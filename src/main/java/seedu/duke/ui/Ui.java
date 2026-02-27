@@ -33,4 +33,9 @@ public class Ui {
         }
         return in.nextLine();
     }
+
+    public void showHelpMessage() {
+        printLine("'bye' - exit the program");
+        printLine("'help' - view all current commands");
+    }
 }
