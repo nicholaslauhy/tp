@@ -1,7 +1,6 @@
 package seedu.duke.data;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class ExpenseList {
@@ -13,5 +12,9 @@ public class ExpenseList {
     public void add(BigDecimal amount){
         expenses.add(amount);
         total = total.add(amount);
+    }
+
+    public BigDecimal getTotal(){
+        return total;
     }
 }
