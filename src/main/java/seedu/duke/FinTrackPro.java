@@ -108,6 +108,9 @@ public class FinTrackPro {
         case "goal":
             handleGoal(userInput);
             break;
+        case "clear":
+            handleClear(in);
+            break;
         default:
             ui.printLine("You said: " + userInput);
             break;
@@ -171,6 +174,17 @@ public class FinTrackPro {
         ui.printLine("Current Total: $" + expenseList.getTotal());
     }
 
+    private void handleClear(Scanner in) {
+        ui.printLine("WARNING: This will permanently delete ALL expenses. Are you sure? (Y/N)");
+        String response = in.nextLine().trim().toLowerCase();
+        if (response.equals("y")) {
+            expenseList.clear();
+            ui.printLine("Expense list has been wiped clean. Fresh start!");
+        } else {
+            ui.printLine("Clear cancelled. Your data is still there, bro.");
+        }
+    }
+
     private void printList(){
         if (expenseList.isEmpty()) {
             ui.printLine("Your expense list is as empty as my wallet. Go spend some money!");
@@ -190,7 +204,7 @@ public class FinTrackPro {
 
         BigDecimal goal = profile.getSpendingGoal();
         if (totalSpent.compareTo(goal) > 0) {
-            ui.printLine("Alert: You've already exceeded this goal by "
+            ui.printLine("Alert: You've already exceeded your goal by "
                     + InputUtil.formatMoney(totalSpent.subtract(goal)) + "!");
         }
     }
