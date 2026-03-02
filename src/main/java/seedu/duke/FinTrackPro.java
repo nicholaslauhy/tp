@@ -113,6 +113,9 @@ public class FinTrackPro {
         case "clear":
             handleClear(in);
             break;
+        case "summary":
+            handleSummary();
+            break;
         default:
             ui.printLine("You said: " + userInput);
             break;
@@ -279,5 +282,39 @@ public class FinTrackPro {
         } catch (NumberFormatException e) {
             ui.printLine("Invalid input. Ratio remains at " + (current * 100) + "%.");
         }
+    }
+
+    private void handleSummary() {
+        BigDecimal btoGoal = profile.getBtoGoal();
+        BigDecimal currentSavings = profile.getCurrentSavings();
+        BigDecimal monthlySalary = profile.getMonthlySalary();
+        BigDecimal totalSpent = expenseList.getTotal();
+
+        BigDecimal distance = btoGoal.subtract(currentSavings);
+        BigDecimal monthlySurplus = monthlySalary.subtract(totalSpent);
+
+        int percentage = 0;
+        if (btoGoal.compareTo(BigDecimal.ZERO) > 0) {
+            percentage = currentSavings.multiply(new BigDecimal("100"))
+                    .divide(btoGoal, 0, BigDecimal.ROUND_HALF_UP)
+                    .intValue();
+        }
+
+        String estimate;
+        if (distance.compareTo(BigDecimal.ZERO) <= 0) {
+            estimate = "Reached! Go get that BTO!";
+        } else if (monthlySurplus.compareTo(BigDecimal.ZERO) <= 0) {
+            estimate = "Infinite (Surplus is $0 or negative!)";
+        } else {
+            int months = distance.divide(monthlySurplus, 0, BigDecimal.ROUND_CEILING).intValue();
+            estimate = months + " months";
+        }
+
+        ui.printLine("======= BTO Readiness Report ====");
+        ui.printLine("Current Goal: " + InputUtil.formatMoney(btoGoal) + " (your share + fees)");
+        ui.printLine("Current Savings: " + InputUtil.formatMoney(currentSavings) + " (" + percentage + "% reached)");
+        ui.printLine("Distance to Goal: " + InputUtil.formatMoney(distance));
+        ui.printLine("Monthly Surplus: " + InputUtil.formatMoney(monthlySurplus));
+        ui.printLine("Estimated Goal Achievement: " + estimate);
     }
 }
