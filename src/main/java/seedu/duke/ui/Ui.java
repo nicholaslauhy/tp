@@ -42,5 +42,6 @@ public class Ui {
         printLine("'salary' - view and update your monthly salary");
         printLine("'savings' - view and update your total current savings");
         printLine("'ratio' - view and update your individual BTO contribution share");
+        printLine("'list' - view all current expenses");
     }
 }

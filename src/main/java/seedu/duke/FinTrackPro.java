@@ -35,14 +35,14 @@ public class FinTrackPro {
 
         // Initial goal setup
         BigDecimal goal = InputUtil.readMoney(ui, in,
-                "What is the total value  that you and your partner have to pay for "
+                "What is the total value that you and your partner have to pay for "
                         + "the house? (in dollars)");
 
         BigDecimal legalFees = goal.multiply(new BigDecimal("1.1"));
         BigDecimal totalRequired = goal.add(legalFees);
 
         ui.printLine("Sweeeett. Including legal fees, you will need "
-                + InputUtil.formatMoney(totalRequired));
+                + InputUtil.formatMoney(totalRequired) + " for the initial downpayment phase");
 
         // Deadline Handling
         LocalDate deadline = InputUtil.readFutureDate(
@@ -102,6 +102,8 @@ public class FinTrackPro {
         case "delete":
             handleDelete(userInput);
             break;
+        case "list":
+            handleList(userInput);
         default:
             ui.printLine("You said: " + userInput);
             break;
@@ -164,6 +166,24 @@ public class FinTrackPro {
         ui.printLine("Deleted expense #" + index + ": $" + removed.getAmount());
         ui.printLine("Current Total: $" + expenseList.getTotal());
     }
+
+    private void handleList(String userInput){
+        if (expenseList.isEmpty()) {
+            ui.printLine("Your expense list is as empty as my wallet. Go spend some money!");
+            return;
+        }
+
+        ui.printLine("Here is your current expenditure list!");
+
+        for (int i = 0; i < expenseList.size(); i++) {
+            Expense expense = expenseList.get(i);
+            String formattedAmount = InputUtil.formatMoney(expense.getAmount());
+            ui.printLine((i + 1) + ". " + formattedAmount);
+        }
+
+        ui.printLine("Total Expenditure: $" +  expenseList.getTotal());
+    }
+
     private void handleSalary(Scanner in) {
         // Show previous input
         BigDecimal current = profile.getMonthlySalary();

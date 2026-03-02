@@ -35,4 +35,12 @@ public class ExpenseList {
         return expenses.size();
     }
 
+    public boolean isEmpty() {
+        return expenses.isEmpty();
+    }
+
+    public Expense get(int index) {
+        return expenses.get(index);
+    }
+
 }
