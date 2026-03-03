@@ -149,7 +149,7 @@ public class FinTrackPro {
             printList();
             break;
         case "goal":
-            handleGoal(userInput);
+            handleGoal(in);
             break;
         case "clear":
             handleClear(in);
@@ -302,52 +302,34 @@ public class FinTrackPro {
     }
 
     /**
-     * Displays or updates the user's spending goal.
+     * Displays the current monthly spending goal and prompts for an updated value.
      *
-     * <p>Usage:
+     * <p>Usage: {@code goal}</p>
+     *
+     * <p>The method performs the following:
      * <ul>
-     *   <li>{@code goal} - displays the current goal and help text</li>
-     *   <li>{@code goal <amount>} - updates the goal to the given amount</li>
+     * <li>Displays the existing goal retrieved from the user's {@link Profile}</li>
+     * <li>Prompts the user for a new goal amount using {@link InputUtil#readMoney}</li>
+     * <li>Updates the profile with the validated amount</li>
+     * <li>Checks if current total expenditure from {@link ExpenseList} already exceeds this goal</li>
      * </ul></p>
      *
-     * <p>Validation:
-     * <ul>
-     *   <li>Rejects non-numeric amounts</li>
-     *   <li>Rejects negative goals</li>
-     * </ul></p>
+     * <p>Validation is handled by {@code InputUtil}, which rejects non-numeric and negative values.</p>
      *
-     * <p>If the current total expenditure already exceeds the new goal, prints an alert.</p>
-     *
-     * @param userInput Full command line entered by the user (starting with {@code goal}).
+     * @param in Scanner used to read the user's new goal amount.
      */
-    private void handleGoal(String userInput) {
-        String rest = userInput.substring("goal".length()).trim();
+    private void handleGoal(Scanner in) {
+        BigDecimal currentGoal = profile.getSpendingGoal();
+        ui.printLine("Current monthly spending goal: " + InputUtil.formatMoney(currentGoal));
 
-        if (rest.isEmpty()) {
-            ui.printLine("Current spending goal: " + InputUtil.formatMoney(profile.getSpendingGoal()));
-            ui.printLine("To update, use: goal <amount>");
-            return;
-        }
-
-        BigDecimal newGoal;
-        try {
-            newGoal = new BigDecimal(rest);
-        } catch (NumberFormatException e) {
-            ui.printLine("Invalid amount! 'goal " + rest + "' is not a number, bro.");
-            return;
-        }
-
-        if (newGoal.compareTo(BigDecimal.ZERO) < 0) {
-            ui.printLine("Goal cannot be negative! You can't budget for negative money!!.");
-            return;
-        }
+        BigDecimal newGoal = InputUtil.readMoney(ui, in, "Enter your new monthly spending goal:");
 
         profile.setSpendingGoal(newGoal);
-        ui.printLine("Spending goal updated to: " + InputUtil.formatMoney(newGoal));
+        ui.printLine("Spending goal successfully updated to: " + InputUtil.formatMoney(newGoal));
 
         BigDecimal totalSpent = expenseList.getTotal();
         if (totalSpent.compareTo(newGoal) > 0) {
-            ui.printLine("Alert: You've already exceeded this goal by "
+            ui.printLine("Alert: You've already exceeded this new goal by "
                     + InputUtil.formatMoney(totalSpent.subtract(newGoal)) + "!");
         }
     }

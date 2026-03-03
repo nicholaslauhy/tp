@@ -27,7 +27,7 @@ public class ExpenseList {
     }
 
     public boolean isValidIndex(int inputIndex){
-        //returns true if index input is writhin ranfge and false if not
+        //returns true if index input is within range and false if not
         return inputIndex >= 1 && inputIndex <= expenses.size();
     }
 
