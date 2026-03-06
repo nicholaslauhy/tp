@@ -15,12 +15,12 @@ FinTrack Pro was created for individual students in a relationship who are plann
 
 ## Features 
 
-* <b>View all commands:</b> [help](#viewing-help-help-)
+* <b>View all commands:</b> [help](#viewing-help-help)
 * <b>Setting monthly salary:</b> [salary](#setting-monthly-salary-salary)
 * <b>Setting current savings:</b> [savings](#setting-current-savings-savings)
 * <b>Setting downpayment goal:</b> [goal](#setting-downpayment-goal-goal)
 * <b>Setting ratio:</b> [ratio](#setting-ratio-ratio)
-* <b>Adding an expense:</b> [add](#adding-an-expense-add-)
+* <b>Adding an expense:</b> [add](#adding-an-expense-add)
 * <b>Listing all expenditures:</b> [list](#listing-all-entries-list)
 * <b>Deleting an entry:</b> [delete](#deleting-an-entry-delete)
 * <b>Setting a target date:</b> [deadline](#setting-a-target-date-deadline)
@@ -28,7 +28,7 @@ FinTrack Pro was created for individual students in a relationship who are plann
 * <b>Clearing all entries:</b> [clear](#clearing-all-entries-clear)
 * <b>Exiting the program:</b> [exit](#exiting-the-program-exit)
 
-Additional Help:
+## Additional Help:
 * [FAQ](#faq)
 * [Command Summary](#command-summary)
 * [Enquiry](#enquiry)
