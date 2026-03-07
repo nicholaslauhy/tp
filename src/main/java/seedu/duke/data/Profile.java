@@ -106,20 +106,4 @@ public class Profile {
     public BigDecimal getContributionRatio() {
         return contributionRatio;
     }
-
-    /**
-     * Sets the user's monthly spending limit.
-     * @param spendingGoal The spending goal amount.
-     */
-    public void setSpendingGoal(BigDecimal spendingGoal) {
-        this.spendingGoal = spendingGoal;
-    }
-
-    /**
-     * Gets the user's monthly spending limit.
-     * @return The spending goal as a {@code BigDecimal}.
-     */
-    public BigDecimal getSpendingGoal() {
-        return spendingGoal;
-    }
 }

@@ -182,9 +182,6 @@ public class FinTrackPro {
         case "list":
             printList();
             break;
-        case "goal":
-            handleGoal(in);
-            break;
         case "clear":
             handleClear(in);
             break;
@@ -369,45 +366,6 @@ public class FinTrackPro {
 
         BigDecimal totalSpent = expenseList.getTotal();
         ui.printLine("Total Expenditure: $" +  expenseList.getTotal());
-
-        BigDecimal goal = profile.getSpendingGoal();
-        if (totalSpent.compareTo(goal) > 0) {
-            ui.printLine("Alert: You've already exceeded your goal by "
-                    + InputUtil.formatMoney(totalSpent.subtract(goal)) + "!");
-        }
-    }
-
-    /**
-     * Displays the current monthly spending goal and prompts for an updated value.
-     *
-     * <p>Usage: {@code goal}</p>
-     *
-     * <p>The method performs the following:
-     * <ul>
-     * <li>Displays the existing goal retrieved from the user's {@link Profile}</li>
-     * <li>Prompts the user for a new goal amount using {@link InputUtil#readMoney}</li>
-     * <li>Updates the profile with the validated amount</li>
-     * <li>Checks if current total expenditure from {@link ExpenseList} already exceeds this goal</li>
-     * </ul></p>
-     *
-     * <p>Validation is handled by {@code InputUtil}, which rejects non-numeric and negative values.</p>
-     *
-     * @param in Scanner used to read the user's new goal amount.
-     */
-    private void handleGoal(Scanner in) {
-        BigDecimal currentGoal = profile.getSpendingGoal();
-        ui.printLine("Current monthly spending goal: " + InputUtil.formatMoney(currentGoal));
-
-        BigDecimal newGoal = InputUtil.readMoney(ui, in, "Enter your new monthly spending goal:");
-
-        profile.setSpendingGoal(newGoal);
-        ui.printLine("Spending goal successfully updated to: " + InputUtil.formatMoney(newGoal));
-
-        BigDecimal totalSpent = expenseList.getTotal();
-        if (totalSpent.compareTo(newGoal) > 0) {
-            ui.printLine("Alert: You've already exceeded this new goal by "
-                    + InputUtil.formatMoney(totalSpent.subtract(newGoal)) + "!");
-        }
     }
 
     /**
@@ -533,7 +491,6 @@ public class FinTrackPro {
             profile.setBtoGoal(BigDecimal.ZERO);
             profile.setMonthlySalary(BigDecimal.ZERO);
             profile.setCurrentSavings(BigDecimal.ZERO);
-            profile.setSpendingGoal(BigDecimal.ZERO);
             profile.setContributionRatio(new BigDecimal("0.5"));
             expenseList.clear();
 
