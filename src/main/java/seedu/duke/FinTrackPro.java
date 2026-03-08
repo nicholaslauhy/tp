@@ -95,8 +95,25 @@ public class FinTrackPro {
         in.close();
     }
 
+    /**
+     * Conducts the first-time onboarding sequence for new users.
+     * * <p>This method sequentially prompts for and initializes:
+     * <ul>
+     * <li>User's name</li>
+     * <li>Current liquid savings and monthly salary</li>
+     * <li>Total BTO house price and the user's specific contribution ratio</li>
+     * <li>Target deadline for the savings goal</li>
+     * </ul>
+     * </p>
+     * * <p>It calculates the user's specific financial goal by applying the 2.5%
+     * downpayment rate and legal fees to the house price, adjusted by their
+     * contribution share.</p>
+     *
+     * @param in Scanner instance to read user inputs.
+     * @return The validated or default name of the user.
+     */
     private String performInitialSetup(Scanner in) {
-        // Name handling
+        // 1. Name handling
         String name = ui.readLine(in, "What is your name?");
         name = name.isEmpty() ? "friend" : name.trim();
         ui.greet(name);
@@ -104,7 +121,13 @@ public class FinTrackPro {
         ui.printLine("");
         ui.printLine("Hang tight... I have a few questions for you.");
 
-        // Initial goal setup
+        // Prompt for monthly salary, current savings, total value of BTO & individual contribution ratio
+        BigDecimal savings = InputUtil.readMoney(ui, in, "How much do you currently have in savings?");
+        profile.setCurrentSavings(savings);
+
+        BigDecimal salary = InputUtil.readMoney(ui, in, "What is your monthly salary? (in dollars)");
+        profile.setMonthlySalary(salary);
+
         BigDecimal housePrice = InputUtil.readMoney(ui, in,
                 "What is the total value that you and your partner have to pay for "
                         + "the house? (in dollars)");
@@ -113,6 +136,7 @@ public class FinTrackPro {
                 "What is your share of the contribution? (e.g., 0.6 for 60%):");
         profile.setContributionRatio(newRatio);
 
+        // Calculate individual share of user's downpayment
         BigDecimal downPayment = housePrice.multiply(new BigDecimal("0.025"));
         BigDecimal legalFees = downPayment.multiply(BigDecimal.valueOf(1.1));
         BigDecimal totalDownpayment = downPayment.add(legalFees);
@@ -125,12 +149,13 @@ public class FinTrackPro {
         profile.setBtoGoal(yourShare);
 
         // Deadline Handling
-        LocalDate deadline = InputUtil.readFutureDate(ui, in, "When do you need to save this money by?");
+        LocalDate deadline = InputUtil.readFutureDate(ui, in, "When do you need to save this money by? (e.g., 2028-10-24)");
         profile.setDeadline(deadline);
 
         LocalDate today = LocalDate.now();
         Period period = Period.between(today, deadline);
 
+        // Calculate time remaining
         ui.printLine("You have " + period.getYears() + " years and "
                 + period.getMonths() + " months remaining.");
 
@@ -145,7 +170,6 @@ public class FinTrackPro {
      *
      * @param userInput Raw line entered by the user.
      * @param in Scanner used for follow-up prompts for commands that require more input
-     *           (e.g., salary, savings, ratio, clear).
      */
     private void handleCommand(String userInput, Scanner in) {
         if (userInput.trim().isEmpty()) {
