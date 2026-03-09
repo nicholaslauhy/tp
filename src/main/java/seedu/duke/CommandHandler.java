@@ -47,6 +47,7 @@ public class CommandHandler {
         // If there is no input after add
         if (rest.isEmpty()){
             ui.printLine("Format: add <value(to 2dp)> bro! where is the MONEHHHH");
+            ui.printLine("");
             return;
         }
 
@@ -56,18 +57,21 @@ public class CommandHandler {
             amount = new BigDecimal(rest);
         } catch (NumberFormatException e) {
             ui.printLine("Amount must be a valid number bro! What is this garbage!");
+            ui.printLine("");
             return;
         }
 
         //Reject negative values
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
             ui.printLine("Amount cannot be negative bro who you trying to scam?");
+            ui.printLine("");
             return;
         }
 
         // Reject >2 decimal places
         if (amount.scale() > 2) {
             ui.printLine("Amount must not exceed 2 decimal places bro we dont want your measly cents!");
+            ui.printLine("");
             return;
         }
 
@@ -75,6 +79,7 @@ public class CommandHandler {
 
         ui.printLine("Added expense: $" + amount);
         ui.printLine("Current Total: $" + expenseList.getTotal());
+        ui.printLine("");
     }
 
     /**
@@ -96,6 +101,7 @@ public class CommandHandler {
         // If there is no input after delete
         if (rest.isEmpty()){
             ui.printLine("Format: delete <index> bro! where is the INDEXXX");
+            ui.printLine("");
             return;
         }
 
@@ -103,6 +109,7 @@ public class CommandHandler {
 
         if (!expenseList.isValidIndex(index)) {
             ui.printLine("Invalid index bro! do you even know how much you've spent?");
+            ui.printLine("");
             return;
         }
 
@@ -110,6 +117,7 @@ public class CommandHandler {
 
         ui.printLine("Deleted expense #" + index + ": $" + removed.getAmount());
         ui.printLine("Current Total: $" + expenseList.getTotal());
+        ui.printLine("");
     }
 
     /**
@@ -128,8 +136,10 @@ public class CommandHandler {
         if (response.equals("y")) {
             expenseList.clear();
             ui.printLine("Expense list has been wiped clean. Fresh start!");
+            ui.printLine("");
         } else {
             ui.printLine("Clear cancelled. Your data is still there, bro.");
+            ui.printLine("");
         }
     }
 
@@ -192,11 +202,14 @@ public class CommandHandler {
             try {
                 storage.save(profile, expenseList);
                 ui.printLine("System reset successful. Please restart or type 'bye' to exit.");
+                ui.printLine("");
             } catch (IOException e) {
                 ui.printLine("Error: Could not reset the save file on disk.");
+                ui.printLine("");
             }
         } else {
             ui.printLine("Reset aborted. Your data is safe!");
+            ui.printLine("");
         }
     }
 }

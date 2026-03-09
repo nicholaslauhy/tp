@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Main application controller for FinTrackPro.
@@ -167,7 +168,33 @@ public class FinTrackPro {
 
         // Calculate time remaining
         ui.printLine("You have " + period.getYears() + " years and "
-                + period.getMonths() + " months remaining.");
+                + period.getMonths() + " months and "
+                + period.getDays() + " days remaining.");
+
+        // Calculate how much more needs to be saved
+        BigDecimal remainingToSave = result.yourShare.subtract(savings);
+
+        if (remainingToSave.compareTo(BigDecimal.ZERO) <= 0) {
+            ui.printLine("Nice! Based on your current savings, you have already met your goal.");
+        } else {
+
+            int monthsLeft = period.getYears() * 12 + period.getMonths();
+
+            // round up if there are remaining days
+            if (period.getDays() > 0) {
+                monthsLeft++;
+            }
+
+            if (monthsLeft <= 0) {
+                monthsLeft = 1;
+            }
+
+            BigDecimal monthlyNeeded = remainingToSave.divide(
+                    BigDecimal.valueOf(monthsLeft), 2, RoundingMode.HALF_UP);
+
+            ui.printLine("Rounding it to " + monthsLeft + " months, you would need to save "
+                    + InputUtil.formatMoney(monthlyNeeded) + "/month.");
+        }
 
         return name;
     }
@@ -215,6 +242,7 @@ public class FinTrackPro {
             break;
         default:
             ui.printLine("You said: " + userInput);
+            ui.printLine("");
             break;
         }
     }
@@ -230,6 +258,7 @@ public class FinTrackPro {
     private void printList(){
         if (expenseList.isEmpty()) {
             ui.printLine("Your expense list is as empty as my wallet. Go spend some money!");
+            ui.printLine("");
             return;
         }
 
@@ -243,6 +272,7 @@ public class FinTrackPro {
 
         BigDecimal totalSpent = expenseList.getTotal();
         ui.printLine("Total Expenditure: $" +  totalSpent);
+        ui.printLine("");
     }
 
 }

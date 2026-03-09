@@ -20,6 +20,7 @@ public class SummaryReport {
     public final BigDecimal distance;
     public final BigDecimal monthlySurplus;
     public final String estimate;
+    public final BigDecimal totalExpenditure;
 
     /**
      * Constructs a {@code SummaryReport} from the user's current profile and expense list.
@@ -34,8 +35,9 @@ public class SummaryReport {
         this.monthlySalary = profile.getMonthlySalary();
         this.currentSavings = profile.getCurrentSavings();
 
+        this.totalExpenditure = expenseList.getTotal();
         this.distance = btoGoal.subtract(currentSavings);
-        this.monthlySurplus = monthlySalary.subtract(expenseList.getTotal());
+        this.monthlySurplus = monthlySalary.subtract(totalExpenditure);
         this.percentage = computePercentage();
         this.estimate = computeEstimate();
     }
@@ -47,7 +49,6 @@ public class SummaryReport {
      * @return percentage of goal reached, rounded to the nearest whole number.
      */
     private int computePercentage() {
-        int percentage = 0;
         if (btoGoal.compareTo(BigDecimal.ZERO) > 0) {
             return currentSavings.multiply(BigDecimal.valueOf(100))
                     .divide(btoGoal, 0, RoundingMode.HALF_UP)

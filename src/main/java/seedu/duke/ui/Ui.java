@@ -3,6 +3,8 @@ package seedu.duke.ui;
 import seedu.duke.data.SummaryReport;
 import seedu.duke.util.InputUtil;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Scanner;
 
 /**
@@ -73,22 +75,23 @@ public class Ui {
      * and brief descriptions of their purpose.</p>
      */
     public void showHelpMessage() {
-        // General Commands
+        printLine("General Commands");
         printLine("'help'    - view all current commands");
         printLine("'summary' - generate your BTO readiness report based on your goals");
         printLine("'bye'     - exit the program");
         printLine("");
 
-        // Daily Transaction Commands
+        printLine("Daily Transaction Commands");
         printLine("'add'      <amount> - add a new expense (e.g., add 5.50)");
         printLine("'list'     - view all current expenses and your total spent");
         printLine("'delete'   <index> - remove a specific expense from your list");
         printLine("");
 
-        // Profile & Goal Management
+        printLine("Profile & Goal Management");
         printLine("'savings' - add a surplus amount to your existing savings");
         printLine("'clear'   - wipe all current expenses from the list");
         printLine("'reset'   - wipes all profile data and expenses to start fresh.");
+        printLine("");
     }
 
     /**
@@ -99,14 +102,26 @@ public class Ui {
     public void showSummaryReport(SummaryReport report) {
         printLine("===== BTO Readiness Report =====");
         printLine("User: " + report.name);
-        printLine("Dateline: " + report.deadline);
         printLine("BTO Goal: " + InputUtil.formatMoney(report.btoGoal) + " (your share + fees)");
-        printLine("Monthly Salary: " + InputUtil.formatMoney(report.monthlySalary));
+        LocalDate today = LocalDate.now();
+        Period period = Period.between(today, report.deadline);
+
+        int monthsLeft = period.getYears() * 12 + period.getMonths();
+        if (period.getDays() > 0) {
+            monthsLeft++;
+        }
+
+        printLine("Deadline: " + report.deadline + " (" + monthsLeft + " months)");
+        printLine("");
         String savingsLine = InputUtil.formatMoney(report.currentSavings) + " (" + report.percentage + "% reached)";
         printLine("Current Savings: " + savingsLine);
         printLine("Distance to Goal: " + InputUtil.formatMoney(report.distance));
+        printLine("");
+        printLine("Monthly Salary: " + InputUtil.formatMoney(report.monthlySalary));
+        printLine("Total Expenditure: " + InputUtil.formatMoney(report.totalExpenditure));
         printLine("Monthly Surplus: " + InputUtil.formatMoney(report.monthlySurplus));
         printLine("Estimated Goal Achievement: " + report.estimate);
+        printLine("");
     }
 
 }
