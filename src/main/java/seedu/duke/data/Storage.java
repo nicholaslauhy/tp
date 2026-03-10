@@ -51,8 +51,7 @@ public class Storage {
         // Save Expenses (E)
         for (int i = 0; i < expenseList.size(); i++) {
             Expense e = expenseList.get(i);
-            fw.write(String.format("E | %s ",
-                    e.getAmount()));
+            fw.write(String.format("E | %s%n", e.getAmount()));
         }
 
         fw.close();
