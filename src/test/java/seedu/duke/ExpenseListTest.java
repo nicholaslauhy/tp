@@ -3,6 +3,7 @@ package seedu.duke;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
+import seedu.duke.data.Expense;
 import seedu.duke.data.ExpenseList;
 
 import java.math.BigDecimal;
@@ -87,4 +88,16 @@ public class ExpenseListTest {
 
         assertEquals(new BigDecimal("0.00"), expenseList.getTotal());
     }
+    /**
+     * Verifies that {@code delete} returns the expense that was removed.
+     */
+    @Test
+    void delete_returnsCorrectExpense() {
+        expenseList.add(new BigDecimal("42.00"));
+
+        Expense removed = expenseList.delete(1);
+
+        assertEquals(new BigDecimal("42.00"), removed.getAmount());
+    }
+
 }
