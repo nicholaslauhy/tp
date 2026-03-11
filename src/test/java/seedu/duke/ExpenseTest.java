@@ -28,4 +28,14 @@ public class ExpenseTest {
 
         assertEquals("$12.50", expense.toString());
     }
+    /**
+     * Verifies that a zero-value expense is stored and displayed correctly.
+     */
+    @Test
+    void constructor_zeroAmount_storedAndDisplayedCorrectly() {
+        Expense expense = new Expense(new BigDecimal("0"));
+
+        assertEquals(new BigDecimal("0"), expense.getAmount());
+        assertEquals("$0", expense.toString());
+    }
 }
