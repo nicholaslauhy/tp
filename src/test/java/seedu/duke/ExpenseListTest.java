@@ -43,4 +43,16 @@ public class ExpenseListTest {
 
         assertEquals(new BigDecimal("17.75"), expenseList.getTotal());
     }
+    /*
+    *Verifies whether insertiongs are in order and retrievable by their own index
+     */
+    @Test
+    void add_multipleExpenses_storedInOrder() {
+        expenseList.add(new BigDecimal("10.00"));
+        expenseList.add(new BigDecimal("20.00"));
+
+        assertEquals(new BigDecimal("10.00"), expenseList.get(0).getAmount());
+        assertEquals(new BigDecimal("20.00"), expenseList.get(1).getAmount());
+    }
+
 }
