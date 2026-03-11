@@ -19,4 +19,13 @@ public class ExpenseTest {
 
         assertEquals(new BigDecimal("12.50"), expense.getAmount());
     }
+    /**
+     * Verifies that {@code toString()} formats the expense with a leading dollar sign.
+     */
+    @Test
+    void toString_validAmount_returnsFormattedString() {
+        Expense expense = new Expense(new BigDecimal("12.50"));
+
+        assertEquals("$12.50", expense.toString());
+    }
 }
