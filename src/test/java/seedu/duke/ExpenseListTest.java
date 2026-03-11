@@ -21,4 +21,14 @@ public class ExpenseListTest {
     void setUp(){
         expenseList = new ExpenseList();
     }
+
+    /**
+     * Verfies that addinhg a single expense increments the list size to 1
+     */
+    @Test
+    void add_singleExpense_sizeIsOne(){
+        expenseList.add(new BigDecimal("12.50"));
+
+        assertEquals(1, expenseList.size());
+    }
 }
