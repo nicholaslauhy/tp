@@ -2,10 +2,12 @@ package seedu.duke.ui;
 
 import seedu.duke.data.SummaryReport;
 import seedu.duke.util.InputUtil;
+import seedu.duke.util.LoggerUtil;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Handles all user-facing input and output operations for FinTrackPro.
@@ -22,13 +24,14 @@ import java.util.Scanner;
  * it is strictly responsible for communication with the user.</p>
  */
 public class Ui {
-
+    private static final Logger logger = LoggerUtil.getLogger(Ui.class);
     /**
      * Displays the welcome message and ASCII logo when the application starts.
      *
      * <p>This method is intended to be called once at application startup.</p>
      */
     public void showWelcome(){
+        logger.info("Displaying welcome message and ASCII logo.");
         String logo = """
             +---------+
             |   HDB   |
@@ -42,11 +45,13 @@ public class Ui {
 
     public void greet(String name){
         assert name != null : "Name should not be null";
+        logger.info("Greeting user: " + name);
         printLine("Nice to meet you, " + name + "!");
     }
 
     public void goodBye(String name){
         assert name != null : "Name should not be null";
+        logger.info("Application exiting for user: " + name);
         printLine("Goodbye " + name + ". Stay disciplined and get that house that you always wanted!");
     }
 
@@ -67,10 +72,12 @@ public class Ui {
     public String readLine(Scanner in, String prompt){
         assert in != null : "Scanner should not be null";
         if (prompt != null && !prompt.isEmpty()){
+            logger.info("Displaying prompt to user: " + prompt);
             printLine(prompt);
         }
 
         String input = in.nextLine();
+        logger.fine("Raw user input received: [" + input + "]");
         assert input != null : "Input read should not be null";
         return input;
     }
@@ -82,6 +89,8 @@ public class Ui {
      * and brief descriptions of their purpose.</p>
      */
     public void showHelpMessage() {
+        logger.info("Displaying help message commands.");
+
         printLine("General Commands");
         printLine("'help'    - view all current commands");
         printLine("'summary' - generate your BTO readiness report based on your goals");
@@ -113,6 +122,7 @@ public class Ui {
         assert report.totalExpenditure != null : "Total expenditure should not be null";
         assert report.estimate != null : "Estimate should not be null";
 
+        logger.info("Rendering SummaryReport for user: " + report.name);
         printLine("===== BTO Readiness Report =====");
         printLine("User: " + report.name);
         printLine("BTO Goal: " + InputUtil.formatMoney(report.btoGoal) + " (your share + fees)");
@@ -138,6 +148,8 @@ public class Ui {
         printLine("Monthly Surplus: " + InputUtil.formatMoney(report.monthlySurplus));
         printLine("Estimated Goal Achievement: " + report.estimate);
         printLine("");
+
+        logger.info("SummaryReport display completed.");
     }
 
 }

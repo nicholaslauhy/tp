@@ -133,3 +133,30 @@
 [2026-03-16 00:21:38] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Adam
 [2026-03-16 00:21:41] [INFO] seedu.duke.FinTrackPro - Profile and expense data saved successfully.
 [2026-03-16 00:21:41] [INFO] seedu.duke.FinTrackPro - Application exiting for user: Adam
+[2026-03-16 00:34:02] [INFO] seedu.duke.FinTrackPro - FinTrackPro initialised successfully
+[2026-03-16 00:34:02] [INFO] seedu.duke.FinTrackPro - Application started.
+[2026-03-16 00:34:02] [INFO] seedu.duke.FinTrackPro - Profile and expense data loaded successfully.
+[2026-03-16 00:34:02] [INFO] seedu.duke.FinTrackPro - Existing profile found for user: Adam
+[2026-03-16 00:34:02] [INFO] seedu.duke.FinTrackPro - Entering main command loop.
+[2026-03-16 00:35:08] [INFO] seedu.duke.FinTrackPro - FinTrackPro initialised successfully
+[2026-03-16 00:35:08] [INFO] seedu.duke.FinTrackPro - Application started.
+[2026-03-16 00:35:08] [INFO] seedu.duke.FinTrackPro - Profile and expense data loaded successfully.
+[2026-03-16 00:35:08] [INFO] seedu.duke.FinTrackPro - Existing profile found for user: Adam
+[2026-03-16 00:35:08] [INFO] seedu.duke.FinTrackPro - Entering main command loop.
+[2026-03-16 00:35:14] [INFO] seedu.duke.FinTrackPro - Profile and expense data saved successfully.
+[2026-03-16 00:35:14] [INFO] seedu.duke.FinTrackPro - Application exiting for user: Adam
+[2026-03-16 00:39:40] [INFO] seedu.duke.FinTrackPro - FinTrackPro initialised successfully
+[2026-03-16 00:39:40] [INFO] seedu.duke.FinTrackPro - Application started.
+[2026-03-16 00:39:40] [INFO] seedu.duke.ui.Ui - Displaying welcome message and ASCII logo.
+[2026-03-16 00:39:40] [INFO] seedu.duke.FinTrackPro - Profile and expense data loaded successfully.
+[2026-03-16 00:39:40] [INFO] seedu.duke.FinTrackPro - Existing profile found for user: Adam
+[2026-03-16 00:39:40] [INFO] seedu.duke.FinTrackPro - Entering main command loop.
+[2026-03-16 00:39:55] [INFO] seedu.duke.FinTrackPro - Received user input: summary
+[2026-03-16 00:39:55] [INFO] seedu.duke.FinTrackPro - Parsed command: summary
+[2026-03-16 00:39:55] [INFO] seedu.duke.FinTrackPro - Executing summary command.
+[2026-03-16 00:39:55] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Adam
+[2026-03-16 00:39:55] [INFO] seedu.duke.ui.Ui - Rendering SummaryReport for user: Adam
+[2026-03-16 00:39:55] [INFO] seedu.duke.ui.Ui - SummaryReport display completed.
+[2026-03-16 00:40:02] [INFO] seedu.duke.FinTrackPro - Profile and expense data saved successfully.
+[2026-03-16 00:40:02] [INFO] seedu.duke.FinTrackPro - Application exiting for user: Adam
+[2026-03-16 00:40:02] [INFO] seedu.duke.ui.Ui - Application exiting for user: Adam
