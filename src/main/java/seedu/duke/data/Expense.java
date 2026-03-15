@@ -17,6 +17,10 @@ public class Expense {
      * @param amount The monetary value of the expense.
      */
     public Expense(BigDecimal amount) {
+        //Invariant: Amount added must never be null
+        assert amount != null : "Expense amount should not be null";
+        //Invariant: Amount input must never be negative
+        assert amount.compareTo(BigDecimal.ZERO) >= 0 : "Expense amount must be non-negative";
         this.amount = amount;
     }
 
@@ -26,6 +30,8 @@ public class Expense {
      * @return The expense amount as a {@code BigDecimal}.
      */
     public BigDecimal getAmount() {
+        //Invariant: Amount must never be null after successful construction
+        assert amount != null : "Expense should never be null after construction.";
         return amount;
     }
 

@@ -3,7 +3,7 @@ package seedu.duke;
 import seedu.duke.ui.Ui;
 /**
  * Duke is running Fintrackpro, a CLI program that helps users
- * estimate savings required for their share of a BTO downpayment.
+ * estimate savings required for their share of a BTO downpayment
  */
 public class Duke {
 

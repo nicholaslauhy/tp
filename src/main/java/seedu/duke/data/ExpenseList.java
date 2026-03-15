@@ -22,9 +22,24 @@ public class ExpenseList {
      * @param amount The monetary value of the expense to add.
      */
     public void add(BigDecimal amount){
+        //Added to capture pre mutation state for post mutation assertions
+        int sizeBeforeAdd = expenses.size();
+        BigDecimal totalBeforeAdd = total;
+
         Expense expense = new Expense(amount);
         expenses.add(expense);
         total = total.add(amount);
+        //Post add invariant: List must have grown by exacrtly ony entry
+        assert expenses.size() == sizeBeforeAdd + 1
+                : "List size should have increaseed by 1 after add";
+        // Post-add invariant: total must have been increased only by the amount that was added
+        assert total.compareTo(totalBeforeAdd.add(amount)) == 0
+                : "Total should increase by exactly the added amount.";
+
+        // Post-add invariant: total must never be negative
+        assert total.compareTo(BigDecimal.ZERO) >= 0
+                : "Total must never be negative.";
+
     }
 
     /**
@@ -35,9 +50,21 @@ public class ExpenseList {
      * @return The {@link Expense} object that was removed.
      */
     public Expense delete(int indexInList){
+        //Capture pre-mutation size to use in post delete assertions
+        int sizeBeforeDelete = expenses.size();
+        BigDecimal totalBeforeDelete = total;
         int indexToDelete = indexInList - 1;
         Expense removed = expenses.remove(indexToDelete);
         total = total.subtract(removed.getAmount());
+        // Post-delete invariant: list must have shrunk by exactly one entry
+        assert expenses.size() == sizeBeforeDelete - 1
+                : "List size should have decreased by 1 after delete.";
+        //Post-delete invariant: List must have been excartly deleted by the amoutn that was removed
+        assert total.compareTo(totalBeforeDelete.subtract(removed.getAmount())) == 0
+                : "Total should decrease exactly by removed amount.";
+        // Post-delete invariant: total must never be negative
+        assert total.compareTo(BigDecimal.ZERO) >= 0
+                : "Total must never be negative.";
         return removed;
     }
 
@@ -47,6 +74,9 @@ public class ExpenseList {
      * @return The total expenditure as a {@code BigDecimal}.
      */
     public BigDecimal getTotal(){
+        // Invariant: total should never be null or negative at any point
+        assert total != null : "Total should never be null.";
+        assert total.compareTo(BigDecimal.ZERO) >= 0 : "Total must never be negative.";
         return total;
     }
 
@@ -87,7 +117,11 @@ public class ExpenseList {
      * @return The {@link Expense} at the specified position.
      */
     public Expense get(int index) {
-        return expenses.get(index);
+        Expense expense = expenses.get(index);
+
+        // Invariant: entries stored in the list must never be null
+        assert expense != null : "Retrieved expense should never be null.";
+        return expense;
     }
 
     /**
@@ -96,5 +130,7 @@ public class ExpenseList {
     public void clear() {
         expenses.clear();
         total = BigDecimal.ZERO;
+        // Post-clear invariant: total must be reset to exactly zero
+        assert total.compareTo(BigDecimal.ZERO) == 0 : "Total should be zero after clear.";
     }
 }
