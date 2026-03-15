@@ -50,6 +50,9 @@ public class ExpenseList {
      * @return The {@link Expense} object that was removed.
      */
     public Expense delete(int indexInList){
+        //Pre-mutation invariant: index must be within list bounds
+        assert indexInList >= 1 && indexInList <= expenses.size()
+                : "Delete index out of bounds.";
         //Capture pre-mutation size to use in post delete assertions
         int sizeBeforeDelete = expenses.size();
         BigDecimal totalBeforeDelete = total;
