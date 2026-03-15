@@ -41,14 +41,17 @@ public class Ui {
     }
 
     public void greet(String name){
+        assert name != null : "Name should not be null";
         printLine("Nice to meet you, " + name + "!");
     }
 
     public void goodBye(String name){
+        assert name != null : "Name should not be null";
         printLine("Goodbye " + name + ". Stay disciplined and get that house that you always wanted!");
     }
 
     public void printLine(String message){
+        assert message != null : "Message should not be null";
         System.out.println(message);
     }
 
@@ -62,10 +65,14 @@ public class Ui {
      * @return The raw line entered by the user.
      */
     public String readLine(Scanner in, String prompt){
+        assert in != null : "Scanner should not be null";
         if (prompt != null && !prompt.isEmpty()){
             printLine(prompt);
         }
-        return in.nextLine();
+
+        String input = in.nextLine();
+        assert input != null : "Input read should not be null";
+        return input;
     }
 
     /**
@@ -100,9 +107,16 @@ public class Ui {
      * @param report a {@link SummaryReport} containing the user's precomputed financial snapshot.
      */
     public void showSummaryReport(SummaryReport report) {
+        assert report.name != null : "Report name should not be null";
+        assert report.deadline != null : "Deadline should not be null";
+        assert report.currentSavings != null : "Current savings should not be null";
+        assert report.totalExpenditure != null : "Total expenditure should not be null";
+        assert report.estimate != null : "Estimate should not be null";
+
         printLine("===== BTO Readiness Report =====");
         printLine("User: " + report.name);
         printLine("BTO Goal: " + InputUtil.formatMoney(report.btoGoal) + " (your share + fees)");
+
         LocalDate today = LocalDate.now();
         Period period = Period.between(today, report.deadline);
 
@@ -110,6 +124,8 @@ public class Ui {
         if (period.getDays() > 0) {
             monthsLeft++;
         }
+
+        assert monthsLeft >= 0 : "Months left should not be negative";
 
         printLine("Deadline: " + report.deadline + " (" + monthsLeft + " months)");
         printLine("");

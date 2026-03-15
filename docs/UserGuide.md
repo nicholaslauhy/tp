@@ -16,17 +16,14 @@ FinTrack Pro was created for individual students in a relationship who are plann
 ## Features 
 
 * <b>View all commands:</b> [help](#viewing-help-help)
-* <b>Setting monthly salary:</b> [salary](#setting-monthly-salary-salary)
-* <b>Setting current savings:</b> [savings](#setting-current-savings-savings)
-* <b>Setting downpayment goal:</b> [goal](#setting-downpayment-goal-goal)
-* <b>Setting ratio:</b> [ratio](#setting-ratio-ratio)
+* <b>Add more savings:</b> [savings](#add-more-savings-savings)
 * <b>Adding an expense:</b> [add](#adding-an-expense-add)
 * <b>Listing all expenditures:</b> [list](#listing-all-entries-list)
 * <b>Deleting an entry:</b> [delete](#deleting-an-entry-delete)
-* <b>Setting a target date:</b> [deadline](#setting-a-target-date-deadline)
 * <b>Viewing financial summary:</b> [summary](#viewing-financial-summary-summary)
 * <b>Clearing all entries:</b> [clear](#clearing-all-entries-clear)
 * <b>Exiting the program:</b> [exit](#exiting-the-program-exit)
+* <b>Data Storage:</b> [storage](#data-storage)
 
 ## Additional Help:
 * [FAQ](#faq)
@@ -40,62 +37,50 @@ Shows a message explaining how to access the help page, lists all commands.
 <b>Example of Usage:</b> <br>
 <b>Expected Output:</b>
 ```
-This is your help page. Here are the commands: 
-salary - helps track the salary
+help
+General Commands
+'help'    - view all current commands
+'summary' - generate your BTO readiness report based on your goals
+'bye'     - exit the program
+
+...
+...
 ```
 
-### Setting monthly salary: ```salary```
-Sets or updates your current monthly income to help calculate spending proportions.
 
-<b>Format:</b> ```salary amt/AMOUNT``` <br>
-<b>Example of Usage:</b> ```salary amt/1200.50``` <br>
+### Add more savings: ```savings```
+Add more savings from the initial saving count
+
+<b>Format:</b> ```savings``` <br>
+<b>NOTE:</b> When entering `amount`, it represents the additional amount of cash you want to add towards the goal.<br>
+<b>Example of Usage:</b> ```savings```<br>
 <b>Expected Output:</b>
 ```
-You have set your salary as $1200.50/month.
-```
+savings
+Current total savings: $1,000.00
+Enter amount to add to your savings:
+1000
 
-### Setting current savings: ```savings```
-Setting your current liquid assets dedicated to the BTO downpayment. 
-
-<b>Format:</b> ```savings amt/AMOUNT``` <br>
-<b>NOTE:</b> ```AMOUNT``` represents the total cash/CPF you currently have available for the goal.<br>
-<b>Example of Usage:</b> ```salary amt/5000```<br>
-<b>Expected Output:</b>
-```
-You have set your current savings as $5000.00/month.
-```
-
-### Setting downpayment goal: ```goal```
-Defines the target BTO price goal <br>
-<b>Format:</b> ```goal TOTAL_PRICE``` <br>
-<b>NOTE:</b> ```TOTAL_PRICE``` is the FULL cost of the BTO flat. FinTrackPro will
-automatically calculate the 2.5% downpayment requirement plus estimated legal fees.<br>
-<b>Example of Usage:</b>```goal 400000`` <br>
-<b>Expected Output:</b>
-```
-Your goal is to save $20000.00 (Downpayment plus legal fees)
-```
- 
-### Setting ratio: ```ratio```
-Defines the proportion of how much you are paying for the downpayment.<br>
-<b>Format:</b> ```ratio RATIO``` <br>
-<b>Example of Usage:</b> ```ratio 60```<br>
-<b>Expected Output:</b>
-```
-You have set the ratio to be 60%. You need to fork out $2,500.00 at the end of your goal of December 2027!
+Transaction successful!
+Added: $1,000.00
+New total savings: $2,000.00
 ```
 
 ### Adding an expense: ```add ```
 Adds a regular expense to your monthly tracker.<br>
-<b>Format:</b> ```add n/NAME amt/AMOUNT``` <br>
+<b>Format:</b> ```add AMOUNT``` <br>
 <b>Example of Usage:</b> <br>
-```add n/Hall Rental amt/450 ```<br>
-```add n/Netflix amt/15.90```
+```add 30 ```<br>
+```add 15.90``` <br>
 <b>Expected Output:</b>
 ```
-Here is the list of your expenditures! 
-1. Hall Rental 450.00
-2. Netflix 15.90
+add 30
+Added expense: $30
+Current Total: $30
+
+add 15.90
+Added expense: $15.90
+Current Total: $45.90
 ```
 
 ### Listing all entries: ```list```
@@ -104,32 +89,21 @@ Shows a list of current month expenses and income entries.<br>
 <b>Example of Usage:</b> ```list```<br>
 <b>Expected Output:</b>
 ```
-Here is your current expenditure list! 
-Food: $100.00
-Hall Rental: $2,000.00
-Miscellaneous: $400.00
-Total Spent: $2,500.00
-Money Left for the Month based on goal: $2,500.00 / $5,000.00
+Here is your current expenditure list!
+1. $30.00
+2. $15.90
+Total Expenditure: $45.90
 ```
 
 ### Deleting an entry: ```delete```
 Deletes the specified entry from the tracker.<br>
 <b>Format:</b> ```delete INDEX``` <br>
-<b>Example of Usage:</b> ```delete 2```<br>
+<b>Example of Usage:</b> ```delete 1```<br>
 <b>Expected Output:</b>
 ```
-You have deleted:
-    2. Hall Rental: $2,000.00.
-You currently have 2 expenses in your expenditure list!
-```
-
-### Setting a target date: ```deadline```
-Sets a specific date by which you want to reach your downpayment goal.<br>
-<b>Format:</b> ```deadline d/YYYY-MM``` <br>
-<b>Example of Usage:</b> ```deadline d/2027-12``` <br>
-<b>Expected Output:</b>
-```
-You have set December 2027 as your goal deadline! You currently have x years, and y months left to your deadline.
+delete 1
+Deleted expense #1: $30
+Current Total: $15.90
 ```
 
 ### Viewing financial summary: ```summary```
@@ -138,12 +112,18 @@ Displays a comprehensive overview of your financial status, including distance t
 <b>Example of Usage:</b> ```summary```<br>
 <b>Expected Output:</b>
 ```
-======= BTO Readiness Report ====
-Current Goal: $6,200.00 (your share of 2.5% + fees)
-Current Savings: $4,500.00 (72% reached)
-Distance to Goal: $1,700.00
-Monthly Surplus: $400.00
-Estimated Goal Achievement: 4 months
+===== BTO Readiness Report =====
+User: nicholas
+BTO Goal: $12,285.00 (your share + fees)
+Deadline: 2027-08-06 (17 months)
+
+Current Savings: $1,000.00 (8% reached)
+Distance to Goal: $11,285.00
+
+Monthly Salary: $4,000.00
+Total Expenditure: $30.00
+Monthly Surplus: $3,970.00
+Estimated Goal Achievement: 3 months
 ```
 
 ### Clearing all entries: ```clear```
@@ -157,42 +137,67 @@ Are you sure you want to clear all current data? (Y/N):
 (else) Cancelling clearing data!
 ```
 
-### Exiting the program: ```exit```
+### Exiting the program: ```bye```
 Exits the program<br>
-<b>Format:</b> ```exit``` <br>
-<b>Example of Usage:</b> ```exit``` <br>
+<b>Format:</b> ```bye``` <br>
+<b>Example of Usage:</b> ```bye``` <br>
 <b>Expected Output:</b>
 ```
-Exiting! Have a nice day!
+Goodbye nicholas. Stay disciplined and get that house that you always wanted!
 ```
 
+### Data Storage
+Stores the data in relative path as 'fintrack.txt'<br>
+<b>NOTE:</b> The saving of data into storage will only be done after you type 'bye'<br>
+<b>Expected Output:</b>
+```
+P | nicholas | 4000 | 1000 | 12285.00 | 0.6 | 2027-08-06
+E | 30
+```
+
+**Below is a table for the interpretation of the output in** `fintrack.txt`
+
+**Profile**
+
+| Field        | Value              | Meaning                                               |
+|--------------|--------------------|-------------------------------------------------------|
+| `P`          | profile marker     | tells the viewer this line represents a **Profile**   |
+| `nicholas`   | name               | user's name                                           |
+| `4000`       | monthly salary     | user earns **$4000/month**                            |
+| `1000`       | current savings    | currently saved **$1000**                             |
+| `12285.00`   | BTO goal           | amount needed for the **downpayment goal**            |
+| `0.6`        | contribution ratio | user is paying **60%** of the BTO cost                |
+| `2027-08-06` | deadline           | goal date (ISO format `YYYY-MM-DD`)                   |
+
+**Expenditure**
+
+| Field        | Value              | Meaning                                               |
+|--------------|--------------------|-------------------------------------------------------|
+| `E`          | expenditure        | tells the viewer this line represents **Expenditure** |
+| `30`         | amount             | user has spent **$30** on a single expenditure        |
 
 ## FAQ
-<b>Updated as of 6 March 2026</b>
+<b>Updated as of 15 March 2026</b>
 
 **Q**: How do I transfer my data to another computer? 
 
-**A**: Your data will be saved on your local computer. Just log in with the same name
-on another device if you want to continue with your saved progress!
+**A**: At this point you cannot, your data will be saved on your local device. Just run the code again and
+you should not have to restart all your progress!
 
 Watch this space for more updates!!
 
 ## Command Summary
 
-| Action                 | Format, Examples                                         |
-| ---------------------- | -------------------------------------------------------- |
-| Viewing Help           | `help`                                                   |
-| Set Monthly Salary     | `salary amt/AMOUNT` e.g. `salary amt/1200.50`            |
-| Set Current Savings    | `savings amt/AMOUNT` e.g. `savings amt/5000`             |
-| Set BTO Goal Price     | `goal TOTAL_PRICE` e.g. `goal 400000`                    |
-| Set Contribution Ratio | `ratio RATIO` e.g. `ratio 60`                            |
-| Add Expense            | `add n/NAME amt/AMOUNT` e.g. `add n/Hall Rental amt/450` |
-| List Entries           | `list`                                                   |
-| Delete Entry           | `delete INDEX` e.g. `delete 2`                           |
-| Set Deadline           | `deadline d/YYYY-MM` e.g. `deadline d/2027-12`           |
-| View Financial Summary | `summary`                                                |
-| Clear All Data         | `clear`                                                  |
-| Exit Program           | `exit`                                                   |
+| Action                 | Format, Examples               |
+|------------------------|--------------------------------|
+| Viewing Help           | `help`                         |
+| Add more savings       | `savings` e.g. `savings`       |
+| Add Expense            | `add AMOUNT` e.g. `add 450`    |
+| List Entries           | `list`                         |
+| Delete Entry           | `delete INDEX` e.g. `delete 2` |
+| View Financial Summary | `summary`                      |
+| Clear All Data         | `clear`                        |
+| Exit Program           | `bye`                          |
 
 ### Enquiry
 We hope that you found FinTrackPro useful and easy to use!

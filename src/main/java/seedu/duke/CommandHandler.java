@@ -21,6 +21,11 @@ public class CommandHandler {
     private final Storage storage;
 
     public CommandHandler(Ui ui, Profile profile, ExpenseList expenseList, Storage storage) {
+        assert ui != null : "Ui should not be null";
+        assert profile != null : "Profile should not be null";
+        assert expenseList != null : "ExpenseList should not be null";
+        assert storage != null : "Storage should not be null";
+
         this.ui = ui;
         this.profile = profile;
         this.expenseList = expenseList;
@@ -44,11 +49,18 @@ public class CommandHandler {
      * @param userInput Full command line entered by the user (starting with {@code add}).
      */
     public void handleAdd(String userInput) {
+        assert userInput != null : "User input should not be null";
+        assert userInput.startsWith("add") : "Input should start with 'add'";
+
         try {
             String rest = userInput.substring("add".length()).trim();
             BigDecimal amount = parseAmount(rest);
 
+            BigDecimal oldTotal = expenseList.getTotal();
             expenseList.add(amount);
+
+            assert expenseList.getTotal().compareTo(oldTotal.add(amount)) == 0
+                    : "Expense total should increase by added amount";
 
             ui.printLine("Added expense: $" + amount);
             ui.printLine("Current Total: $" + expenseList.getTotal());
@@ -74,11 +86,19 @@ public class CommandHandler {
      * @param userInput Full command line entered by the user (starting with {@code delete}).
      */
     public void handleDelete(String userInput) {
+        assert userInput != null : "User input should not be null";
+        assert userInput.startsWith("delete") : "Input should start with 'delete'";
+
         try {
             String rest = userInput.substring("delete".length()).trim();
             int index = parseDeleteIndex(rest);
 
+            BigDecimal oldTotal = expenseList.getTotal();
             Expense removed = expenseList.delete(index);
+
+            assert removed != null : "Deleted expense should not be null";
+            assert expenseList.getTotal().compareTo(oldTotal.subtract(removed.getAmount())) == 0
+                    : "Expense total should decrease by removed amount";
 
             ui.printLine("Deleted expense #" + index + ": $" + removed.getAmount());
             ui.printLine("Current Total: $" + expenseList.getTotal());
@@ -99,8 +119,11 @@ public class CommandHandler {
      * @param in Scanner used to read the user's confirmation response.
      */
     public void handleClear(Scanner in) {
+        assert in != null : "Scanner should not be null";
+
         ui.printLine("WARNING: This will permanently delete ALL expenses. Are you sure? (Input Y to clear)");
         String response = in.nextLine().trim().toLowerCase();
+
         if (response.equals("y")) {
             expenseList.clear();
             ui.printLine("Expense list has been wiped clean. Fresh start!");
@@ -117,15 +140,22 @@ public class CommandHandler {
      * @param in Scanner used to read the user's deposit input.
      */
     public void handleSavings(Scanner in) {
+        assert in != null : "Scanner should not be null";
+
         BigDecimal current = profile.getCurrentSavings();
+        assert current != null : "Current savings should not be null";
+
         ui.printLine("Current total savings: " + InputUtil.formatMoney(current));
 
         // Prompt for the amount to add
         BigDecimal depositAmount = InputUtil.readMoney(ui, in, "Enter amount to add to your savings:");
+        assert depositAmount.compareTo(BigDecimal.ZERO) >= 0 : "Deposit amount should not be negative";
 
         // Update profile by adding to the current balance
         BigDecimal updatedSavings = current.add(depositAmount);
         profile.setCurrentSavings(updatedSavings);
+        assert profile.getCurrentSavings().compareTo(updatedSavings) == 0
+                : "Profile savings should match updated savings";
 
         ui.printLine("");
         ui.printLine("Transaction successful!");
@@ -158,6 +188,8 @@ public class CommandHandler {
      * @param in Scanner used for user confirmation.
      */
     public void handleReset(Scanner in) {
+        assert in != null : "Scanner should not be null";
+
         ui.printLine("WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: ");
         String response = in.nextLine().trim().toLowerCase();
 
@@ -165,6 +197,9 @@ public class CommandHandler {
             // 1. Reset in-memory objects
             profile.reset();
             expenseList.clear();
+
+            assert expenseList.getTotal().compareTo(BigDecimal.ZERO) == 0
+                    : "Expense total should be zero after reset";
 
             // 2. Overwrite the save file with the empty data
             try {
@@ -182,9 +217,11 @@ public class CommandHandler {
     }
 
     public BigDecimal parseAmount(String rest) throws InvalidAmountException {
+        assert rest != null : "Amount input should not be null";
+
         // If there is no input after add
         if (rest.isEmpty()) {
-            throw new InvalidAmountException("Format: add <value(to 2dp)> bro! where is the MONEHHHH");
+            throw new InvalidAmountException("Format: add <value(to 2dp)> bro! where is the MONEHHHH\n");
         }
 
         BigDecimal amount;
@@ -192,34 +229,38 @@ public class CommandHandler {
         try {
             amount = new BigDecimal(rest);
         } catch (NumberFormatException e) {
-            throw new InvalidAmountException("Amount must be a valid number bro! What is this garbage!");
+            throw new InvalidAmountException("Amount must be a valid number bro! What is this garbage!\n");
         }
 
         //Reject negative values
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new InvalidAmountException("Amount cannot be negative bro who you trying to scam?");
+            throw new InvalidAmountException("Amount cannot be negative bro who you trying to scam?\n");
         }
 
         // Reject >2 decimal places
         if (amount.scale() > 2) {
-            throw new InvalidAmountException("Amount must not exceed 2 decimal places bro!");
+            throw new InvalidAmountException("Amount must not exceed 2 decimal places bro!\n");
         }
+
+        assert amount.compareTo(BigDecimal.ZERO) >= 0 : "Amount should be non-negative";
 
         return amount;
     }
 
     public int parseDeleteIndex(String rest) throws InvalidIndexException {
+        assert rest != null : "Delete index input should not be null";
+
         // If there is no input after delete
         if (rest.isEmpty()) {
-            throw new InvalidIndexException("Format: delete <index> bro! where is the INDEXXX");
+            throw new InvalidIndexException("Format: delete <index> bro! where is the INDEXXX\n");
         }
 
         int index = Parser.parseIndex(rest);
 
         if (!expenseList.isValidIndex(index)) {
-            throw new InvalidIndexException("Invalid index bro! do you even know how much you've spent?");
+            throw new InvalidIndexException("Invalid index bro! do you even know how much you've spent?\n");
         }
-
+        
         return index;
     }
 }

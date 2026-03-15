@@ -16,7 +16,6 @@ package seedu.duke;
  */
 public class Parser {
     public static final int MAX_SPLIT_LENGTH = 2;
-
     /**
      * Extracts the command keyword from a raw input string.
      *
@@ -29,13 +28,19 @@ public class Parser {
      * @return The command keyword (first token before the first space).
      */
     public static String parseCommand(String input) {
-        if (input == null || input.trim().isEmpty()) {
+        assert input != null : "Input to parseCommand should not be null";
+
+        if (input.trim().isEmpty()) {
             return "";
         }
-        return input.trim().split(" ", MAX_SPLIT_LENGTH)[0].toLowerCase();
+
+        String[] tokens = input.trim().split("\\s+", MAX_SPLIT_LENGTH);
+        assert tokens.length > 0 : "Split should produce at least one token";
+        return tokens[0].toLowerCase();
     }
 
     public static int parseIndex(String indexString) {
+        assert indexString != null : "Index string should not be null";
         if (!indexString.matches("\\d+")) {
             return -1;
         }
