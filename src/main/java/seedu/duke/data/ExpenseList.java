@@ -29,7 +29,16 @@ public class ExpenseList {
         Expense expense = new Expense(amount);
         expenses.add(expense);
         total = total.add(amount);
+        //Post add invariant: List must have grown by exacrtly ony entry
+        assert expenses.size() == sizeBefore + 1
+                : "List size should have increaseed by 1 after add";
+        // Post-add invariant: total must not have decreased
+        assert total.compareTo(totalBefore) >= 0
+                : "Total should not decrease after adding an expense.";
 
+        // Post-add invariant: total must never be negative
+        assert total.compareTo(BigDecimal.ZERO) >= 0
+                : "Total must never be negative.";
 
     }
 
