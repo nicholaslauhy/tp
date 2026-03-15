@@ -35,6 +35,7 @@ public class FinTrackPro {
     private final CommandHandler handler;
 
     public FinTrackPro(Ui ui) {
+        assert ui != null : "Ui must not be null";
         this.ui = new Ui();
         this.profile = new Profile();
         this.expenseList = new ExpenseList();
@@ -209,6 +210,9 @@ public class FinTrackPro {
      * @param in Scanner used for follow-up prompts for commands that require more input
      */
     private void handleCommand(String userInput, Scanner in) {
+        assert userInput != null : "userInput should not be null";
+        assert in != null : "Scanner should not be null";
+
         if (userInput.trim().isEmpty()) {
             ui.printLine("Cannot process empty description!");
             return;
