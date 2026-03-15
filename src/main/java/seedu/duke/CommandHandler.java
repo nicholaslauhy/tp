@@ -184,6 +184,10 @@ public class CommandHandler {
         assert profile.getCurrentSavings().compareTo(updatedSavings) == 0
                 : "Profile savings should match updated savings";
 
+        // Log at INFO: savings update is a key profile state change
+        logger.info("handleSavings executed | deposited: $" + depositAmount
+                + " | new savings total: $" + updatedSavings);
+
         ui.printLine("");
         ui.printLine("Transaction successful!");
         ui.printLine("Added: " + InputUtil.formatMoney(depositAmount));
