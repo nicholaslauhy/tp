@@ -303,14 +303,20 @@ public class CommandHandler {
 
         // If there is no input after delete
         if (rest.isEmpty()) {
+            logger.warning("parseDeleteIndex rejected | reason: empty input");
             throw new InvalidIndexException("Format: delete <index> bro! where is the INDEXXX\n");
         }
 
         int index = Parser.parseIndex(rest);
 
         if (!expenseList.isValidIndex(index)) {
+            logger.warning("parseDeleteIndex rejected | reason: index " + index
+                    + " out of range, list size: " + expenseList.size());
             throw new InvalidIndexException("Invalid index bro! do you even know how much you've spent?\n");
         }
+
+        // Log at FINE: successful parse is a low-level detail, not a key app event
+        logger.fine("parseDeleteIndex succeeded | parsed index: " + index);
         
         return index;
     }
