@@ -160,3 +160,46 @@
 [2026-03-16 00:40:02] [INFO] seedu.duke.FinTrackPro - Profile and expense data saved successfully.
 [2026-03-16 00:40:02] [INFO] seedu.duke.FinTrackPro - Application exiting for user: Adam
 [2026-03-16 00:40:02] [INFO] seedu.duke.ui.Ui - Application exiting for user: Adam
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index -1 out of range, list size: 0
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: negative value -1
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: more than 2 decimal places, value: 7.009
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: empty input
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: non-numeric input 'hello'
+[2026-03-17 13:42:36] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | amount: $10.50 | new total: $10.50
+[2026-03-17 13:42:36] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | amount: $10 | new total: $10
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index 2 out of range, list size: 1
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: empty input
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index -1 out of range, list size: 0
+[2026-03-17 13:42:36] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index 0 out of range, list size: 0
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-17 13:42:36] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.Storage - Saving financial data to C:\Users\jairu\AppData\Local\Temp\junit707330005803083657\test_data.txt
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.Storage - Save successful.
+[2026-03-17 13:42:36] [WARNING] seedu.duke.data.Storage - No save file found. Starting fresh.
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-17 13:42:36] [WARNING] seedu.duke.data.SummaryReport - Monthly surplus is non-positive; cannot estimate completion.
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-17 13:42:36] [WARNING] seedu.duke.data.SummaryReport - Monthly surplus is non-positive; cannot estimate completion.
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-17 13:42:36] [WARNING] seedu.duke.data.SummaryReport - BTO goal is zero; percentage set to 0.
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
+[2026-03-17 13:42:36] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick

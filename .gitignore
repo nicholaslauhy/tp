@@ -6,6 +6,10 @@
 # Data save files
 fintrack.txt
 
+# Log files
+*.log
+logs/
+
 # Gradle build files
 /.gradle/
 /build/
