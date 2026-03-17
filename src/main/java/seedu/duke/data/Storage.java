@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Handles the persistence of user profile data and expense lists to a local file.
@@ -14,6 +17,7 @@ import java.util.Scanner;
  * </p>
  */
 public class Storage {
+    private static final Logger logger = Logger.getLogger(Storage.class.getName());
     private final String filePath;
 
     /**
@@ -22,6 +26,8 @@ public class Storage {
      * @param filePath The path to the text file used for data persistence.
      */
     public Storage(String filePath) {
+        // Assertion: The file path should never be null or empty
+        assert filePath != null && !filePath.trim().isEmpty() : "Storage file path is invalid!";
         this.filePath = filePath;
     }
 
@@ -37,24 +43,34 @@ public class Storage {
      * @throws IOException If there is an error writing to the file.
      */
     public void save(Profile profile, ExpenseList expenseList) throws IOException {
-        FileWriter fw = new FileWriter(filePath);
+        // Assertion: Verify internal state before writing to disk
+        assert profile != null : "Cannot save a null profile!";
+        assert expenseList != null : "Cannot save a null expense list!";
 
-        // Save Profile (P)
-        fw.write(String.format("P | %s | %s | %s | %s | %s | %s%n",
-                profile.getName(),
-                profile.getMonthlySalary(),
-                profile.getCurrentSavings(),
-                profile.getBtoGoal(),
-                profile.getContributionRatio(),
-                profile.getDeadline()));
+        logger.log(Level.INFO, "Saving financial data to " + filePath);
 
-        // Save Expenses (E)
-        for (int i = 0; i < expenseList.size(); i++) {
-            Expense e = expenseList.get(i);
-            fw.write(String.format("E | %s%n", e.getAmount()));
+        try (FileWriter fw = new FileWriter(filePath)) {
+            // Save Profile (P)
+            fw.write(String.format("P | %s | %s | %s | %s | %s | %s%n",
+                    profile.getName(),
+                    profile.getMonthlySalary(),
+                    profile.getCurrentSavings(),
+                    profile.getBtoGoal(),
+                    profile.getContributionRatio(),
+                    profile.getDeadline()));
+
+            // Save Expenses (E)
+            for (int i = 0; i < expenseList.size(); i++) {
+                Expense e = expenseList.get(i);
+                // ASSERTION: Ensure no corrupted data exists in the list
+                assert e.getAmount() != null : "Expense amount at index " + i + " is null";
+                fw.write(String.format("E | %s%n", e.getAmount()));
+            }
+            logger.log(Level.INFO, "Save successful.");
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Could not write to file: " + filePath, e);
+            throw e;
         }
-
-        fw.close();
     }
 
     /**
@@ -72,25 +88,34 @@ public class Storage {
     public void load(Profile profile, ExpenseList expenseList) throws IOException {
         File f = new File(filePath);
         if (!f.exists()) {
+            logger.log(Level.WARNING, "No save file found. Starting fresh.");
             return; // No save file yet, start with fresh data
         }
 
-        Scanner s = new Scanner(f);
-        while (s.hasNext()) {
-            String line = s.nextLine();
-            String[] parts = line.split(" \\| ");
+        try (Scanner s = new Scanner(f)) {
+            while (s.hasNext()) {
+                String line = s.nextLine();
+                String[] parts = line.split(" \\| ");
 
-            if (parts[0].equals("P")) {
-                profile.setName(parts[1]);
-                profile.setMonthlySalary(new BigDecimal(parts[2]));
-                profile.setCurrentSavings(new BigDecimal(parts[3]));
-                profile.setBtoGoal(new BigDecimal(parts[4]));
-                profile.setContributionRatio(new BigDecimal(parts[5]));
-                profile.setDeadline(java.time.LocalDate.parse(parts[6]));
-            } else if (parts[0].equals("E")) {
-                expenseList.add(new BigDecimal(parts[1]));
+                if (parts.length < 2) {
+                    logger.log(Level.WARNING, "Skipping malformed line: " + line);
+                    continue;
+                }
+
+                if (parts[0].equals("P")) {
+                    profile.setName(parts[1]);
+                    profile.setMonthlySalary(new BigDecimal(parts[2]));
+                    profile.setCurrentSavings(new BigDecimal(parts[3]));
+                    profile.setBtoGoal(new BigDecimal(parts[4]));
+                    profile.setContributionRatio(new BigDecimal(parts[5]));
+                    profile.setDeadline(java.time.LocalDate.parse(parts[6]));
+                } else if (parts[0].equals("E")) {
+                    expenseList.add(new BigDecimal(parts[1]));
+                }
             }
+        } catch (IOException | NumberFormatException | DateTimeParseException e) {
+            logger.log(Level.SEVERE, "Failed to parse save file accurately.", e);
+            throw new IOException("The save file is corrupted and cannot be loaded.", e);
         }
-        s.close();
     }
 }
