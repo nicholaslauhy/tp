@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Handles the persistence of user profile data and expense lists to a local file.
@@ -22,6 +24,8 @@ public class Storage {
      * @param filePath The path to the text file used for data persistence.
      */
     public Storage(String filePath) {
+        // Assertion: The file path should never be null or empty
+        assert filePath != null && !filePath.trim().isEmpty() : "Storage file path is invalid!";
         this.filePath = filePath;
     }
 
@@ -37,6 +41,10 @@ public class Storage {
      * @throws IOException If there is an error writing to the file.
      */
     public void save(Profile profile, ExpenseList expenseList) throws IOException {
+        // Assertion: Verify internal state before writing to disk
+        assert profile != null : "Cannot save a null profile!";
+        assert expenseList != null : "Cannot save a null expense list!";
+
         FileWriter fw = new FileWriter(filePath);
 
         // Save Profile (P)
@@ -51,6 +59,8 @@ public class Storage {
         // Save Expenses (E)
         for (int i = 0; i < expenseList.size(); i++) {
             Expense e = expenseList.get(i);
+            // ASSERTION: Ensure no corrupted data exists in the list
+            assert e.getAmount() != null : "Expense amount at index " + i + " is null";
             fw.write(String.format("E | %s%n", e.getAmount()));
         }
 
@@ -79,6 +89,9 @@ public class Storage {
         while (s.hasNext()) {
             String line = s.nextLine();
             String[] parts = line.split(" \\| ");
+
+            // ASSERTION: Verify the file structure matches our expected internal logic
+            assert parts.length >= 2 : "Corrupted file line detected: " + line;
 
             if (parts[0].equals("P")) {
                 profile.setName(parts[1]);
