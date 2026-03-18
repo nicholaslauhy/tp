@@ -1,5 +1,6 @@
 package seedu.duke.util;
 
+import seedu.duke.CommandHandler;
 import seedu.duke.ui.Ui;
 
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
  * Utility class for validated user input handling in FinTrackPro.
@@ -24,6 +26,7 @@ import java.util.Scanner;
  * once valid input has been received.</p>
  */
 public class InputUtil {
+    private static final Logger logger = LoggerUtil.getLogger(CommandHandler.class);
     private static final NumberFormat MONEY_FMT =
             NumberFormat.getCurrencyInstance(Locale.US);
 
@@ -42,6 +45,9 @@ public class InputUtil {
      * @return Formatted currency string.
      */
     public static String formatMoney(BigDecimal amount) {
+        assert amount != null : "formatMoney: amount must not be null";
+        // Log at INFO: user provided valid string input which is accepted
+        logger.info("formatMoney succeeded | amount: " + amount + ", formatted: " + MONEY_FMT.format(amount));
         return MONEY_FMT.format(amount);
     }
 
@@ -75,16 +81,24 @@ public class InputUtil {
      * @return 2.5% of the validated monetary amount.
      */
     public static BigDecimal readMoney(Ui ui, Scanner in, String prompt) {
+        assert ui != null : "readMoney: ui must not be null";
+        assert in != null : "readMoney: in must not be null";
+        assert prompt != null : "readMoney: prompt must not be null";
+
         while (true) {
-            String moneyString = ui.readLine(in,prompt).trim();
+            String moneyString = ui.readLine(in, prompt).trim();
 
             if (!moneyString.matches("\\d+(\\.\\d{1,2})?")) {
+                // Log at WARNING: user provided invalid format string which is rejected
+                logger.warning("readMoney unsuccessful | reason: invalid formatting");
                 ui.printLine("Bruh I need a valid amount like " +
                         "10250 or 10250.50 (numbers only, max 2 dp). Try again.");
                 continue;
             }
 
-            return new BigDecimal(moneyString);
+            BigDecimal result = new BigDecimal(moneyString);
+            assert result.compareTo(BigDecimal.ZERO) >= 0 : "readMoney: parsed amount must be non-negative";
+            return result;
 
         }
     }
@@ -107,6 +121,9 @@ public class InputUtil {
      * @return A {@link LocalDate} that is strictly after today.
      */
     public static LocalDate readFutureDate(Ui ui, Scanner in, String prompt) {
+        assert ui != null : "readFutureDate: ui must not be null";
+        assert in != null : "readFutureDate: in must not be null";
+        assert prompt != null : "readFutureDate: prompt must not be null";
         while (true) {
             String s = ui.readLine(in, prompt).trim();
 
@@ -115,13 +132,20 @@ public class InputUtil {
                 LocalDate today = LocalDate.now();
 
                 if (!date.isAfter(today)) {
+                    // Log at WARNING: user provided non-future date which is rejected
+                    logger.warning("readFutureDate unsuccessful | reason: date input is not a future date");
                     ui.printLine("Deadline must be a future date. Try again.");
                     continue;
                 }
 
+                assert date.isAfter(LocalDate.now()) : "readFutureDate: returned date must be strictly in the future";
+                // Log at FINE: readFutureDate is a low-level detail, not a key app event
+                logger.fine("readFutureDate successful | date: " + date);
                 return date;
 
             } catch (DateTimeParseException e) {
+                // Log at WARNING: user provided invalid formatted string which is rejected
+                logger.warning("readFutureDate unsuccessful | reason: invalid formatting");
                 ui.printLine("Date format needs to be YYYY-MM-DD (e.g., 2026-12-31). Try again.");
             }
         }
@@ -154,12 +178,18 @@ public class InputUtil {
      * @return A validated {@link BigDecimal} between 0 and 1.
      */
     public static BigDecimal readRatio(Ui ui, Scanner in, String prompt) {
+        assert ui != null : "readRatio: ui must not be null";
+        assert in != null : "readRatio: in must not be null";
+        assert prompt != null : "readRatio: prompt must not be null";
+
         while (true) {
             String input = ui.readLine(in, prompt).trim();
 
             // Regex: Digits followed by a dot and 1-2 digits.
             // This prevents negative signs (-), symbols, and excessive decimals.
             if (!input.matches("\\d+(\\.\\d{1,2})?")) {
+                // Log at WARNING: user provided invalid formatted string which is rejected
+                logger.warning("readRatio unsuccessful | reason: invalid formatting");
                 ui.printLine("EH WRONG FORMAT! Enter a decimal between 0 and 1 (e.g., 0.5).");
                 continue;
             }
@@ -168,11 +198,20 @@ public class InputUtil {
 
                 // Check if between 0.0 & 1.0
                 if (ratio.compareTo(BigDecimal.ZERO) < 0 || ratio.compareTo(BigDecimal.ONE) > 0) {
+                    // Log at WARNING: user provided out of bounds input which is rejected
+                    logger.warning("readRatio unsuccessful | reason: out of specified bounds");
                     ui.printLine("Brother...Ratio must be between 0 and 1. Try again!");
                     continue;
                 }
+
+                assert ratio.compareTo(BigDecimal.ZERO) >= 0 && ratio.compareTo(BigDecimal.ONE) <= 0
+                        : "readRatio: returned ratio must be between 0.0 and 1.0 inclusive";
+                // Log at FINE: readRatio is a low-level detail, not a key app event
+                logger.fine("readRatio successful | ratio: " + ratio);
                 return ratio;
             } catch (NumberFormatException e) {
+                // Log at WARNING: user provided non-numeric string which is rejected
+                logger.warning("readRatio unsuccessful | reason: input is not a number");
                 ui.printLine("Pleaseee input a number. Try again!!!");
             }
         }

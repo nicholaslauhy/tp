@@ -1,5 +1,9 @@
 package seedu.duke;
 
+import seedu.duke.util.LoggerUtil;
+
+import java.util.logging.Logger;
+
 /**
  * Parses raw user input into command tokens.
  *
@@ -16,6 +20,13 @@ package seedu.duke;
  */
 public class Parser {
     public static final int MAX_SPLIT_LENGTH = 2;
+
+    /**
+     * Logger for recording command handler events.
+     * Routes all output to the central {@code logs/fintrack.log} via {@link LoggerUtil}.
+     */
+    private static final Logger logger = LoggerUtil.getLogger(CommandHandler.class);
+
     /**
      * Extracts the command keyword from a raw input string.
      *
@@ -31,19 +42,28 @@ public class Parser {
         assert input != null : "Input to parseCommand should not be null";
 
         if (input.trim().isEmpty()) {
+            // Log at WARNING: user provided empty string which is rejected
+            logger.warning("Input rejected | reason: Input to parseCommand is null");
             return "";
         }
 
         String[] tokens = input.trim().split("\\s+", MAX_SPLIT_LENGTH);
         assert tokens.length > 0 : "Split should produce at least one token";
+
+        // Log at FINE: parseCommand is a low-level detail, not a key app event
+        logger.fine("parseCommand succeeded | token: " + tokens[0].toLowerCase());
         return tokens[0].toLowerCase();
     }
 
     public static int parseIndex(String indexString) {
         assert indexString != null : "Index string should not be null";
         if (!indexString.matches("\\d+")) {
+            // Log at WARNING: user provided invalid format string which is rejected
+            logger.warning("Index string rejected | reason: Index string does not match integer format");
             return -1;
         }
+        // Log at FINE: readRatio is a low-level detail, not a key app event
+        logger.fine("parseIndex succeeded | index string: " + indexString);
         return Integer.parseInt(indexString);
     }
 }
