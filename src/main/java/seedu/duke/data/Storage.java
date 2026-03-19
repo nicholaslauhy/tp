@@ -111,6 +111,11 @@ public class Storage {
                 }
 
                 if (parts[0].equals("P")) {
+                    if (parts.length < 7) {
+                        logger.log(Level.WARNING, "Skipping malformed profile line: " + line);
+                        continue;
+                    }
+
                     profile.setName(parts[1]);
                     profile.setMonthlySalary(new BigDecimal(parts[2]));
                     profile.setCurrentSavings(new BigDecimal(parts[3]));
@@ -118,11 +123,19 @@ public class Storage {
                     profile.setContributionRatio(new BigDecimal(parts[5]));
                     profile.setDeadline(java.time.LocalDate.parse(parts[6]));
                 } else if (parts[0].equals("E")) {
-                    String name = parts[1];
-                    BigDecimal amount = new BigDecimal(parts[2]);
-                    Category category = Category.fromString(parts[3]);
-
-                    expenseList.add(name, amount, category);
+                    if (parts.length == 2) {
+                        // Old format: E | amount
+                        BigDecimal amount = new BigDecimal(parts[1]);
+                        expenseList.add("Unnamed Expense", amount, Category.OTHER);
+                    } else if (parts.length == 4) {
+                        // New format: E | name | amount | category
+                        String name = parts[1];
+                        BigDecimal amount = new BigDecimal(parts[2]);
+                        Category category = Category.fromString(parts[3]);
+                        expenseList.add(name, amount, category);
+                    } else {
+                        logger.log(Level.WARNING, "Skipping malformed expense line: " + line);
+                    }
                 } else {
                     logger.log(Level.WARNING, "Skipping unknown record type: " + line);
                 }
