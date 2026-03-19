@@ -40,7 +40,7 @@ General Commands
 'bye'     - exit the program
 
 Daily Transaction Commands
-'add'      <amount> - add a new expense (e.g., add 5.50)
+'add'      <name> <amount> <category>- add a new expense (e.g., add lunch 5.50 FOOD)
 'list'     - view all current expenses and your total spent
 'delete'   <index> - remove a specific expense from your list
 
