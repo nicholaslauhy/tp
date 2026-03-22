@@ -1,8 +1,9 @@
 package seedu.duke;
 
-import seedu.duke.data.Profile;
+import seedu.duke.data.Category;
 import seedu.duke.data.Expense;
 import seedu.duke.data.ExpenseList;
+import seedu.duke.data.Profile;
 import seedu.duke.data.Storage;
 import seedu.duke.data.SummaryReport;
 import seedu.duke.exception.InvalidAmountException;
@@ -44,17 +45,24 @@ public class CommandHandler {
     /**
      * Adds an expense entry into the {@link ExpenseList}.
      *
-     * <p>Expected format: {@code add <amount>}</p>
+     * <p>Expected format: {@code add <name> <amount> <category>}</p>
+     *
+     * <p>The final token is treated as the category, the second-last token as the amount,
+     * and all preceding tokens are treated as the expense name. This allows expense names
+     * to contain multiple words.</p>
+     *
      * <ul>
-     *   <li>Rejects missing amount</li>
-     *   <li>Rejects non-numeric amount</li>
+     *   <li>Rejects missing input</li>
+     *   <li>Rejects blank expense names</li>
+     *   <li>Rejects non-numeric amounts</li>
      *   <li>Rejects negative values</li>
      *   <li>Rejects values with more than 2 decimal places</li>
+     *   <li>Rejects invalid categories</li>
      * </ul>
      *
      * <p>On success, prints the new expense and the updated running total.</p>
      *
-     * @param userInput Full command line entered by the user (starting with {@code add}).
+     * @param userInput Full command line entered by the user, beginning with {@code add}.
      */
     public void handleAdd(String userInput) {
         assert userInput != null : "User input should not be null";
@@ -62,30 +70,62 @@ public class CommandHandler {
 
         try {
             String rest = userInput.substring("add".length()).trim();
-            BigDecimal amount = parseAmount(rest);
+
+            if (rest.isEmpty()) {
+                logger.warning("handleAdd rejected | reason: empty input");
+                throw new InvalidAmountException("Format: add <name> <amount> <category>\n");
+            }
+
+            String[] parts = rest.split("\\s+");
+
+            if (parts.length < 3) {
+                logger.warning("handleAdd rejected | reason: insufficient arguments");
+                throw new InvalidAmountException("Format: add <name> <amount> <category>\n");
+            }
+
+            String categoryString = parts[parts.length - 1];
+            String amountString = parts[parts.length - 2];
+
+            StringBuilder nameBuilder = new StringBuilder();
+            for (int i = 0; i < parts.length - 2; i++) {
+                if (i > 0) {
+                    nameBuilder.append(" ");
+                }
+                nameBuilder.append(parts[i]);
+            }
+
+            String name = nameBuilder.toString();
+
+            if (name.isBlank()) {
+                logger.warning("handleAdd rejected | reason: blank expense name");
+                throw new InvalidAmountException("Expense name cannot be empty.\n");
+            }
+
+            BigDecimal amount = parseAmount(amountString);
+
+            // To be provided by category implementation
+            Category category = Category.fromString(categoryString);
 
             BigDecimal oldTotal = expenseList.getTotal();
-            expenseList.add(amount);
+            expenseList.add(name, amount, category);
 
             assert expenseList.getTotal().compareTo(oldTotal.add(amount)) == 0
                     : "Expense total should increase by added amount";
 
-            // Log at INFO: a successful add is a key application state change
-            logger.info("handleAdd succeeded | amount: $" + amount
+            logger.info("handleAdd succeeded | name: " + name
+                    + " | amount: $" + amount
+                    + " | category: " + category
                     + " | new total: $" + expenseList.getTotal());
 
-            ui.printLine("Added expense: $" + amount);
+            ui.printLine("Added expense: " + new Expense(name, amount, category));
             ui.printLine("Current Total: $" + expenseList.getTotal());
             ui.printLine("");
 
         } catch (InvalidAmountException e) {
-            // Log at WARNING: user provided invalid input that was rejected
-            logger.warning("handleAdd rejected | reason: " + e.getMessage().trim());
             ui.printLine(e.getMessage());
             ui.printLine("");
         }
     }
-
     /**
      * Deletes an expense entry from the {@link ExpenseList} by 1-based index.
      *

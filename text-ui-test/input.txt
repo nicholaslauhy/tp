@@ -9,9 +9,9 @@ help
 list
 savings
 500
-add 5
+add lunch 5 FOOD
 add
-add -1
+add lunch -1 FOOD
 category 1 FOOD
 category 1
 category 1 HELLO

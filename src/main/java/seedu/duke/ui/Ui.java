@@ -98,7 +98,7 @@ public class Ui {
         printLine("");
 
         printLine("Daily Transaction Commands");
-        printLine("'add'      <amount> - add a new expense (e.g., add 5.50)");
+        printLine("'add'      <name> <amount> <category>- add a new expense (e.g., add lunch 5.50 FOOD)");
         printLine("'list'     - view all current expenses and your total spent");
         printLine("'delete'   <index> - remove a specific expense from your list");
         printLine("");

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import seedu.duke.data.Category;
 import seedu.duke.data.Storage;
 import seedu.duke.data.Profile;
 import seedu.duke.data.ExpenseList;
@@ -33,7 +34,7 @@ class StorageTest {
         originalProfile.setDeadline(LocalDate.of(2030, 1, 1));
 
         ExpenseList originalExpenses = new ExpenseList();
-        originalExpenses.add(new BigDecimal("50"));
+        originalExpenses.add("Lunch", new BigDecimal("50"), Category.FOOD);
 
         // Save and then Load back into fresh objects
         storage.save(originalProfile, originalExpenses);

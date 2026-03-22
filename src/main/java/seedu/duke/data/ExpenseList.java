@@ -15,18 +15,24 @@ public class ExpenseList {
     //place to store total
     private BigDecimal total = BigDecimal.ZERO;
 
+
     /**
-     * Creates a new expense with the specified amount, adds it to the list,
-     * and updates the running total.
+     * Creates a new expense with the specified name, amount, and category,
+     * adds it to the list, and updates the running total.
      *
-     * @param amount The monetary value of the expense to add.
+     * @param name Name or description of the expense.
+     * @param amount Monetary value of the expense.
+     * @param category Category assigned to the expense.
      */
-    public void add(BigDecimal amount){
+    public void add(String name, BigDecimal amount, Category category){
+        assert name != null && !name.isBlank() : "Expense name should not be null or blank.";
+        assert amount != null : "Expense amount should not be null.";
+        assert category != null : "Expense category should not be null.";
         //Added to capture pre mutation state for post mutation assertions
         int sizeBeforeAdd = expenses.size();
         BigDecimal totalBeforeAdd = total;
 
-        Expense expense = new Expense(amount);
+        Expense expense = new Expense(name, amount, category);
         expenses.add(expense);
         total = total.add(amount);
         //Post add invariant: List must have grown by exacrtly ony entry

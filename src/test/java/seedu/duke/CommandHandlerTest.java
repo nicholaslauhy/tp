@@ -47,7 +47,7 @@ class CommandHandlerTest {
 
     @Test
     public void parseDeleteIndex_validInput_returnsValidIndex() throws InvalidIndexException {
-        ch.handleAdd("add 10.50");
+        ch.handleAdd("add lunch 10.50 food");
         assertEquals(1, ch.parseDeleteIndex("1"));
     }
 
