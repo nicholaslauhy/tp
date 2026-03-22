@@ -330,7 +330,10 @@ public class FinTrackPro {
         for (int i = 0; i < displayList.size(); i++) {
             Expense expense = displayList.get(i);
             String formattedAmount = InputUtil.formatMoney(expense.getAmount());
-            ui.printLine( (i + 1) +  ". " + formattedAmount);
+            ui.printLine( (i + 1) +  ". " +
+                    expense.getName() + " " +
+                    formattedAmount + " " +
+                    "[" + expense.getCategory() + "]");
         }
 
         BigDecimal totalSpent = expenseList.getTotal();
