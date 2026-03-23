@@ -610,3 +610,15 @@
 [2026-03-23 23:35:56] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 100, formatted: $100.00
 [2026-03-23 23:35:56] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 20, formatted: $20.00
 [2026-03-23 23:35:56] [INFO] seedu.duke.FinTrackPro - Total expenditure calculated: 1130
+[2026-03-23 23:52:52] [INFO] seedu.duke.FinTrackPro - FinTrackPro initialised successfully
+[2026-03-23 23:52:52] [INFO] seedu.duke.FinTrackPro - Application started.
+[2026-03-23 23:52:52] [INFO] seedu.duke.ui.Ui - Displaying welcome message and ASCII logo.
+[2026-03-23 23:52:52] [INFO] seedu.duke.FinTrackPro - Profile and expense data loaded successfully.
+[2026-03-23 23:52:52] [INFO] seedu.duke.FinTrackPro - Existing profile found for user: Jairus
+[2026-03-23 23:52:52] [INFO] seedu.duke.FinTrackPro - Entering main command loop.
+[2026-03-23 23:55:57] [INFO] seedu.duke.FinTrackPro - FinTrackPro initialised successfully
+[2026-03-23 23:55:58] [INFO] seedu.duke.FinTrackPro - Application started.
+[2026-03-23 23:55:58] [INFO] seedu.duke.ui.Ui - Displaying welcome message and ASCII logo.
+[2026-03-23 23:55:58] [INFO] seedu.duke.FinTrackPro - Profile and expense data loaded successfully.
+[2026-03-23 23:55:58] [INFO] seedu.duke.FinTrackPro - Existing profile found for user: Jairus
+[2026-03-23 23:55:58] [INFO] seedu.duke.FinTrackPro - Entering main command loop.

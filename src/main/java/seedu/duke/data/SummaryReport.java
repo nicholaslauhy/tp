@@ -91,7 +91,7 @@ public class SummaryReport {
      *
      * @param percentage The current percentage of the BTO goal reached.
      * @return A descriptive string indicating the user's readiness level and
-     * corresponding advice or encouragement.
+     *     corresponding advice or encouragement.
      */
     private String computeReadinessLevel(int percentage) {
         if (percentage >= 100) {
