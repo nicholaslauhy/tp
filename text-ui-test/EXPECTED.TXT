@@ -1,0 +1,103 @@
+Welcome to Fintrack Pro!
+      +---------+
+      |   HDB   |
+      |  [ ][ ] |
+      |_________|
+Secure the Keys, Secure the Dream
+
+I am FinBro's brother, FinTrack Pro!
+What is your name?
+
+Nice to meet you, James Gosling!
+
+Hang tight... I have a few questions for you.
+How much do you currently have in savings?
+
+What is your monthly allowance? (in dollars)
+
+What is the total value that you and your partner have to pay for the house? (in dollars)
+
+What is your share of the contribution? (e.g., 0.6 for 60%):
+
+Total downpayment needed: $1,522.50
+Based on a 60.0% share...
+Your personal contribution needed: $913.50
+
+When do you need to save this money by? (e.g., 2028-10-24)
+
+You have 1 years and 6 months and 0 days remaining.
+Nice! Based on your current savings, you have already met your goal.
+
+Type 'help' to view my currently supported commands!
+Any non-command word would be echoed back to you you you
+Type 'bye' to exit!
+
+You said: hello
+
+General Commands
+'help'    - view all current commands
+'summary' - generate your BTO readiness report based on your goals
+'bye'     - exit the program
+
+Daily Transaction Commands
+'add'      <name> <amount> <category>- add a new expense (e.g., add lunch 5.50 FOOD)
+'list'     - view all current expenses and your total spent
+'delete'   <index> - remove a specific expense from your list
+
+Profile & Goal Management
+'sort'   <keyword> - sort the expenditure list by name, category or recency (e.g sort name, sort recent, sort category)
+'savings' - add a surplus amount to your existing savings
+'clear'   - wipe all current expenses from the list
+'reset'   - wipes all profile data and expenses to start fresh.
+
+Your expense list is as empty as my wallet. Go spend some money!
+
+Current total savings: $2,000.00
+Enter amount to add to your savings:
+
+Transaction successful!
+Added: $500.00
+New total savings: $2,500.00
+
+Added expense: [FOOD] lunch $5
+Current Total: $5
+
+Format: add <name> <amount> <category>
+
+
+Amount cannot be negative bro who you trying to scam?
+
+
+You said: category 1 FOOD
+
+You said: category 1
+
+You said: category 1 HELLO
+
+Added expense: [TRANSPORT] grab home $20
+Current Total: $25
+
+Added expense: [FOOD] hho $10
+Current Total: $35
+
+Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!
+
+Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!
+
+Expenses sorted by category.
+
+Here is your current expenditure list!
+1. lunch $5.00 [FOOD]
+2. hho $10.00 [FOOD]
+3. grab home $20.00 [TRANSPORT]
+Total Expenditure: $35
+
+Expenses sorted by insertion order.
+
+Here is your current expenditure list!
+1. lunch $5.00 [FOOD]
+2. grab home $20.00 [TRANSPORT]
+3. hho $10.00 [FOOD]
+Total Expenditure: $35
+
+Goodbye James Gosling. Stay disciplined and get that house that you always wanted!
