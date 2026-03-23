@@ -120,4 +120,67 @@ public class SummaryReportTest {
         assertEquals(new BigDecimal("3000"), report.monthlySurplus);
         assertEquals("3 months", report.estimate);
     }
+
+    @Test
+    void computeReadinessLevel_thresholdTests() {
+        Profile profile = new Profile();
+        ExpenseList expenseList = new ExpenseList();
+
+        profile.setBtoGoal(new BigDecimal("10000"));
+        profile.setDeadline(LocalDate.now().plusYears(1));
+
+        // Test 100% threshold
+        profile.setCurrentSavings(new BigDecimal("10000"));
+        assertEquals("Ready - Time to sign that BTO!",
+                new SummaryReport(profile, expenseList).readinessLevel);
+
+        // Test 70% threshold
+        profile.setCurrentSavings(new BigDecimal("7500"));
+        assertEquals("Secure - Keep it up, you're almost there!",
+                new SummaryReport(profile, expenseList).readinessLevel);
+
+        // Test 50% threshold
+        profile.setCurrentSavings(new BigDecimal("5500"));
+        assertEquals("On Track - Let's go! You're more than halfway there",
+                new SummaryReport(profile, expenseList).readinessLevel);
+
+        // Test 10% threshold
+        profile.setCurrentSavings(new BigDecimal("1500"));
+        assertEquals("Making Progress - Jiayou! You're making good progress",
+                new SummaryReport(profile, expenseList).readinessLevel);
+
+        // Test <10% threshold
+        profile.setCurrentSavings(new BigDecimal("500"));
+        assertEquals("Barely Started - Do start saving soon!!",
+                new SummaryReport(profile, expenseList).readinessLevel);
+    }
+
+    @Test
+    void constructor_calculatesCorrectMonthlyRequired() {
+        Profile profile = new Profile();
+        ExpenseList expenseList = new ExpenseList();
+
+        profile.setBtoGoal(new BigDecimal("10000"));
+        profile.setCurrentSavings(new BigDecimal("4000"));
+        profile.setDeadline(LocalDate.now().plusMonths(12));
+
+        SummaryReport report = new SummaryReport(profile, expenseList);
+
+        assertEquals(new BigDecimal("500.00"), report.monthlyRequired);
+    }
+
+    @Test
+    void monthlyRequired_goalAlreadyReached_returnsZero() {
+        Profile profile = new Profile();
+        ExpenseList expenseList = new ExpenseList();
+
+        profile.setBtoGoal(new BigDecimal("10000"));
+        profile.setCurrentSavings(new BigDecimal("12000"));
+        profile.setDeadline(LocalDate.now().plusMonths(5));
+
+        SummaryReport report = new SummaryReport(profile, expenseList);
+
+        assertEquals(BigDecimal.ZERO, report.monthlyRequired);
+        assertEquals("Ready - Time to sign that BTO!", report.readinessLevel);
+    }
 }

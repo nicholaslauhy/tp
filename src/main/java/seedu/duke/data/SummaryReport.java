@@ -3,6 +3,7 @@ package seedu.duke.data;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.logging.Logger;
 import seedu.duke.util.LoggerUtil;
 
@@ -25,6 +26,8 @@ public class SummaryReport {
     public final BigDecimal monthlySurplus;
     public final String estimate;
     public final BigDecimal totalExpenditure;
+    public final BigDecimal monthlyRequired;
+    public final String readinessLevel;
 
     /**
      * Constructs a {@code SummaryReport} from the user's current profile and expense list.
@@ -52,9 +55,56 @@ public class SummaryReport {
         this.monthlySurplus = monthlyAllowance.subtract(totalExpenditure);
 
         this.percentage = computePercentage();
+        this.readinessLevel = computeReadinessLevel(this.percentage);
         this.estimate = computeEstimate();
 
+        // Calculate months remaining
+        LocalDate today = LocalDate.now();
+        Period period = Period.between(today, profile.getDeadline());
+        int monthsLeft = period.getYears() * 12 + period.getMonths();
+        if (period.getDays() > 0) {
+            monthsLeft++; // Round up for partial months
+        }
+        if (monthsLeft <= 0) {
+            monthsLeft = 1;
+        }
+
+        // Calculate Distance to Goal / Months Remaining
+        BigDecimal distanceToGoal = profile.getBtoGoal().subtract(profile.getCurrentSavings());
+
+        if (distanceToGoal.compareTo(BigDecimal.ZERO) <= 0) {
+            this.monthlyRequired = BigDecimal.ZERO;
+        } else {
+            this.monthlyRequired = distanceToGoal.divide(
+                    BigDecimal.valueOf(monthsLeft), 2, java.math.RoundingMode.HALF_UP);
+        }
+
         logger.fine("Report values - Distance: " + distance + ", Surplus: " + monthlySurplus);
+    }
+
+    /**
+     * Determines a qualitative financial readiness level based on the savings percentage.
+     *
+     * <p>Maps the current progress to an encouraging status message using specific
+     * thresholds (100%, 70%, 50%, and 10%). This provides users with a quick
+     * benchmark of their BTO downpayment progress.</p>
+     *
+     * @param percentage The current percentage of the BTO goal reached.
+     * @return A descriptive string indicating the user's readiness level and
+     *     corresponding advice or encouragement.
+     */
+    private String computeReadinessLevel(int percentage) {
+        if (percentage >= 100) {
+            return "Ready - Time to sign that BTO!";
+        } else if (percentage >= 70) {
+            return "Secure - Keep it up, you're almost there!";
+        } else if (percentage >= 50) {
+            return "On Track - Let's go! You're more than halfway there";
+        } else if (percentage >= 10) {
+            return "Making Progress - Jiayou! You're making good progress";
+        } else {
+            return "Barely Started - Do start saving soon!!";
+        }
     }
 
     /**

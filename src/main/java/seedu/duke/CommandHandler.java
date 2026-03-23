@@ -474,6 +474,12 @@ public class CommandHandler {
         String arg = userInput.substring("sort".length()).trim();
 
         switch (arg.toLowerCase()) {
+        case "name":
+            expenseList.sortByName();
+            logger.info("handleSort executed | sort type: name");
+            ui.printLine("Expenses sorted alphabetically by name.");
+            ui.printLine("");
+            break;
         case "category":
             expenseList.sortByCategory();
             logger.info("handleSort executed | sort type: category");
@@ -489,7 +495,7 @@ public class CommandHandler {
             break;
         default:
             logger.warning("handleSort rejected | unknown argument: " + arg);
-            ui.printLine("Wrong argument la bro! Use 'sort category' or 'sort recent' ONLY!");
+            ui.printLine("Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!");
             ui.printLine("");
             break;
         }

@@ -182,4 +182,15 @@ public class ExpenseList {
     public void sortByRecent() {
         expenses.sort(Comparator.comparingInt(Expense::getInsertionOrder));
     }
+
+    /**
+     * Sorts the expense list in place alphabetically by expense name.
+     *
+     * <p>Uses a case-insensitive comparison by converting names to lowercase
+     * during the sorting process. The sort is stable, so expenses with the
+     * same name (regardless of case) retain their relative insertion order.</p>
+     */
+    public void sortByName() {
+        expenses.sort(Comparator.comparing(expense -> expense.getName().toLowerCase()));
+    }
 }

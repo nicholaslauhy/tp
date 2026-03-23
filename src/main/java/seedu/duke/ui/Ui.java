@@ -105,8 +105,8 @@ public class Ui {
         printLine("");
 
         printLine("Profile & Goal Management");
-        printLine("'sort'   <keyword> - sort the expenditure list by category or recency " +
-                "(e.g sort recent, sort category)");
+        printLine("'sort'   <keyword> - sort the expenditure list by name, category or recency " +
+                "(e.g sort name, sort recent, sort category)");
         printLine("'savings' - add a surplus amount to your existing savings");
         printLine("'clear'   - wipe all current expenses from the list");
         printLine("'reset'   - wipes all profile data and expenses to start fresh.");
@@ -152,6 +152,7 @@ public class Ui {
         logger.info("Rendering SummaryReport for user: " + report.name);
         printLine("===== BTO Readiness Report =====");
         printLine("User: " + report.name);
+        printLine("Readiness Level: " + report.readinessLevel);
         printLine("BTO Goal: " + InputUtil.formatMoney(report.btoGoal) + " (your share + fees)");
 
         LocalDate today = LocalDate.now();
@@ -169,10 +170,11 @@ public class Ui {
         String savingsLine = InputUtil.formatMoney(report.currentSavings) + " (" + report.percentage + "% reached)";
         printLine("Current Savings: " + savingsLine);
         printLine("Distance to Goal: " + InputUtil.formatMoney(report.distance));
+        printLine("Adjusted Minimum Savings: " + InputUtil.formatMoney(report.monthlyRequired) + " / month");
         printLine("");
         printLine("Monthly Allowance: " + InputUtil.formatMoney(report.monthlyAllowance));
         printLine("Total Expenditure: " + InputUtil.formatMoney(report.totalExpenditure));
-        printLine("Monthly Surplus: " + InputUtil.formatMoney(report.monthlySurplus));
+        printLine("Monthly Surplus (Allowance - Expenditure): " + InputUtil.formatMoney(report.monthlySurplus));
         printLine("Estimated Goal Achievement: " + report.estimate);
         printLine("");
 

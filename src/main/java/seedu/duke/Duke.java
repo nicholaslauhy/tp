@@ -11,6 +11,7 @@ public class Duke {
      * Runs the Duke program which runs FinTrackPro
      */
     public static void main(String[] args) {
+        // assert false : "Assertions are ENABLED!";
         Ui ui = new Ui();
         FinTrackPro app = new FinTrackPro(ui);
         app.run();

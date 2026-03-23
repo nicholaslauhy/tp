@@ -25,7 +25,7 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 6 months and 9 days remaining.
+You have 1 years and 6 months and 0 days remaining.
 Nice! Based on your current savings, you have already met your goal.
 
 Type 'help' to view my currently supported commands!
@@ -45,7 +45,7 @@ Daily Transaction Commands
 'delete'   <index> - remove a specific expense from your list
 
 Profile & Goal Management
-'sort'   <keyword> - sort the expenditure list by category or recency (e.g sort recent, sort category)
+'sort'   <keyword> - sort the expenditure list by name, category or recency (e.g sort name, sort recent, sort category)
 'savings' - add a surplus amount to your existing savings
 'clear'   - wipe all current expenses from the list
 'reset'   - wipes all profile data and expenses to start fresh.
@@ -80,9 +80,9 @@ Current Total: $25
 Added expense: [FOOD] hho $10
 Current Total: $35
 
-Wrong argument la bro! Use 'sort category' or 'sort recent' ONLY!
+Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!
 
-Wrong argument la bro! Use 'sort category' or 'sort recent' ONLY!
+Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!
 
 Expenses sorted by category.
 
