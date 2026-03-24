@@ -20,4 +20,16 @@ public class RecurringExpense {
         this.amount = amount;
         this.category = category;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
 }
