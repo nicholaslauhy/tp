@@ -173,7 +173,7 @@ public class CommandHandler {
         }
 
         StringBuilder nameBuilder = new StringBuilder();
-        for (int i = 0; i < parts.length - 2; i++) {
+        for (int i = 0; i < nameEndExclusive; i++) {
             if (i > 0) {
                 nameBuilder.append(" ");
             }
@@ -396,7 +396,7 @@ public class CommandHandler {
 
             // 2. Overwrite the save file with the empty data
             try {
-                storage.save(profile, expenseList);
+                storage.save(profile, expenseList, recurringExpenseList);
 
                 // Log at INFO: full system reset is the most significant application event
                 logger.info("handleReset executed | profile and expenses cleared, save file overwritten");
