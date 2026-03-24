@@ -100,8 +100,8 @@ public class Ui {
 
         printLine("Daily Transaction Commands");
         printLine("'add'      <name> <amount> <category><recurring> - " +
-                "add a new expense (e.g., add lunch 5.50 FOOD for not recurring and add lunch 5.50 FOOD recurring for " +
-                "recurring)");
+                "add a new expense" +   "(e.g., add lunch 5.50 FOOD for not recurring and" +
+                " add lunch 5.50 FOOD recurring for recurring)");
         printLine("'list'     - view all current expenses and your total spent");
         printLine("'delete'   <index> - remove a specific expense from your list");
         printLine("'deleterecurring' <index> - remove a recurring monthly expense");

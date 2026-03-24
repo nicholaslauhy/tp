@@ -1,7 +1,13 @@
 package seedu.duke;
 
 import seedu.duke.category.Category;
-import seedu.duke.data.*;
+import seedu.duke.data.Expense;
+import seedu.duke.data.ExpenseList;
+import seedu.duke.data.Profile;
+import seedu.duke.data.RecurringExpense;
+import seedu.duke.data.RecurringExpenseList;
+import seedu.duke.data.Storage;
+import seedu.duke.data.SummaryReport;
 import seedu.duke.exception.InvalidAmountException;
 import seedu.duke.exception.InvalidCategoryException;
 import seedu.duke.exception.InvalidIndexException;

@@ -43,7 +43,8 @@ public class Storage {
      * @param expenseList The {@link ExpenseList} containing all recorded transactions.
      * @throws IOException If there is an error writing to the file.
      */
-    public void save(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList) throws IOException {
+    public void save(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
+            throws IOException {
         // Assertion: Verify internal state before writing to disk
         assert profile != null : "Cannot save a null profile!";
         assert expenseList != null : "Cannot save a null expense list!";
@@ -105,7 +106,8 @@ public class Storage {
      * @param expenseList The {@link ExpenseList} object to be populated with saved expenses.
      * @throws IOException If there is an error reading from the file.
      */
-    public void load(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList) throws IOException {
+    public void load(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
+            throws IOException {
         assert profile != null : "Cannot load into a null profile!";
         assert expenseList != null : "Cannot load into a null expense list!";
         assert recurringExpenseList != null : "Cannot load into a null recurring expense list!";
@@ -168,8 +170,7 @@ public class Storage {
                     BigDecimal amount = new BigDecimal(parts[2]);
                     Category category = Category.fromString(parts[3]);
                     recurringExpenseList.add(new RecurringExpense(name, amount, category));
-                }
-                else {
+                } else {
                     logger.log(Level.WARNING, "Skipping unknown record type: " + line);
                 }
             }

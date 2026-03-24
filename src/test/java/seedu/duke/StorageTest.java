@@ -5,7 +5,11 @@ import org.junit.jupiter.api.io.TempDir;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import seedu.duke.category.Category;
-import seedu.duke.data.*;
+import seedu.duke.data.ExpenseList;
+import seedu.duke.data.Profile;
+import seedu.duke.data.RecurringExpense;
+import seedu.duke.data.RecurringExpenseList;
+import seedu.duke.data.Storage;
 
 import java.io.IOException;
 import java.nio.file.Path;
