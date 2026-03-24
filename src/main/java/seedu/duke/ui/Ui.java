@@ -104,6 +104,7 @@ public class Ui {
                 "recurring)");
         printLine("'list'     - view all current expenses and your total spent");
         printLine("'delete'   <index> - remove a specific expense from your list");
+        printLine("'deleterecurring' <index> - remove a recurring monthly expense");
         printLine("");
 
         printLine("Profile & Goal Management");

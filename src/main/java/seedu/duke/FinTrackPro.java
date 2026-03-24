@@ -263,6 +263,10 @@ public class FinTrackPro {
             logger.info("Executing delete command.");
             handler.handleDelete(userInput);
             break;
+        case "deleterecurring":
+            logger.info("Executing deleterecurring command.");
+            handler.handleDeleteRecurring(userInput);
+            break;
         case "list":
             logger.info("Executing list command.");
             printList();

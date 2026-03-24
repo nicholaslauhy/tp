@@ -239,6 +239,61 @@ public class CommandHandler {
             ui.printLine(e.getMessage());
         }
     }
+    /**
+     * Handles the deletion of a recurring expense based on user input.
+     *
+     * <p>Expected input format:
+     * {@code deleterecurring <index>}</p>
+     *
+     * <p>This method parses the index provided by the user, validates it against the
+     * {@link RecurringExpenseList}, and removes the corresponding recurring expense.</p>
+     *
+     * <p>Upon successful deletion:
+     * <ul>
+     *     <li>The recurring expense is removed from the list.</li>
+     *     <li>The total recurring expenditure is updated accordingly.</li>
+     *     <li>A confirmation message is displayed to the user.</li>
+     * </ul>
+     *
+     * <p>If the input format is invalid or the index is out of bounds, an appropriate
+     * error message is shown to the user.</p>
+     *
+     * @param userInput Full user input string starting with {@code deleterecurring}.
+     *                  Must not be {@code null} and must start with {@code deleterecurring}.
+     */
+    public void handleDeleteRecurring(String userInput) {
+        assert userInput != null : "User input should not be null";
+        assert userInput.startsWith("deleterecurring") : "Input should start with 'deleterecurring'";
+
+        try {
+            String rest = userInput.substring("deleterecurring".length()).trim();
+
+            if (rest.isEmpty()) {
+                throw new InvalidIndexException("Format: deleterecurring <index>\n");
+            }
+
+            int index = Parser.parseIndex(rest);
+
+            if (!recurringExpenseList.isValidIndex(index)) {
+                throw new InvalidIndexException("Invalid recurring expense index!\n");
+            }
+
+            BigDecimal oldTotal = recurringExpenseList.getTotal();
+            RecurringExpense removed = recurringExpenseList.delete(index);
+
+            assert removed != null : "Deleted recurring expense should not be null";
+            assert recurringExpenseList.getTotal().compareTo(oldTotal.subtract(removed.getAmount())) == 0
+                    : "Recurring expense total should decrease by removed amount";
+
+            ui.printLine("Deleted recurring expense #" + index + ": " + removed);
+            ui.printLine("Recurring Total: $" + recurringExpenseList.getTotal());
+            ui.printLine("");
+
+        } catch (InvalidIndexException e) {
+            ui.printLine(e.getMessage());
+            ui.printLine("");
+        }
+    }
 
     /**
      * Clears all expenses from the {@link ExpenseList} after user confirmation.
