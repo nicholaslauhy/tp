@@ -32,4 +32,8 @@ public class RecurringExpense {
     public Category getCategory() {
         return category;
     }
+    @Override
+    public String toString() {
+        return "[RECURRING]" + "[" + category + "] " + name + " $" + amount;
+    }
 }
