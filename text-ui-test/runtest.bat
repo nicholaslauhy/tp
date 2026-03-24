@@ -14,7 +14,7 @@ java -jar %jarloc% < ..\..\text-ui-test\input.txt > ..\..\text-ui-test\ACTUAL.TX
 
 cd ..\..\text-ui-test
 
-cmd /c "FC ACTUAL.TXT EXPECTED.TXT >NUL"
+cmd /c "FC /W ACTUAL.TXT EXPECTED.TXT >NUL"
 if %errorlevel% == 0 (
     echo Test passed!
 ) else (
