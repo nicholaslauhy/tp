@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import seedu.duke.data.MonthlyArchive;
+import seedu.duke.data.ArchivedExpense;
 import seedu.duke.data.ExpenseList;
 import seedu.duke.category.Category;
 
@@ -156,7 +157,7 @@ public class MonthlyArchiveTest {
         expenseList.add("Lunch", new BigDecimal("15.50"), Category.fromString("FOOD"));
         archive.saveMonthlyExpenses(1, expenseList);
 
-        java.util.List<MonthlyArchive.ArchivedExpense> loaded = archive.loadMonthlyExpenses(1);
+        java.util.List<ArchivedExpense> loaded = archive.loadMonthlyExpenses(1);
 
         assertEquals(1, loaded.size());
         assertEquals("Lunch", loaded.get(0).getName());
@@ -166,7 +167,7 @@ public class MonthlyArchiveTest {
 
     @Test
     public void loadMonthlyExpenses_missingArchive_returnsEmptyList() throws IOException {
-        java.util.List<MonthlyArchive.ArchivedExpense> loaded = archive.loadMonthlyExpenses(2);
+        java.util.List<ArchivedExpense> loaded = archive.loadMonthlyExpenses(2);
         assertTrue(loaded.isEmpty());
     }
 }
