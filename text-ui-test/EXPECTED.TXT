@@ -25,8 +25,12 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 6 months and 0 days remaining.
+You have 1 years and 5 months and 30 days remaining.
 Nice! Based on your current savings, you have already met your goal.
+
+===============================================
+Current Month: Month 1
+===============================================
 
 Type 'help' to view my currently supported commands!
 Any non-command word would be echoed back to you you you
@@ -40,7 +44,7 @@ General Commands
 'bye'     - exit the program
 
 Daily Transaction Commands
-'add'      <name> <amount> <category><recurring> - add a new expense(e.g., add lunch 5.50 FOOD for not recurring and add lunch 5.50 FOOD recurring for recurring)
+'add'      <name> <amount> <category> <recurring> - add a new expense(e.g., add lunch 5.50 FOOD for not recurring and add lunch 5.50 FOOD recurring for recurring)
 'list'     - view all current expenses and your total spent
 'delete'   <index> - remove a specific expense from your list
 'deleterecurring' <index> - remove a recurring monthly expense
@@ -61,7 +65,7 @@ Added: $500.00
 New total savings: $2,500.00
 
 Added expense: [FOOD] lunch $5
-Current Total: $5
+Month 1 Total: $5
 
 Format: add <name> <amount> <category>
 
@@ -76,10 +80,10 @@ Added recurring expense: [RECURRING][UTILITIES] phone bill $20
 Recurring Total: $50
 
 Added expense: [TRANSPORT] grab home $20
-Current Total: $25
+Month 1 Total: $25
 
 Added expense: [FOOD] hho $10
-Current Total: $35
+Month 1 Total: $35
 
 You said: find food
 
@@ -95,7 +99,7 @@ Here are your recurring monthly commitments!
 1. netflix $30.00 [ENTERTAINMENT]
 2. phone bill $20.00 [UTILITIES]
 
-Here is your current month's expenditure list!
+*** MONTH 1 EXPENSES ***
 1. lunch $5.00 [FOOD]
 2. hho $10.00 [FOOD]
 3. grab home $20.00 [TRANSPORT]
@@ -108,7 +112,7 @@ Here are your recurring monthly commitments!
 1. netflix $30.00 [ENTERTAINMENT]
 2. phone bill $20.00 [UTILITIES]
 
-Here is your current month's expenditure list!
+*** MONTH 1 EXPENSES ***
 1. lunch $5.00 [FOOD]
 2. grab home $20.00 [TRANSPORT]
 3. hho $10.00 [FOOD]
@@ -121,7 +125,7 @@ Here are your recurring monthly commitments!
 1. netflix $30.00 [ENTERTAINMENT]
 2. phone bill $20.00 [UTILITIES]
 
-Here is your current month's expenditure list!
+*** MONTH 1 EXPENSES ***
 1. lunch $5.00 [FOOD]
 2. grab home $20.00 [TRANSPORT]
 3. hho $10.00 [FOOD]
@@ -134,7 +138,7 @@ Recurring Total: $20
 Here are your recurring monthly commitments!
 1. phone bill $20.00 [UTILITIES]
 
-Here is your current month's expenditure list!
+*** MONTH 1 EXPENSES ***
 1. lunch $5.00 [FOOD]
 2. grab home $20.00 [TRANSPORT]
 3. hho $10.00 [FOOD]
