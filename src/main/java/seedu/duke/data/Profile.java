@@ -3,26 +3,53 @@ package seedu.duke.data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import seedu.duke.util.BtoCalculator;
+
 /**
  * Manages the user's personal financial data, including income, savings,
  * and specific targets for BTO downpayment planning.
  */
 public class Profile {
     private String name = "friend";
-    private BigDecimal monthlySalary;
+    private BigDecimal monthlyAllowance;
     private BigDecimal currentSavings;
     private BigDecimal btoGoal;
     private BigDecimal contributionRatio;
     private LocalDate deadline = LocalDate.now();
+    private BigDecimal housePrice;
+    private int currentMonth = 1;
 
     /**
-     * Initializes a profile with zero Salary/Savings and a default 50/50 split ratio.
+     * Initializes a profile with zero Allowance/Savings and a default 50/50 split ratio.
      */
     public Profile() {
-        this.monthlySalary = BigDecimal.ZERO;
+        this.monthlyAllowance = BigDecimal.ZERO;
         this.currentSavings = BigDecimal.ZERO;
         this.contributionRatio = new BigDecimal("0.5");
         this.btoGoal = BigDecimal.ZERO;
+    }
+
+    /**
+     * Sets the total purchase price of the BTO flat.
+     * This value serves as the base for calculating the total downpayment
+     * and the user's individual contribution goal.
+     *
+     * @param housePrice The total price of the HDB flat in dollars.
+     */
+    public void setHousePrice(BigDecimal housePrice) {
+        assert housePrice != null && housePrice.compareTo(BigDecimal.ZERO) >= 0
+                : "House price cannot be null or negative";
+        this.housePrice = housePrice;
+    }
+
+    /**
+     * Returns the total purchase price of the BTO flat.
+     * This value is used as the base for all downpayment and goal calculations.
+     *
+     * @return The total house price as a {@code BigDecimal}.
+     */
+    public BigDecimal getHousePrice() {
+        return this.housePrice;
     }
 
     /**
@@ -85,21 +112,21 @@ public class Profile {
     }
 
     /**
-     * Updates the user's monthly salary.
-     * @param monthlySalary The new monthly income.
+     * Updates the user's monthly Allowance.
+     * @param monthlyAllowance The new monthly income.
      */
-    public void setMonthlySalary(BigDecimal monthlySalary) {
-        assert monthlySalary != null : "Monthly salary cannot be null";
-        assert monthlySalary.compareTo(BigDecimal.ZERO) >= 0 : "Monthly salary cannot be negative";
-        this.monthlySalary = monthlySalary;
+    public void setMonthlyAllowance(BigDecimal monthlyAllowance) {
+        assert monthlyAllowance != null : "Monthly allowance cannot be null";
+        assert monthlyAllowance.compareTo(BigDecimal.ZERO) >= 0 : "Monthly allowance cannot be negative";
+        this.monthlyAllowance = monthlyAllowance;
     }
 
     /**
-     * Gets the user's monthly salary.
-     * @return The monthly salary as a {@code BigDecimal}.
+     * Gets the user's monthly allowance.
+     * @return The monthly allowance as a {@code BigDecimal}.
      */
-    public BigDecimal getMonthlySalary() {
-        return monthlySalary;
+    public BigDecimal getMonthlyAllowance() {
+        return monthlyAllowance;
     }
 
     /**
@@ -125,11 +152,18 @@ public class Profile {
      */
     public void setContributionRatio(BigDecimal contributionRatio) {
         assert contributionRatio != null : "Contribution ratio cannot be null";
+
         // Ensure the ratio is between 0% and 100%
         assert contributionRatio.compareTo(BigDecimal.ZERO) >= 0 &&
                 contributionRatio.compareTo(BigDecimal.ONE) <= 0
                 : "Contribution ratio must be between 0.0 and 1.0";
         this.contributionRatio = contributionRatio;
+
+        // Set new btoGoal if ratio changed
+        if (this.housePrice != null) {
+            BtoCalculator calc = new BtoCalculator(this.housePrice, this.contributionRatio);
+            this.btoGoal = calc.yourShare;
+        }
     }
 
     /**
@@ -140,11 +174,28 @@ public class Profile {
         return contributionRatio;
     }
 
+    /**
+     * Gets the current month number.
+     * @return The current month as an integer (starting from 1).
+     */
+    public int getCurrentMonth() {
+        return currentMonth;
+    }
+
+    /**
+     * Advances to the next month.
+     * Increments the current month counter by 1.
+     */
+    public void advanceMonth() {
+        this.currentMonth++;
+    }
+
     public void reset() {
         this.name = "friend";
         this.btoGoal = BigDecimal.ZERO;
-        this.monthlySalary = BigDecimal.ZERO;
+        this.monthlyAllowance = BigDecimal.ZERO;
         this.currentSavings = BigDecimal.ZERO;
         this.contributionRatio = new BigDecimal("0.5");
+        this.currentMonth = 1;
     }
 }

@@ -8,7 +8,11 @@ fintrack.txt
 
 # Log files
 *.log
-logs/
+logs/*
+!logs/fintrack.log
+
+# Monthly archive files and directory
+monthly_archives/
 
 # Gradle build files
 /.gradle/

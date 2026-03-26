@@ -30,9 +30,14 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
           java-package: jdk+fx
+          cache: gradle
+
+      - name: Make gradlew executable
+        if: runner.os != 'Windows'
+        run: chmod +x gradlew
 
       - name: Build and check with Gradle
-        run: ./gradlew check
+        run: ./gradlew check --stacktrace
 
       - name: Install dos2unix on Linux
         if: runner.os == 'Linux'

@@ -4,6 +4,7 @@ import seedu.duke.data.SummaryReport;
 import seedu.duke.util.InputUtil;
 import seedu.duke.util.LoggerUtil;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Scanner;
@@ -69,11 +70,16 @@ public class Ui {
      * @param prompt Prompt message displayed before reading input.
      * @return The raw line entered by the user.
      */
-    public String readLine(Scanner in, String prompt){
+    public String readLine(Scanner in, String prompt) {
         assert in != null : "Scanner should not be null";
-        if (prompt != null && !prompt.isEmpty()){
+        if (prompt != null && !prompt.isEmpty()) {
             logger.info("Displaying prompt to user: " + prompt);
             printLine(prompt);
+        }
+
+        if (!in.hasNextLine()) {
+            logger.warning("No more input available. Returning bye.");
+            return "bye";
         }
 
         String input = in.nextLine();
@@ -98,16 +104,46 @@ public class Ui {
         printLine("");
 
         printLine("Daily Transaction Commands");
-        printLine("'add'      <amount> - add a new expense (e.g., add 5.50)");
+        printLine("'add'      <name> <amount> <category> <recurring> - " +
+                "add a new expense" +   "(e.g., add lunch 5.50 FOOD for not recurring and" +
+                " add lunch 5.50 FOOD recurring for recurring)");
         printLine("'list'     - view all current expenses and your total spent");
         printLine("'delete'   <index> - remove a specific expense from your list");
+        printLine("'deleterecurring' <index> - remove a recurring monthly expense");
         printLine("");
 
         printLine("Profile & Goal Management");
+        printLine("'sort'   <keyword> - sort the expenditure list by name, category or recency " +
+                "(e.g sort name, sort recent, sort category)");
         printLine("'savings' - add a surplus amount to your existing savings");
+        printLine("'save'   - archive current month's expenses and advance to next month");
         printLine("'clear'   - wipe all current expenses from the list");
         printLine("'reset'   - wipes all profile data and expenses to start fresh.");
         printLine("");
+    }
+
+    /**
+     * Displays the current monthly allowance and prompts the user to provide a new value.
+     * This provides context to the user before they perform an update to their profile.
+     *
+     * @param currentAllowance The existing monthly allowance stored in the User's profile.
+     */
+    public void promptForAllowance(BigDecimal currentAllowance) {
+        assert currentAllowance != null : "Current allowance cannot be null for display";
+        printLine("Current Monthly Allowance: " + InputUtil.formatMoney(currentAllowance));
+    }
+
+    /**
+     * Displays the current contribution ratio in both percentage and decimal formats,
+     * then prompts the user for a new decimal input.
+     *
+     * @param currentRatio The existing contribution ratio (0.0 to 1.0) from the User's profile.
+     */
+    public void promptForRatio(BigDecimal currentRatio) {
+        assert currentRatio != null : "Current ratio cannot be null for display";
+        // Convert 0.5 to 50 for the display string
+        BigDecimal percentage = currentRatio.multiply(new BigDecimal("100"));
+        printLine("Current Contribution Ratio: " + percentage.toPlainString() + "% (" + currentRatio + ")");
     }
 
     /**
@@ -119,12 +155,12 @@ public class Ui {
         assert report.name != null : "Report name should not be null";
         assert report.deadline != null : "Deadline should not be null";
         assert report.currentSavings != null : "Current savings should not be null";
-        assert report.totalExpenditure != null : "Total expenditure should not be null";
         assert report.estimate != null : "Estimate should not be null";
 
         logger.info("Rendering SummaryReport for user: " + report.name);
         printLine("===== BTO Readiness Report =====");
         printLine("User: " + report.name);
+        printLine("Readiness Level: " + report.readinessLevel);
         printLine("BTO Goal: " + InputUtil.formatMoney(report.btoGoal) + " (your share + fees)");
 
         LocalDate today = LocalDate.now();
@@ -142,10 +178,11 @@ public class Ui {
         String savingsLine = InputUtil.formatMoney(report.currentSavings) + " (" + report.percentage + "% reached)";
         printLine("Current Savings: " + savingsLine);
         printLine("Distance to Goal: " + InputUtil.formatMoney(report.distance));
+        printLine("Adjusted Minimum Savings: " + InputUtil.formatMoney(report.monthlyRequired) + " / month");
         printLine("");
-        printLine("Monthly Salary: " + InputUtil.formatMoney(report.monthlySalary));
+        printLine("Monthly Allowance: " + InputUtil.formatMoney(report.monthlyAllowance));
         printLine("Total Expenditure: " + InputUtil.formatMoney(report.totalExpenditure));
-        printLine("Monthly Surplus: " + InputUtil.formatMoney(report.monthlySurplus));
+        printLine("Monthly Surplus (Allowance - Expenditure): " + InputUtil.formatMoney(report.monthlySurplus));
         printLine("Estimated Goal Achievement: " + report.estimate);
         printLine("");
 

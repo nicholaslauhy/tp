@@ -3,17 +3,29 @@ James Gosling
 2500.50
 29000
 0.6
-2027-10-02
+2027-09-24
 hello
 help
 list
 savings
 500
-add 5
+add lunch 5 FOOD
 add
-add -1
-category 1 FOOD
-category 1
-category 1 HELLO
+add lunch -1 FOOD
+add netflix 30 entertainment recurring
+add phone bill 20 utilities RECURRING
+add grab home 20 transport
+add hho 10 food
+find food
+find recurring
+sort
+sort foo
+sort category
+list
+sort recent
+list
+nextmonth
+list
+deleterecurring 1
 list
 bye

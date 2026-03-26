@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import seedu.duke.category.Category;
 
 /**
  * Handles the persistence of user profile data and expense lists to a local file.
@@ -33,19 +34,21 @@ public class Storage {
 
     /**
      * Saves the current financial state to a text file.
-     * <p>
-     * Format for Profile: {@code P | name | salary | savings | btoGoal | ratio}
-     * <p>
-     * Format for Expenses: {@code E | amount | category}
+     *
+     * <p>Format for Profile: {@code P | name | allowance | savings | btoGoal | ratio | deadline}</p>
+     *
+     * <p>Format for Expenses: {@code E | name | amount | category}</p>
      *
      * @param profile The {@link Profile} containing the user's personal financial goals.
      * @param expenseList The {@link ExpenseList} containing all recorded transactions.
      * @throws IOException If there is an error writing to the file.
      */
-    public void save(Profile profile, ExpenseList expenseList) throws IOException {
+    public void save(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
+            throws IOException {
         // Assertion: Verify internal state before writing to disk
         assert profile != null : "Cannot save a null profile!";
         assert expenseList != null : "Cannot save a null expense list!";
+        assert recurringExpenseList != null : "Cannot save a null recurring expense list!";
 
         logger.log(Level.INFO, "Saving financial data to " + filePath);
 
@@ -53,7 +56,7 @@ public class Storage {
             // Save Profile (P)
             fw.write(String.format("P | %s | %s | %s | %s | %s | %s%n",
                     profile.getName(),
-                    profile.getMonthlySalary(),
+                    profile.getMonthlyAllowance(),
                     profile.getCurrentSavings(),
                     profile.getBtoGoal(),
                     profile.getContributionRatio(),
@@ -63,8 +66,26 @@ public class Storage {
             for (int i = 0; i < expenseList.size(); i++) {
                 Expense e = expenseList.get(i);
                 // ASSERTION: Ensure no corrupted data exists in the list
+                assert e.getName() != null : "Expense name at index " + i + " is null";
                 assert e.getAmount() != null : "Expense amount at index " + i + " is null";
-                fw.write(String.format("E | %s%n", e.getAmount()));
+                assert e.getCategory() != null : "Expense category at index " + i + " is null";
+                fw.write(String.format("E | %s | %s | %s | %s%n",
+                        e.getName(),
+                        e.getAmount(),
+                        e.getCategory(),
+                        e.getInsertionOrder()));
+            }
+            //save recurring expenses
+            for (int i = 0; i < recurringExpenseList.size(); i++) {
+                RecurringExpense recurringExpense = recurringExpenseList.get(i);
+                assert recurringExpense.getName() != null : "Recurring expense name at index " + i + " is null";
+                assert recurringExpense.getAmount() != null : "Recurring expense amount at index " + i + " is null";
+                assert recurringExpense.getCategory() != null : "Recurring expense category at index " + i + " is null";
+
+                fw.write(String.format("R | %s | %s | %s%n",
+                        recurringExpense.getName(),
+                        recurringExpense.getAmount(),
+                        recurringExpense.getCategory()));
             }
             logger.log(Level.INFO, "Save successful.");
         } catch (IOException e) {
@@ -85,7 +106,12 @@ public class Storage {
      * @param expenseList The {@link ExpenseList} object to be populated with saved expenses.
      * @throws IOException If there is an error reading from the file.
      */
-    public void load(Profile profile, ExpenseList expenseList) throws IOException {
+    public void load(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
+            throws IOException {
+        assert profile != null : "Cannot load into a null profile!";
+        assert expenseList != null : "Cannot load into a null expense list!";
+        assert recurringExpenseList != null : "Cannot load into a null recurring expense list!";
+
         File f = new File(filePath);
         if (!f.exists()) {
             logger.log(Level.WARNING, "No save file found. Starting fresh.");
@@ -103,14 +129,49 @@ public class Storage {
                 }
 
                 if (parts[0].equals("P")) {
+                    if (parts.length < 7) {
+                        logger.log(Level.WARNING, "Skipping malformed profile line: " + line);
+                        continue;
+                    }
+
                     profile.setName(parts[1]);
-                    profile.setMonthlySalary(new BigDecimal(parts[2]));
+                    profile.setMonthlyAllowance(new BigDecimal(parts[2]));
                     profile.setCurrentSavings(new BigDecimal(parts[3]));
                     profile.setBtoGoal(new BigDecimal(parts[4]));
                     profile.setContributionRatio(new BigDecimal(parts[5]));
                     profile.setDeadline(java.time.LocalDate.parse(parts[6]));
                 } else if (parts[0].equals("E")) {
-                    expenseList.add(new BigDecimal(parts[1]));
+                    if (parts.length == 2) {
+                        // Old format: E | amount
+                        BigDecimal amount = new BigDecimal(parts[1]);
+                        expenseList.add("Unnamed Expense", amount, Category.fromString("OTHER"));
+                    } else if (parts.length == 4) {
+                        // New format: E | name | amount | category
+                        String name = parts[1];
+                        BigDecimal amount = new BigDecimal(parts[2]);
+                        Category category = Category.fromString(parts[3]);
+                        expenseList.add(name, amount, category);
+                    } else if (parts.length == 5) {
+                        String name = parts[1];
+                        BigDecimal amount = new BigDecimal(parts[2]);
+                        Category category = Category.fromString(parts[3]);
+                        int insertionOrder = Integer.parseInt(parts[4]);
+                        expenseList.add(name, amount, category, insertionOrder);
+                    } else {
+                        logger.log(Level.WARNING, "Skipping malformed expense line: " + line);
+                    }
+                }else if (parts[0].equals("R")) {
+                    if (parts.length != 4) {
+                        logger.log(Level.WARNING, "Skipping malformed recurring expense line: " + line);
+                        continue;
+                    }
+
+                    String name = parts[1];
+                    BigDecimal amount = new BigDecimal(parts[2]);
+                    Category category = Category.fromString(parts[3]);
+                    recurringExpenseList.add(new RecurringExpense(name, amount, category));
+                } else {
+                    logger.log(Level.WARNING, "Skipping unknown record type: " + line);
                 }
             }
         } catch (IOException | NumberFormatException | DateTimeParseException e) {

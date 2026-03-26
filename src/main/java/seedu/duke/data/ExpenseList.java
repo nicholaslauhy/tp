@@ -2,6 +2,8 @@ package seedu.duke.data;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
+import seedu.duke.category.Category;
 
 /**
  * Manages a collection of {@link Expense} objects and tracks the cumulative total.
@@ -15,21 +17,28 @@ public class ExpenseList {
     //place to store total
     private BigDecimal total = BigDecimal.ZERO;
 
+
     /**
-     * Creates a new expense with the specified amount, adds it to the list,
-     * and updates the running total.
+     * Creates a new expense with the specified name, amount, and category,
+     * adds it to the list, and updates the running total.
      *
-     * @param amount The monetary value of the expense to add.
+     * @param name Name or description of the expense.
+     * @param amount Monetary value of the expense.
+     * @param category Category assigned to the expense.
      */
-    public void add(BigDecimal amount){
+    public void add(String name, BigDecimal amount, Category category){
+        assert name != null && !name.isBlank() : "Expense name should not be null or blank.";
+        assert amount != null : "Expense amount should not be null.";
+        assert category != null : "Expense category should not be null.";
         //Added to capture pre mutation state for post mutation assertions
         int sizeBeforeAdd = expenses.size();
+        int insertionOrder = expenses.size();
         BigDecimal totalBeforeAdd = total;
 
-        Expense expense = new Expense(amount);
+        Expense expense = new Expense(name, amount, category, insertionOrder);
         expenses.add(expense);
         total = total.add(amount);
-        //Post add invariant: List must have grown by exacrtly ony entry
+        //Post add invariant: List must have grown by exactly ony entry
         assert expenses.size() == sizeBeforeAdd + 1
                 : "List size should have increaseed by 1 after add";
         // Post-add invariant: total must have been increased only by the amount that was added
@@ -40,6 +49,23 @@ public class ExpenseList {
         assert total.compareTo(BigDecimal.ZERO) >= 0
                 : "Total must never be negative.";
 
+    }
+
+    /**
+     * Creates a new expense with the specified name, amount, category and insertion order,
+     * adds it to the list, and updates the running total.
+     *
+     * @param name Name or description of the expense.
+     * @param amount Monetary value of the expense.
+     * @param category Category assigned to the expense.
+     * @param insertionOrder Insertion order assigned to the expense, used for sorting.
+     */
+    // Used by Storage only — preserves original insertion order from file
+    public void add(String name, BigDecimal amount, Category category, int insertionOrder) {
+        assert insertionOrder >= 0 : "Insertion order should be non-negative";
+        Expense expense = new Expense(name, amount, category, insertionOrder);
+        expenses.add(expense);
+        total = total.add(amount);
     }
 
     /**
@@ -132,5 +158,39 @@ public class ExpenseList {
         total = BigDecimal.ZERO;
         // Post-clear invariant: total must be reset to exactly zero
         assert total.compareTo(BigDecimal.ZERO) == 0 : "Total should be zero after clear.";
+    }
+
+    /**
+     * Sorts the expense list in place by category sort order.
+     *
+     * <p>Uses the natural ordering defined by {@link seedu.duke.category.Category#compareTo},
+     * where each category's sort priority determines its position.
+     * The sort is stable, so expenses within the same category
+     * retain their relative insertion order.</p>
+     */
+    public void sortByCategory() {
+        expenses.sort(Comparator.comparing(Expense::getCategory));
+    }
+
+    /**
+     * Sorts the expense list in place by original insertion order.
+     *
+     * <p>Restores the list to the order in which expenses were added,
+     * using the insertion index stored on each {@link Expense} at the time
+     * it was created.</p>
+     */
+    public void sortByRecent() {
+        expenses.sort(Comparator.comparingInt(Expense::getInsertionOrder));
+    }
+
+    /**
+     * Sorts the expense list in place alphabetically by expense name.
+     *
+     * <p>Uses a case-insensitive comparison by converting names to lowercase
+     * during the sorting process. The sort is stable, so expenses with the
+     * same name (regardless of case) retain their relative insertion order.</p>
+     */
+    public void sortByName() {
+        expenses.sort(Comparator.comparing(expense -> expense.getName().toLowerCase()));
     }
 }

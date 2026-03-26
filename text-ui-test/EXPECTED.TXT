@@ -13,7 +13,7 @@ Nice to meet you, James Gosling!
 Hang tight... I have a few questions for you.
 How much do you currently have in savings?
 
-What is your monthly salary? (in dollars)
+What is your monthly allowance? (in dollars)
 
 What is the total value that you and your partner have to pay for the house? (in dollars)
 
@@ -25,7 +25,7 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 6 months and 14 days remaining.
+You have 1 years and 5 months and 30 days remaining.
 Nice! Based on your current savings, you have already met your goal.
 
 Type 'help' to view my currently supported commands!
@@ -40,12 +40,15 @@ General Commands
 'bye'     - exit the program
 
 Daily Transaction Commands
-'add'      <amount> - add a new expense (e.g., add 5.50)
+'add'      <name> <amount> <category> <recurring> - add a new expense(e.g., add lunch 5.50 FOOD for not recurring and add lunch 5.50 FOOD recurring for recurring)
 'list'     - view all current expenses and your total spent
 'delete'   <index> - remove a specific expense from your list
+'deleterecurring' <index> - remove a recurring monthly expense
 
 Profile & Goal Management
+'sort'   <keyword> - sort the expenditure list by name, category or recency (e.g sort name, sort recent, sort category)
 'savings' - add a surplus amount to your existing savings
+'save'   - archive current month's expenses and advance to next month
 'clear'   - wipe all current expenses from the list
 'reset'   - wipes all profile data and expenses to start fresh.
 
@@ -58,23 +61,89 @@ Transaction successful!
 Added: $500.00
 New total savings: $2,500.00
 
-Added expense: $5
-Current Total: $5
+Added expense: [FOOD] lunch $5
+Month 1 Total: $5
 
-Format: add <value(to 2dp)> bro! where is the MONEHHHH
+Format: add <name> <amount> <category>
 
 
 Amount cannot be negative bro who you trying to scam?
 
 
-You said: category 1 FOOD
+Added recurring expense: [RECURRING][ENTERTAINMENT] netflix $30
+Recurring Total: $30
 
-You said: category 1
+Added recurring expense: [RECURRING][UTILITIES] phone bill $20
+Recurring Total: $50
 
-You said: category 1 HELLO
+Added expense: [TRANSPORT] grab home $20
+Month 1 Total: $25
 
-Here is your current expenditure list!
-1. $5.00
-Total Expenditure: $5
+Added expense: [FOOD] hho $10
+Month 1 Total: $35
+
+You said: find food
+
+You said: find recurring
+
+Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!
+
+Wrong argument la bro! Use 'sort name', 'sort category' or 'sort recent' ONLY!
+
+Expenses sorted by category.
+
+Here are your recurring monthly commitments!
+1. netflix $30.00 [ENTERTAINMENT]
+2. phone bill $20.00 [UTILITIES]
+
+*** MONTH 1 EXPENSES
+1. lunch $5.00 [FOOD]
+2. hho $10.00 [FOOD]
+3. grab home $20.00 [TRANSPORT]
+Month 1 Total: $35.00
+
+Total Expenditure (All Months + Recurring): $85.00
+
+Expenses sorted by insertion order.
+
+Here are your recurring monthly commitments!
+1. netflix $30.00 [ENTERTAINMENT]
+2. phone bill $20.00 [UTILITIES]
+
+*** MONTH 1 EXPENSES
+1. lunch $5.00 [FOOD]
+2. grab home $20.00 [TRANSPORT]
+3. hho $10.00 [FOOD]
+Month 1 Total: $35.00
+
+Total Expenditure (All Months + Recurring): $85.00
+
+You said: nextmonth
+
+Here are your recurring monthly commitments!
+1. netflix $30.00 [ENTERTAINMENT]
+2. phone bill $20.00 [UTILITIES]
+
+*** MONTH 1 EXPENSES
+1. lunch $5.00 [FOOD]
+2. grab home $20.00 [TRANSPORT]
+3. hho $10.00 [FOOD]
+Month 1 Total: $35.00
+
+Total Expenditure (All Months + Recurring): $85.00
+
+Deleted recurring expense #1: [RECURRING][ENTERTAINMENT] netflix $30
+Recurring Total: $20
+
+Here are your recurring monthly commitments!
+1. phone bill $20.00 [UTILITIES]
+
+*** MONTH 1 EXPENSES
+1. lunch $5.00 [FOOD]
+2. grab home $20.00 [TRANSPORT]
+3. hho $10.00 [FOOD]
+Month 1 Total: $35.00
+
+Total Expenditure (All Months + Recurring): $55.00
 
 Goodbye James Gosling. Stay disciplined and get that house that you always wanted!

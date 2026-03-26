@@ -19,6 +19,7 @@ FinTrack Pro was created for individual students in a relationship who are plann
 * <b>Add more savings:</b> [savings](#add-more-savings-savings)
 * <b>Adding an expense:</b> [add](#adding-an-expense-add)
 * <b>Listing all expenditures:</b> [list](#listing-all-entries-list)
+* <b>Sorting the expenditure list:</b> [sort](#sorting-the-expenditure-list-sort-keyword)
 * <b>Deleting an entry:</b> [delete](#deleting-an-entry-delete)
 * <b>Viewing financial summary:</b> [summary](#viewing-financial-summary-summary)
 * <b>Clearing all entries:</b> [clear](#clearing-all-entries-clear)
@@ -68,10 +69,10 @@ New total savings: $2,000.00
 
 ### Adding an expense: ```add ```
 Adds a regular expense to your monthly tracker.<br>
-<b>Format:</b> ```add AMOUNT``` <br>
+<b>Format:</b> ```add <NAME> <AMOUNT> <CATEGORY>``` <br>
 <b>Example of Usage:</b> <br>
-```add 30 ```<br>
-```add 15.90``` <br>
+```add NETFLIX 30 ENTERTAINMENT ```<br>
+```add HHO DINNER 15.90 FOOD``` <br>
 <b>Expected Output:</b>
 ```
 add 30
@@ -90,10 +91,24 @@ Shows a list of current month expenses and income entries.<br>
 <b>Expected Output:</b>
 ```
 Here is your current expenditure list!
-1. $30.00
-2. $15.90
+1. NETFLIX $30.00 [ENTERTAINMENT]
+2. HHO DINNER $15.90 [FOOD]
 Total Expenditure: $45.90
 ```
+
+### Sorting the expenditure list: ```sort <keyword>```
+Sorts the expenditure list by category or by recency. Valid keywords are `category` and `recent`.<br>
+<b>Format:</b> ```sort category``` or ```sort recent```<br>
+<b>Example of Usage:</b> ```sort category```<br>
+<b>Expected Output:</b>
+```
+sort category
+Expenses sorted by category.
+
+sort recent
+Expenses sorted by insertion order.
+```
+<b>NOTE:</b> Use `list` after sorting to view the updated order. Any keyword other than `category` or `recent` will be rejected with an error message.
 
 ### Deleting an entry: ```delete```
 Deletes the specified entry from the tracker.<br>
@@ -120,7 +135,7 @@ Deadline: 2027-08-06 (17 months)
 Current Savings: $1,000.00 (8% reached)
 Distance to Goal: $11,285.00
 
-Monthly Salary: $4,000.00
+Monthly Allowance: $4,000.00
 Total Expenditure: $30.00
 Monthly Surplus: $3,970.00
 Estimated Goal Achievement: 3 months
@@ -163,7 +178,7 @@ E | 30
 |--------------|--------------------|-------------------------------------------------------|
 | `P`          | profile marker     | tells the viewer this line represents a **Profile**   |
 | `nicholas`   | name               | user's name                                           |
-| `4000`       | monthly salary     | user earns **$4000/month**                            |
+| `4000`       | monthly allowance     | user earns **$4000/month**                            |
 | `1000`       | current savings    | currently saved **$1000**                             |
 | `12285.00`   | BTO goal           | amount needed for the **downpayment goal**            |
 | `0.6`        | contribution ratio | user is paying **60%** of the BTO cost                |
@@ -203,4 +218,3 @@ Watch this space for more updates!!
 We hope that you found FinTrackPro useful and easy to use!
 
 Meanwhile, if you have any enquires/bugs that you might have found please email us [here!](mailto:e1406324@u.nus.edu) 
-
