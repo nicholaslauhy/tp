@@ -1,0 +1,151 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BtoCalculator</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.util</a>
+</div>
+
+<h1>Coverage Summary for Class: BtoCalculator (seedu.duke.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BtoCalculator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.util;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.math.RoundingMode;
+&nbsp;
+&nbsp;/**
+&nbsp; * Calculates the BTO downpayment amounts for a given house price and contribution ratio.
+&nbsp; *
+&nbsp; * &lt;p&gt;The total downpayment is derived from a 2.5% base rate on the house price,
+&nbsp; * plus an additional 10% legal fee surcharge on that base amount.
+&nbsp; * The user&#39;s personal share is then computed by applying their contribution ratio
+&nbsp; * to the total downpayment.&lt;/p&gt;
+&nbsp; *
+&nbsp; * &lt;p&gt;All monetary results are rounded to 2 decimal places using
+&nbsp; * {@link java.math.RoundingMode#HALF_UP}.&lt;/p&gt;
+&nbsp; */
+&nbsp;public class BtoCalculator {
+&nbsp;
+&nbsp;    /** The total downpayment amount (base downpayment + legal fees), rounded to 2 decimal places. */
+&nbsp;    public final BigDecimal totalDownpayment;
+&nbsp;
+&nbsp;    /** The user&#39;s personal share of the total downpayment, rounded to 2 decimal places. */
+&nbsp;    public final BigDecimal yourShare;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a {@code BtoCalculator} and computes the downpayment figures.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Calculation breakdown:
+&nbsp;     * &lt;ol&gt;
+&nbsp;     *   &lt;li&gt;Base downpayment = {@code housePrice × 0.025}&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Legal fees       = {@code baseDownpayment × 1.1}&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Total downpayment = {@code baseDownpayment + legalFees}&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Your share       = {@code totalDownpayment × ratio}&lt;/li&gt;
+&nbsp;     * &lt;/ol&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param housePrice the total purchase price of the BTO flat, shared between both partners.
+&nbsp;     * @param ratio      the user&#39;s fractional contribution (e.g., {@code 0.6} for 60%).
+&nbsp;     *                   Must be between {@code 0.0} and {@code 1.0} inclusive.
+&nbsp;     */
+<b class="nc">&nbsp;    public BtoCalculator(BigDecimal housePrice, BigDecimal ratio) {</b>
+<b class="nc">&nbsp;        BigDecimal downpayment = housePrice.multiply(new BigDecimal(&quot;0.025&quot;));</b>
+<b class="nc">&nbsp;        BigDecimal legalFees = downpayment.multiply(BigDecimal.valueOf(1.1));</b>
+<b class="nc">&nbsp;        this.totalDownpayment = downpayment.add(legalFees).setScale(2, RoundingMode.HALF_UP);</b>
+<b class="nc">&nbsp;        this.yourShare = totalDownpayment.multiply(ratio).setScale(2, RoundingMode.HALF_UP);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

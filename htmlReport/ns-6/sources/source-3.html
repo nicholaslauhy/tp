@@ -1,0 +1,256 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LoggerUtil</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.util</a>
+</div>
+
+<h1>Coverage Summary for Class: LoggerUtil (seedu.duke.util)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LoggerUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    87.5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.5%
+  </span>
+  <span class="absValue">
+    (23/26)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">LoggerUtil$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.6%
+  </span>
+  <span class="absValue">
+    (29/32)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.util;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.nio.file.Files;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.nio.file.Paths;
+&nbsp;import java.util.logging.FileHandler;
+&nbsp;import java.util.logging.Formatter;
+&nbsp;import java.util.logging.Handler;
+&nbsp;import java.util.logging.Level;
+&nbsp;import java.util.logging.LogRecord;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+<b class="nc">&nbsp;public class LoggerUtil {</b>
+&nbsp;    private static final String LOG_DIR = &quot;logs&quot;;
+&nbsp;    private static final String LOG_FILE = LOG_DIR + &quot;/fintrack.log&quot;;
+<b class="fc">&nbsp;    private static boolean isInitialized = false;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a logger for the given class.
+&nbsp;     *
+&nbsp;     * @param inputClass The class requesting the logger.
+&nbsp;     * @return Configured logger instance.
+&nbsp;     */
+&nbsp;    public static synchronized Logger getLogger(Class&lt;?&gt; inputClass) {
+<b class="fc">&nbsp;        if (!isInitialized) {</b>
+<b class="fc">&nbsp;            initializeLogging();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return Logger.getLogger(inputClass.getName());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes logging configuration.
+&nbsp;     */
+&nbsp;    private static void initializeLogging() {
+&nbsp;        try {
+<b class="fc">&nbsp;            createLogDirectory();</b>
+&nbsp;
+<b class="fc">&nbsp;            Logger rootLogger = Logger.getLogger(&quot;&quot;);</b>
+<b class="fc">&nbsp;            rootLogger.setLevel(Level.INFO);</b>
+&nbsp;
+&nbsp;            // Prevent logs from also appearing in terminal
+<b class="fc">&nbsp;            rootLogger.setUseParentHandlers(false);</b>
+&nbsp;
+<b class="fc">&nbsp;            clearExistingHandlers(rootLogger);</b>
+&nbsp;
+<b class="fc">&nbsp;            Formatter formatter = createFormatter();</b>
+<b class="fc">&nbsp;            FileHandler fileHandler = createFileHandler(formatter);</b>
+&nbsp;
+<b class="fc">&nbsp;            rootLogger.addHandler(fileHandler);</b>
+&nbsp;
+<b class="fc">&nbsp;            isInitialized = true;</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            Logger.getLogger(LoggerUtil.class.getName()) .log(Level.SEVERE, &quot;Failed to initialize logging system&quot;, e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the logs directory if it does not exist.
+&nbsp;     */
+&nbsp;    private static void createLogDirectory() throws IOException {
+<b class="fc">&nbsp;        Path logDirPath = Paths.get(LOG_DIR);</b>
+<b class="pc">&nbsp;        if (!Files.exists(logDirPath)) {</b>
+<b class="nc">&nbsp;            Files.createDirectories(logDirPath);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes and closes all existing handlers on the root logger.
+&nbsp;     */
+&nbsp;    private static void clearExistingHandlers(Logger rootLogger) {
+<b class="fc">&nbsp;        for (Handler handler : rootLogger.getHandlers()) {</b>
+<b class="fc">&nbsp;            rootLogger.removeHandler(handler);</b>
+&nbsp;            handler.close();
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the formatter used for log messages.
+&nbsp;     */
+&nbsp;    private static Formatter createFormatter() {
+<b class="fc">&nbsp;        return new Formatter() {</b>
+&nbsp;            @Override
+&nbsp;            public String format(LogRecord record) {
+<b class="fc">&nbsp;                return String.format(</b>
+&nbsp;                        &quot;[%1$tF %1$tT] [%2$s] %3$s - %4$s%n&quot;,
+<b class="fc">&nbsp;                        record.getMillis(),</b>
+<b class="fc">&nbsp;                        record.getLevel().getName(),</b>
+<b class="fc">&nbsp;                        record.getLoggerName(),</b>
+<b class="fc">&nbsp;                        record.getMessage()</b>
+&nbsp;                );
+&nbsp;            }
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and configures the file handler.
+&nbsp;     */
+&nbsp;    private static FileHandler createFileHandler(Formatter formatter) throws IOException {
+<b class="fc">&nbsp;        FileHandler fileHandler = new FileHandler(LOG_FILE, true);</b>
+<b class="fc">&nbsp;        fileHandler.setLevel(Level.INFO);</b>
+<b class="fc">&nbsp;        fileHandler.setEncoding(&quot;UTF-8&quot;);</b>
+<b class="fc">&nbsp;        fileHandler.setFormatter(formatter);</b>
+<b class="fc">&nbsp;        return fileHandler;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,308 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Ui</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.ui</a>
+</div>
+
+<h1>Coverage Summary for Class: Ui (seedu.duke.ui)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Ui</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    45.5%
+  </span>
+  <span class="absValue">
+    (5/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (4/32)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (11/77)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.ui;
+&nbsp;
+&nbsp;import seedu.duke.data.SummaryReport;
+&nbsp;import seedu.duke.util.InputUtil;
+&nbsp;import seedu.duke.util.LoggerUtil;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.Period;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+&nbsp;/**
+&nbsp; * Handles all user-facing input and output operations for FinTrackPro.
+&nbsp; *
+&nbsp; * &lt;p&gt;This class centralizes console interaction logic, ensuring that:
+&nbsp; * &lt;ul&gt;
+&nbsp; *   &lt;li&gt;All output formatting passes through a single interface&lt;/li&gt;
+&nbsp; *   &lt;li&gt;User prompts are displayed consistently&lt;/li&gt;
+&nbsp; *   &lt;li&gt;Business logic remains separated from presentation logic&lt;/li&gt;
+&nbsp; * &lt;/ul&gt;
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; * &lt;p&gt;This class does not perform validation or computation;
+&nbsp; * it is strictly responsible for communication with the user.&lt;/p&gt;
+&nbsp; */
+<b class="fc">&nbsp;public class Ui {</b>
+<b class="fc">&nbsp;    private static final Logger logger = LoggerUtil.getLogger(Ui.class);</b>
+&nbsp;    /**
+&nbsp;     * Displays the welcome message and ASCII logo when the application starts.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method is intended to be called once at application startup.&lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void showWelcome(){
+<b class="fc">&nbsp;        logger.info(&quot;Displaying welcome message and ASCII logo.&quot;);</b>
+<b class="fc">&nbsp;        String logo = &quot;&quot;&quot;</b>
+&nbsp;            +---------+
+&nbsp;            |   HDB   |
+&nbsp;            |  [ ][ ] |
+&nbsp;            |_________|
+&nbsp;      Secure the Keys, Secure the Dream
+&nbsp;            &quot;&quot;&quot;;
+<b class="fc">&nbsp;        printLine(&quot;Welcome to Fintrack Pro!\n&quot; + logo);</b>
+<b class="fc">&nbsp;        printLine(&quot;I am FinBro&#39;s brother, FinTrack Pro!&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void greet(String name){
+<b class="nc">&nbsp;        assert name != null : &quot;Name should not be null&quot;;</b>
+<b class="nc">&nbsp;        logger.info(&quot;Greeting user: &quot; + name);</b>
+<b class="nc">&nbsp;        printLine(&quot;Nice to meet you, &quot; + name + &quot;!&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void goodBye(String name){
+<b class="nc">&nbsp;        assert name != null : &quot;Name should not be null&quot;;</b>
+<b class="nc">&nbsp;        logger.info(&quot;Application exiting for user: &quot; + name);</b>
+<b class="nc">&nbsp;        printLine(&quot;Goodbye &quot; + name + &quot;. Stay disciplined and get that house that you always wanted!&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void printLine(String message){
+<b class="pc">&nbsp;        assert message != null : &quot;Message should not be null&quot;;</b>
+<b class="fc">&nbsp;        System.out.println(message);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays an optional prompt and reads a full line of input from the user.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;If the prompt is null or empty, no prompt is displayed.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param in Scanner used to read user input.
+&nbsp;     * @param prompt Prompt message displayed before reading input.
+&nbsp;     * @return The raw line entered by the user.
+&nbsp;     */
+&nbsp;    public String readLine(Scanner in, String prompt) {
+<b class="pc">&nbsp;        assert in != null : &quot;Scanner should not be null&quot;;</b>
+<b class="pc">&nbsp;        if (prompt != null &amp;&amp; !prompt.isEmpty()) {</b>
+<b class="nc">&nbsp;            logger.info(&quot;Displaying prompt to user: &quot; + prompt);</b>
+<b class="nc">&nbsp;            printLine(prompt);</b>
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (!in.hasNextLine()) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;No more input available. Returning bye.&quot;);</b>
+<b class="nc">&nbsp;            return &quot;bye&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        String input = in.nextLine();</b>
+<b class="nc">&nbsp;        logger.fine(&quot;Raw user input received: [&quot; + input + &quot;]&quot;);</b>
+<b class="nc">&nbsp;        assert input != null : &quot;Input read should not be null&quot;;</b>
+<b class="nc">&nbsp;        return input;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays a list of supported commands and their usage.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method prints the currently supported CLI commands
+&nbsp;     * and brief descriptions of their purpose.&lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void showHelpMessage() {
+<b class="nc">&nbsp;        logger.info(&quot;Displaying help message commands.&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        printLine(&quot;General Commands&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;help&#39;    - view all current commands&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;summary&#39; - generate your BTO readiness report based on your goals&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;bye&#39;     - exit the program&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        printLine(&quot;Daily Transaction Commands&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;add&#39;      &lt;name&gt; &lt;amount&gt; &lt;category&gt; &lt;recurring&gt; - &quot; +</b>
+&nbsp;                &quot;add a new expense&quot; +   &quot;(e.g., add lunch 5.50 FOOD for not recurring and&quot; +
+&nbsp;                &quot; add lunch 5.50 FOOD recurring for recurring)&quot;);
+<b class="nc">&nbsp;        printLine(&quot;&#39;list&#39;     - view all current expenses and your total spent&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;delete&#39;   &lt;index&gt; - remove a specific expense from your list&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;deleterecurring&#39; &lt;index&gt; - remove a recurring monthly expense&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        printLine(&quot;Profile &amp; Goal Management&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;sort&#39;   &lt;keyword&gt; - sort the expenditure list by name, category or recency &quot; +</b>
+&nbsp;                &quot;(e.g sort name, sort recent, sort category)&quot;);
+<b class="nc">&nbsp;        printLine(&quot;&#39;savings&#39; - add a surplus amount to your existing savings&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;save&#39;   - archive current month&#39;s expenses and advance to next month&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;clear&#39;   - wipe all current expenses from the list&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&#39;reset&#39;   - wipes all profile data and expenses to start fresh.&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays the current monthly allowance and prompts the user to provide a new value.
+&nbsp;     * This provides context to the user before they perform an update to their profile.
+&nbsp;     *
+&nbsp;     * @param currentAllowance The existing monthly allowance stored in the User&#39;s profile.
+&nbsp;     */
+&nbsp;    public void promptForAllowance(BigDecimal currentAllowance) {
+<b class="nc">&nbsp;        assert currentAllowance != null : &quot;Current allowance cannot be null for display&quot;;</b>
+<b class="nc">&nbsp;        printLine(&quot;Current Monthly Allowance: &quot; + InputUtil.formatMoney(currentAllowance));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays the current contribution ratio in both percentage and decimal formats,
+&nbsp;     * then prompts the user for a new decimal input.
+&nbsp;     *
+&nbsp;     * @param currentRatio The existing contribution ratio (0.0 to 1.0) from the User&#39;s profile.
+&nbsp;     */
+&nbsp;    public void promptForRatio(BigDecimal currentRatio) {
+<b class="nc">&nbsp;        assert currentRatio != null : &quot;Current ratio cannot be null for display&quot;;</b>
+&nbsp;        // Convert 0.5 to 50 for the display string
+<b class="nc">&nbsp;        BigDecimal percentage = currentRatio.multiply(new BigDecimal(&quot;100&quot;));</b>
+<b class="nc">&nbsp;        printLine(&quot;Current Contribution Ratio: &quot; + percentage.toPlainString() + &quot;% (&quot; + currentRatio + &quot;)&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Prints a formatted BTO Readiness Report to the console.
+&nbsp;     *
+&nbsp;     * @param report a {@link SummaryReport} containing the user&#39;s precomputed financial snapshot.
+&nbsp;     */
+&nbsp;    public void showSummaryReport(SummaryReport report) {
+<b class="nc">&nbsp;        assert report.name != null : &quot;Report name should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert report.deadline != null : &quot;Deadline should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert report.currentSavings != null : &quot;Current savings should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert report.estimate != null : &quot;Estimate should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;Rendering SummaryReport for user: &quot; + report.name);</b>
+<b class="nc">&nbsp;        printLine(&quot;===== BTO Readiness Report =====&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;User: &quot; + report.name);</b>
+<b class="nc">&nbsp;        printLine(&quot;Readiness Level: &quot; + report.readinessLevel);</b>
+<b class="nc">&nbsp;        printLine(&quot;BTO Goal: &quot; + InputUtil.formatMoney(report.btoGoal) + &quot; (your share + fees)&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        LocalDate today = LocalDate.now();</b>
+<b class="nc">&nbsp;        Period period = Period.between(today, report.deadline);</b>
+&nbsp;
+<b class="nc">&nbsp;        int monthsLeft = period.getYears() * 12 + period.getMonths();</b>
+<b class="nc">&nbsp;        if (period.getDays() &gt; 0) {</b>
+<b class="nc">&nbsp;            monthsLeft++;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        assert monthsLeft &gt;= 0 : &quot;Months left should not be negative&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        printLine(&quot;Deadline: &quot; + report.deadline + &quot; (&quot; + monthsLeft + &quot; months)&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&quot;);</b>
+<b class="nc">&nbsp;        String savingsLine = InputUtil.formatMoney(report.currentSavings) + &quot; (&quot; + report.percentage + &quot;% reached)&quot;;</b>
+<b class="nc">&nbsp;        printLine(&quot;Current Savings: &quot; + savingsLine);</b>
+<b class="nc">&nbsp;        printLine(&quot;Distance to Goal: &quot; + InputUtil.formatMoney(report.distance));</b>
+<b class="nc">&nbsp;        printLine(&quot;Adjusted Minimum Savings: &quot; + InputUtil.formatMoney(report.monthlyRequired) + &quot; / month&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;&quot;);</b>
+<b class="nc">&nbsp;        printLine(&quot;Monthly Allowance: &quot; + InputUtil.formatMoney(report.monthlyAllowance));</b>
+<b class="nc">&nbsp;        printLine(&quot;Total Expenditure: &quot; + InputUtil.formatMoney(report.totalExpenditure));</b>
+<b class="nc">&nbsp;        printLine(&quot;Monthly Surplus (Allowance - Expenditure): &quot; + InputUtil.formatMoney(report.monthlySurplus));</b>
+<b class="nc">&nbsp;        printLine(&quot;Estimated Goal Achievement: &quot; + report.estimate);</b>
+<b class="nc">&nbsp;        printLine(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;SummaryReport display completed.&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

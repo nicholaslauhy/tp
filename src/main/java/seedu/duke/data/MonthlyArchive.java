@@ -1,3 +1,4 @@
+//@@author nicholaslauhy
 package seedu.duke.data;
 
 import seedu.duke.util.LoggerUtil;

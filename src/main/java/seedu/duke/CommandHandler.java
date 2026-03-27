@@ -302,6 +302,7 @@ public class CommandHandler {
         }
     }
 
+    //@@ jairusljr
     /**
      * Clears all expenses from the {@link ExpenseList} after user confirmation.
      *
@@ -334,6 +335,7 @@ public class CommandHandler {
         }
     }
 
+    //@@ ak2003x
     /**
      * Adds a specified amount to the user's current total savings.
      *
@@ -438,6 +440,7 @@ public class CommandHandler {
         ui.showSummaryReport(new SummaryReport(profile, expenseList, recurringExpenseList));
     }
 
+    //@@ jairusljr
     /**
      * Completely resets the user profile and expense list after confirmation.
      * @param in Scanner used for user confirmation.
@@ -480,6 +483,7 @@ public class CommandHandler {
         }
     }
 
+    //@@ author
     /**
      * Parses and validates an amount string.
      *

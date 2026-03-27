@@ -1,0 +1,269 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SummaryReport</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.data</a>
+</div>
+
+<h1>Coverage Summary for Class: SummaryReport (seedu.duke.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SummaryReport</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/59)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.data;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.math.RoundingMode;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.Period;
+&nbsp;import java.util.logging.Logger;
+&nbsp;import seedu.duke.util.LoggerUtil;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a snapshot of the user&#39;s BTO savings readiness.
+&nbsp; *
+&nbsp; * &lt;p&gt;Computed from a {@link Profile} and {@link ExpenseList} at the time of construction.
+&nbsp; * All fields are immutable after instantiation.&lt;/p&gt;
+&nbsp; */
+<b class="nc">&nbsp;public class SummaryReport {</b>
+<b class="nc">&nbsp;    private static final Logger logger = LoggerUtil.getLogger(SummaryReport.class);</b>
+&nbsp;
+&nbsp;    public final String name;
+&nbsp;    public final LocalDate deadline;
+&nbsp;    public final BigDecimal btoGoal;
+&nbsp;    public final BigDecimal monthlyAllowance;
+&nbsp;    public final BigDecimal currentSavings;
+&nbsp;    public final int percentage;
+&nbsp;    public final BigDecimal distance;
+&nbsp;    public final BigDecimal monthlySurplus;
+&nbsp;    public final String estimate;
+&nbsp;    public final BigDecimal totalExpenditure;
+&nbsp;    public final BigDecimal monthlyRequired;
+&nbsp;    public final String readinessLevel;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a {@code SummaryReport} from the user&#39;s current profile and expense list.
+&nbsp;     *
+&nbsp;     * @param profile     the user&#39;s financial profile.
+&nbsp;     * @param expenseList the user&#39;s current list of expenses.
+&nbsp;     */
+<b class="nc">&nbsp;    public SummaryReport(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList) {</b>
+<b class="nc">&nbsp;        assert profile != null : &quot;Profile cannot be null for report generation&quot;;</b>
+<b class="nc">&nbsp;        assert expenseList != null : &quot;ExpenseList cannot be null for report generation&quot;;</b>
+<b class="nc">&nbsp;        assert recurringExpenseList != null : &quot;RecurringExpenseList cannot be null for report generation&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;Generating SummaryReport for user: &quot; + profile.getName());</b>
+&nbsp;
+<b class="nc">&nbsp;        this.name = profile.getName();</b>
+<b class="nc">&nbsp;        this.deadline = profile.getDeadline();</b>
+<b class="nc">&nbsp;        this.btoGoal = profile.getBtoGoal();</b>
+<b class="nc">&nbsp;        this.monthlyAllowance = profile.getMonthlyAllowance();</b>
+<b class="nc">&nbsp;        this.currentSavings = profile.getCurrentSavings();</b>
+&nbsp;
+<b class="nc">&nbsp;        assert btoGoal.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;BTO Goal should not be negative&quot;;</b>
+<b class="nc">&nbsp;        assert monthlyAllowance.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;Allowance should not be negative&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        this.totalExpenditure = expenseList.getTotal().add(recurringExpenseList.getTotal());</b>
+<b class="nc">&nbsp;        this.distance = btoGoal.subtract(currentSavings);</b>
+<b class="nc">&nbsp;        this.monthlySurplus = monthlyAllowance.subtract(totalExpenditure);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.percentage = computePercentage();</b>
+<b class="nc">&nbsp;        this.readinessLevel = computeReadinessLevel(this.percentage);</b>
+<b class="nc">&nbsp;        this.estimate = computeEstimate();</b>
+&nbsp;
+&nbsp;        // Calculate months remaining
+<b class="nc">&nbsp;        LocalDate today = LocalDate.now();</b>
+<b class="nc">&nbsp;        Period period = Period.between(today, profile.getDeadline());</b>
+<b class="nc">&nbsp;        int monthsLeft = period.getYears() * 12 + period.getMonths();</b>
+<b class="nc">&nbsp;        if (period.getDays() &gt; 0) {</b>
+<b class="nc">&nbsp;            monthsLeft++; // Round up for partial months</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (monthsLeft &lt;= 0) {</b>
+<b class="nc">&nbsp;            monthsLeft = 1;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Calculate Distance to Goal / Months Remaining
+<b class="nc">&nbsp;        BigDecimal distanceToGoal = profile.getBtoGoal().subtract(profile.getCurrentSavings());</b>
+&nbsp;
+<b class="nc">&nbsp;        if (distanceToGoal.compareTo(BigDecimal.ZERO) &lt;= 0) {</b>
+<b class="nc">&nbsp;            this.monthlyRequired = BigDecimal.ZERO;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            this.monthlyRequired = distanceToGoal.divide(</b>
+<b class="nc">&nbsp;                    BigDecimal.valueOf(monthsLeft), 2, java.math.RoundingMode.HALF_UP);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        logger.fine(&quot;Report values - Distance: &quot; + distance + &quot;, Surplus: &quot; + monthlySurplus);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Determines a qualitative financial readiness level based on the savings percentage.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Maps the current progress to an encouraging status message using specific
+&nbsp;     * thresholds (100%, 70%, 50%, and 10%). This provides users with a quick
+&nbsp;     * benchmark of their BTO downpayment progress.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param percentage The current percentage of the BTO goal reached.
+&nbsp;     * @return A descriptive string indicating the user&#39;s readiness level and
+&nbsp;     *     corresponding advice or encouragement.
+&nbsp;     */
+&nbsp;    private String computeReadinessLevel(int percentage) {
+<b class="nc">&nbsp;        if (percentage &gt;= 100) {</b>
+<b class="nc">&nbsp;            return &quot;Ready - Time to sign that BTO!&quot;;</b>
+<b class="nc">&nbsp;        } else if (percentage &gt;= 70) {</b>
+<b class="nc">&nbsp;            return &quot;Secure - Keep it up, you&#39;re almost there!&quot;;</b>
+<b class="nc">&nbsp;        } else if (percentage &gt;= 50) {</b>
+<b class="nc">&nbsp;            return &quot;On Track - Let&#39;s go! You&#39;re more than halfway there&quot;;</b>
+<b class="nc">&nbsp;        } else if (percentage &gt;= 10) {</b>
+<b class="nc">&nbsp;            return &quot;Making Progress - Jiayou! You&#39;re making good progress&quot;;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return &quot;Barely Started - Do start saving soon!!&quot;;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Computes the percentage of the BTO goal reached.
+&nbsp;     * Returns {@code 0} if the BTO goal is zero or negative.
+&nbsp;     *
+&nbsp;     * @return percentage of goal reached, rounded to the nearest whole number.
+&nbsp;     */
+&nbsp;    private int computePercentage() {
+<b class="nc">&nbsp;        if (btoGoal.compareTo(BigDecimal.ZERO) &gt; 0) {</b>
+<b class="nc">&nbsp;            int calcPercentage = currentSavings.multiply(BigDecimal.valueOf(100))</b>
+<b class="nc">&nbsp;                    .divide(btoGoal, 0, RoundingMode.HALF_UP)</b>
+<b class="nc">&nbsp;                    .intValue();</b>
+&nbsp;
+<b class="nc">&nbsp;            assert calcPercentage &gt;= 0 : &quot;Percentage calculation resulted in negative value&quot;;</b>
+<b class="nc">&nbsp;            return calcPercentage;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        logger.warning(&quot;BTO goal is zero; percentage set to 0.&quot;);</b>
+<b class="nc">&nbsp;        return 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Computes a human-readable estimate of when the BTO goal will be reached.
+&nbsp;     *
+&nbsp;     * @return {@code &quot;Reached! Go get that BTO!&quot;} if the goal is met,
+&nbsp;     *         {@code &quot;Infinite (Surplus is $0 or negative!)&quot;} if no progress can be made,
+&nbsp;     *         or the estimated number of months as a {@code String} otherwise.
+&nbsp;     */
+&nbsp;    private String computeEstimate() {
+<b class="nc">&nbsp;        if (distance.compareTo(BigDecimal.ZERO) &lt;= 0) {</b>
+<b class="nc">&nbsp;            logger.info(&quot;Distance is zero or negative. Goal marked as reached.&quot;);</b>
+<b class="nc">&nbsp;            return &quot;Reached! Go get that BTO!&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (monthlySurplus.compareTo(BigDecimal.ZERO) &lt;= 0) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;Monthly surplus is non-positive; cannot estimate completion.&quot;);</b>
+<b class="nc">&nbsp;            return &quot;Infinite (Surplus is $0 or negative!)&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        int months = distance.divide(monthlySurplus, 0, RoundingMode.CEILING).intValue();</b>
+&nbsp;
+<b class="nc">&nbsp;        assert months &gt;= 0 : &quot;Estimated months should be a positive value&quot;;</b>
+<b class="nc">&nbsp;        return months + &quot; months&quot;;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

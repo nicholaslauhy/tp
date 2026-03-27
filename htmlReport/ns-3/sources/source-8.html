@@ -1,0 +1,298 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Storage</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.data</a>
+</div>
+
+<h1>Coverage Summary for Class: Storage (seedu.duke.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Storage</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20.4%
+  </span>
+  <span class="absValue">
+    (11/54)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27.1%
+  </span>
+  <span class="absValue">
+    (23/85)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.data;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.FileWriter;
+&nbsp;import java.io.IOException;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.time.format.DateTimeParseException;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.logging.Level;
+&nbsp;import java.util.logging.Logger;
+&nbsp;import seedu.duke.category.Category;
+&nbsp;
+&nbsp;/**
+&nbsp; * Handles the persistence of user profile data and expense lists to a local file.
+&nbsp; * &lt;p&gt;
+&nbsp; * This class ensures that the financial profile and all tracked expenses are saved
+&nbsp; * to a text file on disk and loaded back into the application at startup.
+&nbsp; * &lt;/p&gt;
+&nbsp; */
+<b class="fc">&nbsp;public class Storage {</b>
+<b class="fc">&nbsp;    private static final Logger logger = Logger.getLogger(Storage.class.getName());</b>
+&nbsp;    private final String filePath;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes a new Storage object with the specified file path.
+&nbsp;     *
+&nbsp;     * @param filePath The path to the text file used for data persistence.
+&nbsp;     */
+<b class="fc">&nbsp;    public Storage(String filePath) {</b>
+&nbsp;        // Assertion: The file path should never be null or empty
+<b class="pc">&nbsp;        assert filePath != null &amp;&amp; !filePath.trim().isEmpty() : &quot;Storage file path is invalid!&quot;;</b>
+<b class="fc">&nbsp;        this.filePath = filePath;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Saves the current financial state to a text file.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Format for Profile: {@code P | name | allowance | savings | btoGoal | ratio | deadline}&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Format for Expenses: {@code E | name | amount | category}&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param profile The {@link Profile} containing the user&#39;s personal financial goals.
+&nbsp;     * @param expenseList The {@link ExpenseList} containing all recorded transactions.
+&nbsp;     * @throws IOException If there is an error writing to the file.
+&nbsp;     */
+&nbsp;    public void save(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
+&nbsp;            throws IOException {
+&nbsp;        // Assertion: Verify internal state before writing to disk
+<b class="nc">&nbsp;        assert profile != null : &quot;Cannot save a null profile!&quot;;</b>
+<b class="nc">&nbsp;        assert expenseList != null : &quot;Cannot save a null expense list!&quot;;</b>
+<b class="nc">&nbsp;        assert recurringExpenseList != null : &quot;Cannot save a null recurring expense list!&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.log(Level.INFO, &quot;Saving financial data to &quot; + filePath);</b>
+&nbsp;
+<b class="nc">&nbsp;        try (FileWriter fw = new FileWriter(filePath)) {</b>
+&nbsp;            // Save Profile (P)
+<b class="nc">&nbsp;            fw.write(String.format(&quot;P | %s | %s | %s | %s | %s | %s%n&quot;,</b>
+<b class="nc">&nbsp;                    profile.getName(),</b>
+<b class="nc">&nbsp;                    profile.getMonthlyAllowance(),</b>
+<b class="nc">&nbsp;                    profile.getCurrentSavings(),</b>
+<b class="nc">&nbsp;                    profile.getBtoGoal(),</b>
+<b class="nc">&nbsp;                    profile.getContributionRatio(),</b>
+<b class="nc">&nbsp;                    profile.getDeadline()));</b>
+&nbsp;
+&nbsp;            // Save Expenses (E)
+<b class="nc">&nbsp;            for (int i = 0; i &lt; expenseList.size(); i++) {</b>
+<b class="nc">&nbsp;                Expense e = expenseList.get(i);</b>
+&nbsp;                // ASSERTION: Ensure no corrupted data exists in the list
+<b class="nc">&nbsp;                assert e.getName() != null : &quot;Expense name at index &quot; + i + &quot; is null&quot;;</b>
+<b class="nc">&nbsp;                assert e.getAmount() != null : &quot;Expense amount at index &quot; + i + &quot; is null&quot;;</b>
+<b class="nc">&nbsp;                assert e.getCategory() != null : &quot;Expense category at index &quot; + i + &quot; is null&quot;;</b>
+<b class="nc">&nbsp;                fw.write(String.format(&quot;E | %s | %s | %s | %s%n&quot;,</b>
+<b class="nc">&nbsp;                        e.getName(),</b>
+<b class="nc">&nbsp;                        e.getAmount(),</b>
+<b class="nc">&nbsp;                        e.getCategory(),</b>
+<b class="nc">&nbsp;                        e.getInsertionOrder()));</b>
+&nbsp;            }
+&nbsp;            //save recurring expenses
+<b class="nc">&nbsp;            for (int i = 0; i &lt; recurringExpenseList.size(); i++) {</b>
+<b class="nc">&nbsp;                RecurringExpense recurringExpense = recurringExpenseList.get(i);</b>
+<b class="nc">&nbsp;                assert recurringExpense.getName() != null : &quot;Recurring expense name at index &quot; + i + &quot; is null&quot;;</b>
+<b class="nc">&nbsp;                assert recurringExpense.getAmount() != null : &quot;Recurring expense amount at index &quot; + i + &quot; is null&quot;;</b>
+<b class="nc">&nbsp;                assert recurringExpense.getCategory() != null : &quot;Recurring expense category at index &quot; + i + &quot; is null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;                fw.write(String.format(&quot;R | %s | %s | %s%n&quot;,</b>
+<b class="nc">&nbsp;                        recurringExpense.getName(),</b>
+<b class="nc">&nbsp;                        recurringExpense.getAmount(),</b>
+<b class="nc">&nbsp;                        recurringExpense.getCategory()));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            logger.log(Level.INFO, &quot;Save successful.&quot;);</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            logger.log(Level.SEVERE, &quot;Could not write to file: &quot; + filePath, e);</b>
+&nbsp;            throw e;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loads financial data from the save file into the provided profile and expense list.
+&nbsp;     * &lt;p&gt;
+&nbsp;     * If the save file does not exist, the method returns without modifying the data.
+&nbsp;     * It parses each line based on the prefix (&quot;P&quot; for Profile, &quot;E&quot; for Expense) and
+&nbsp;     * maps the data to the respective object fields.
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param profile The {@link Profile} object to be populated with saved data.
+&nbsp;     * @param expenseList The {@link ExpenseList} object to be populated with saved expenses.
+&nbsp;     * @throws IOException If there is an error reading from the file.
+&nbsp;     */
+&nbsp;    public void load(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
+&nbsp;            throws IOException {
+<b class="pc">&nbsp;        assert profile != null : &quot;Cannot load into a null profile!&quot;;</b>
+<b class="pc">&nbsp;        assert expenseList != null : &quot;Cannot load into a null expense list!&quot;;</b>
+<b class="pc">&nbsp;        assert recurringExpenseList != null : &quot;Cannot load into a null recurring expense list!&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        File f = new File(filePath);</b>
+<b class="pc">&nbsp;        if (!f.exists()) {</b>
+<b class="nc">&nbsp;            logger.log(Level.WARNING, &quot;No save file found. Starting fresh.&quot;);</b>
+&nbsp;            return; // No save file yet, start with fresh data
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        try (Scanner s = new Scanner(f)) {</b>
+<b class="fc">&nbsp;            while (s.hasNext()) {</b>
+<b class="fc">&nbsp;                String line = s.nextLine();</b>
+<b class="fc">&nbsp;                String[] parts = line.split(&quot; \\| &quot;);</b>
+&nbsp;
+<b class="pc">&nbsp;                if (parts.length &lt; 2) {</b>
+<b class="nc">&nbsp;                    logger.log(Level.WARNING, &quot;Skipping malformed line: &quot; + line);</b>
+&nbsp;                    continue;
+&nbsp;                }
+&nbsp;
+<b class="pc">&nbsp;                if (parts[0].equals(&quot;P&quot;)) {</b>
+<b class="pc">&nbsp;                    if (parts.length &lt; 7) {</b>
+<b class="nc">&nbsp;                        logger.log(Level.WARNING, &quot;Skipping malformed profile line: &quot; + line);</b>
+&nbsp;                        continue;
+&nbsp;                    }
+&nbsp;
+<b class="fc">&nbsp;                    profile.setName(parts[1]);</b>
+<b class="fc">&nbsp;                    profile.setMonthlyAllowance(new BigDecimal(parts[2]));</b>
+<b class="fc">&nbsp;                    profile.setCurrentSavings(new BigDecimal(parts[3]));</b>
+<b class="fc">&nbsp;                    profile.setBtoGoal(new BigDecimal(parts[4]));</b>
+<b class="fc">&nbsp;                    profile.setContributionRatio(new BigDecimal(parts[5]));</b>
+<b class="fc">&nbsp;                    profile.setDeadline(java.time.LocalDate.parse(parts[6]));</b>
+<b class="nc">&nbsp;                } else if (parts[0].equals(&quot;E&quot;)) {</b>
+<b class="nc">&nbsp;                    if (parts.length == 2) {</b>
+&nbsp;                        // Old format: E | amount
+<b class="nc">&nbsp;                        BigDecimal amount = new BigDecimal(parts[1]);</b>
+<b class="nc">&nbsp;                        expenseList.add(&quot;Unnamed Expense&quot;, amount, Category.fromString(&quot;OTHER&quot;));</b>
+<b class="nc">&nbsp;                    } else if (parts.length == 4) {</b>
+&nbsp;                        // New format: E | name | amount | category
+<b class="nc">&nbsp;                        String name = parts[1];</b>
+<b class="nc">&nbsp;                        BigDecimal amount = new BigDecimal(parts[2]);</b>
+<b class="nc">&nbsp;                        Category category = Category.fromString(parts[3]);</b>
+<b class="nc">&nbsp;                        expenseList.add(name, amount, category);</b>
+<b class="nc">&nbsp;                    } else if (parts.length == 5) {</b>
+<b class="nc">&nbsp;                        String name = parts[1];</b>
+<b class="nc">&nbsp;                        BigDecimal amount = new BigDecimal(parts[2]);</b>
+<b class="nc">&nbsp;                        Category category = Category.fromString(parts[3]);</b>
+<b class="nc">&nbsp;                        int insertionOrder = Integer.parseInt(parts[4]);</b>
+<b class="nc">&nbsp;                        expenseList.add(name, amount, category, insertionOrder);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        logger.log(Level.WARNING, &quot;Skipping malformed expense line: &quot; + line);</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }else if (parts[0].equals(&quot;R&quot;)) {</b>
+<b class="nc">&nbsp;                    if (parts.length != 4) {</b>
+<b class="nc">&nbsp;                        logger.log(Level.WARNING, &quot;Skipping malformed recurring expense line: &quot; + line);</b>
+&nbsp;                        continue;
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    String name = parts[1];</b>
+<b class="nc">&nbsp;                    BigDecimal amount = new BigDecimal(parts[2]);</b>
+<b class="nc">&nbsp;                    Category category = Category.fromString(parts[3]);</b>
+<b class="nc">&nbsp;                    recurringExpenseList.add(new RecurringExpense(name, amount, category));</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    logger.log(Level.WARNING, &quot;Skipping unknown record type: &quot; + line);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        } catch (IOException | NumberFormatException | DateTimeParseException e) {
+<b class="nc">&nbsp;            logger.log(Level.SEVERE, &quot;Failed to parse save file accurately.&quot;, e);</b>
+<b class="nc">&nbsp;            throw new IOException(&quot;The save file is corrupted and cannot be loaded.&quot;, e);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

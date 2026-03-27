@@ -1,0 +1,818 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CommandHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke</a>
+</div>
+
+<h1>Coverage Summary for Class: CommandHandler (seedu.duke)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CommandHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (2/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.1%
+  </span>
+  <span class="absValue">
+    (5/121)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.2%
+  </span>
+  <span class="absValue">
+    (13/248)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CommandHandler$AddArguments</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    11.8%
+  </span>
+  <span class="absValue">
+    (2/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.1%
+  </span>
+  <span class="absValue">
+    (5/121)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.1%
+  </span>
+  <span class="absValue">
+    (13/253)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke;
+&nbsp;
+&nbsp;import seedu.duke.category.Category;
+&nbsp;import seedu.duke.data.Expense;
+&nbsp;import seedu.duke.data.ExpenseList;
+&nbsp;import seedu.duke.data.MonthlyArchive;
+&nbsp;import seedu.duke.data.Profile;
+&nbsp;import seedu.duke.data.RecurringExpense;
+&nbsp;import seedu.duke.data.RecurringExpenseList;
+&nbsp;import seedu.duke.data.Storage;
+&nbsp;import seedu.duke.data.SummaryReport;
+&nbsp;import seedu.duke.exception.InvalidAmountException;
+&nbsp;import seedu.duke.exception.InvalidCategoryException;
+&nbsp;import seedu.duke.exception.InvalidIndexException;
+&nbsp;import seedu.duke.ui.Ui;
+&nbsp;import seedu.duke.util.InputUtil;
+&nbsp;import seedu.duke.util.LoggerUtil;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+<b class="fc">&nbsp;public class CommandHandler {</b>
+&nbsp;    /**
+&nbsp;     * Logger for recording command handler events.
+&nbsp;     * Routes all output to the central {@code logs/fintrack.log} via {@link LoggerUtil}.
+&nbsp;     */
+<b class="fc">&nbsp;    private static final Logger logger = LoggerUtil.getLogger(CommandHandler.class);</b>
+&nbsp;
+&nbsp;    private final Ui ui;
+&nbsp;    private final Profile profile;
+&nbsp;    private final ExpenseList expenseList;
+&nbsp;    private final RecurringExpenseList recurringExpenseList;
+&nbsp;    private final Storage storage;
+&nbsp;
+&nbsp;    private static class AddArguments {
+&nbsp;        private final String name;
+&nbsp;        private final BigDecimal amount;
+&nbsp;        private final Category category;
+&nbsp;        private final boolean recurring;
+&nbsp;
+<b class="nc">&nbsp;        private AddArguments(String name, BigDecimal amount, Category category, boolean recurring) {</b>
+<b class="nc">&nbsp;            this.name = name;</b>
+<b class="nc">&nbsp;            this.amount = amount;</b>
+<b class="nc">&nbsp;            this.category = category;</b>
+<b class="nc">&nbsp;            this.recurring = recurring;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public CommandHandler(Ui ui, Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList,
+<b class="fc">&nbsp;                          Storage storage) {</b>
+<b class="pc">&nbsp;        assert ui != null : &quot;Ui should not be null&quot;;</b>
+<b class="pc">&nbsp;        assert profile != null : &quot;Profile should not be null&quot;;</b>
+<b class="pc">&nbsp;        assert expenseList != null : &quot;ExpenseList should not be null&quot;;</b>
+<b class="pc">&nbsp;        assert recurringExpenseList != null : &quot;RecurringExpenseList should not be null&quot;;</b>
+<b class="pc">&nbsp;        assert storage != null : &quot;Storage should not be null&quot;;</b>
+&nbsp;
+<b class="fc">&nbsp;        this.ui = ui;</b>
+<b class="fc">&nbsp;        this.profile = profile;</b>
+<b class="fc">&nbsp;        this.expenseList = expenseList;</b>
+<b class="fc">&nbsp;        this.recurringExpenseList = recurringExpenseList;</b>
+<b class="fc">&nbsp;        this.storage = storage;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds an expense entry into the {@link ExpenseList}.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Expected format: {@code add &lt;name&gt; &lt;amount&gt; &lt;category&gt;}&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;The final token is treated as the category, the second-last token as the amount,
+&nbsp;     * and all preceding tokens are treated as the expense name. This allows expense names
+&nbsp;     * to contain multiple words.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Rejects missing input&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Rejects blank expense names&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Rejects non-numeric amounts&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Rejects negative values&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Rejects values with more than 2 decimal places&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Rejects invalid categories&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;On success, prints the new expense and the updated running total.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param userInput Full command line entered by the user, beginning with {@code add}.
+&nbsp;     */
+&nbsp;    public void handleAdd(String userInput) {
+<b class="nc">&nbsp;        assert userInput != null : &quot;User input should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert userInput.startsWith(&quot;add&quot;) : &quot;Input should start with &#39;add&#39;&quot;;</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            AddArguments args = parseAddArguments(userInput);</b>
+<b class="nc">&nbsp;            if (args.recurring) {</b>
+<b class="nc">&nbsp;                int oldSize = recurringExpenseList.size();</b>
+<b class="nc">&nbsp;                recurringExpenseList.add(new RecurringExpense(args.name, args.amount, args.category));</b>
+&nbsp;
+<b class="nc">&nbsp;                assert recurringExpenseList.size() == oldSize + 1</b>
+&nbsp;                        : &quot;Recurring expense list size should increase by one after add&quot;;
+&nbsp;
+<b class="nc">&nbsp;                logger.info(&quot;handleAdd succeeded | recurring expense | name: &quot; + args.name</b>
+&nbsp;                        + &quot; | amount: $&quot; + args.amount
+&nbsp;                        + &quot; | category: &quot; + args.category);
+&nbsp;
+<b class="nc">&nbsp;                ui.printLine(&quot;Added recurring expense: &quot; + recurringExpenseList.get(recurringExpenseList.size() - 1));</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;Recurring Total: $&quot; + recurringExpenseList.getTotal());</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;&quot;);</b>
+&nbsp;                return;
+&nbsp;            }
+<b class="nc">&nbsp;            BigDecimal oldTotal = expenseList.getTotal();</b>
+<b class="nc">&nbsp;            expenseList.add(args.name, args.amount, args.category);</b>
+&nbsp;
+<b class="nc">&nbsp;            assert expenseList.getTotal().compareTo(oldTotal.add(args.amount)) == 0</b>
+&nbsp;                    : &quot;Expense total should increase by added amount&quot;;
+&nbsp;
+<b class="nc">&nbsp;            logger.info(&quot;handleAdd succeeded | name: &quot; + args.name</b>
+&nbsp;                    + &quot; | amount: $&quot; + args.amount
+&nbsp;                    + &quot; | category: &quot; + args.category
+<b class="nc">&nbsp;                    + &quot; | new total: $&quot; + expenseList.getTotal());</b>
+&nbsp;
+<b class="nc">&nbsp;            ui.printLine(&quot;Added expense: &quot; + expenseList.get(expenseList.size() - 1));</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Month &quot; + profile.getCurrentMonth() + &quot; Total: $&quot; + expenseList.getTotal());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;
+&nbsp;        } catch (InvalidAmountException | InvalidCategoryException e) {
+<b class="nc">&nbsp;            ui.printLine(e.getMessage());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Parses the arguments of an {@code add} command into an expense name,
+&nbsp;     * amount, and category.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;The final token is treated as the category, the second-last token
+&nbsp;     * as the amount, and all preceding tokens are treated as the expense name.
+&nbsp;     * This allows expense names to contain multiple words.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param userInput Full command line entered by the user, beginning with {@code add}.
+&nbsp;     * @return A parsed {@code AddArguments} object containing the expense details.
+&nbsp;     * @throws InvalidAmountException If the input is missing fields, contains a blank name,
+&nbsp;     *                                or contains an invalid amount.
+&nbsp;     */
+&nbsp;    private AddArguments parseAddArguments(String userInput) throws InvalidAmountException, InvalidCategoryException {
+<b class="nc">&nbsp;        assert userInput != null : &quot;User input should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert userInput.startsWith(&quot;add&quot;) : &quot;Input should start with &#39;add&#39;&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        String rest = userInput.substring(&quot;add&quot;.length()).trim();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (rest.isEmpty()) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;handleAdd rejected | reason: empty input&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Format: add &lt;name&gt; &lt;amount&gt; &lt;category&gt;\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        String[] parts = rest.split(&quot;\\s+&quot;);</b>
+<b class="nc">&nbsp;        boolean recurring = parts[parts.length - 1].equalsIgnoreCase(&quot;recurring&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!recurring &amp;&amp; parts.length &lt; 3) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;handleAdd rejected | reason: insufficient arguments&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Format: add &lt;name&gt; &lt;amount&gt; &lt;category&gt; [recurring]\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (recurring &amp;&amp; parts.length &lt; 4) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;handleAdd rejected | reason: insufficient arguments for recurring expense&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Format: add &lt;name&gt; &lt;amount&gt; &lt;category&gt; [recurring]\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        String categoryString;
+&nbsp;        String amountString;
+&nbsp;        int nameEndExclusive;
+&nbsp;
+<b class="nc">&nbsp;        if (recurring) {</b>
+<b class="nc">&nbsp;            categoryString = parts[parts.length - 2];</b>
+<b class="nc">&nbsp;            amountString = parts[parts.length - 3];</b>
+<b class="nc">&nbsp;            nameEndExclusive = parts.length - 3;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            categoryString = parts[parts.length - 1];</b>
+<b class="nc">&nbsp;            amountString = parts[parts.length - 2];</b>
+<b class="nc">&nbsp;            nameEndExclusive = parts.length - 2;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        StringBuilder nameBuilder = new StringBuilder();</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; nameEndExclusive; i++) {</b>
+<b class="nc">&nbsp;            if (i &gt; 0) {</b>
+<b class="nc">&nbsp;                nameBuilder.append(&quot; &quot;);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            nameBuilder.append(parts[i]);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        String name = nameBuilder.toString();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (name.isBlank()) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;handleAdd rejected | reason: blank expense name&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Expense name cannot be empty.\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (!Category.isValid(categoryString)) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;handleAdd rejected | reason: invalid category &quot; + categoryString);</b>
+<b class="nc">&nbsp;            throw new InvalidCategoryException(&quot;Invalid category! Valid categories: &quot; +</b>
+&nbsp;                    &quot;FOOD, TRANSPORT, ENTERTAINMENT, UTILITIES, OTHER\n&quot;);
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        BigDecimal amount = parseAmount(amountString);</b>
+<b class="nc">&nbsp;        Category category = Category.fromString(categoryString);</b>
+&nbsp;
+<b class="nc">&nbsp;        return new AddArguments(name, amount, category, recurring);</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Deletes an expense entry from the {@link ExpenseList} by 1-based index.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Expected format: {@code delete &lt;index&gt;}&lt;/p&gt;
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Rejects non-integer indices&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Rejects out-of-range indices&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;On success, prints the removed entry and the updated running total.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param userInput Full command line entered by the user (starting with {@code delete}).
+&nbsp;     */
+&nbsp;    public void handleDelete(String userInput) {
+<b class="nc">&nbsp;        assert userInput != null : &quot;User input should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert userInput.startsWith(&quot;delete&quot;) : &quot;Input should start with &#39;delete&#39;&quot;;</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            String rest = userInput.substring(&quot;delete&quot;.length()).trim();</b>
+<b class="nc">&nbsp;            int index = parseDeleteIndex(rest);</b>
+&nbsp;
+<b class="nc">&nbsp;            BigDecimal oldTotal = expenseList.getTotal();</b>
+<b class="nc">&nbsp;            Expense removed = expenseList.delete(index);</b>
+&nbsp;
+<b class="nc">&nbsp;            assert removed != null : &quot;Deleted expense should not be null&quot;;</b>
+<b class="nc">&nbsp;            assert expenseList.getTotal().compareTo(oldTotal.subtract(removed.getAmount())) == 0</b>
+&nbsp;                    : &quot;Expense total should decrease by removed amount&quot;;
+&nbsp;            // Log at INFO: a successful delete is a key application state change
+<b class="nc">&nbsp;            logger.info(&quot;handleDelete succeeded | index: &quot; + index</b>
+<b class="nc">&nbsp;                            + &quot; | removed: $&quot; + removed.getAmount()</b>
+<b class="nc">&nbsp;                            + &quot; | new total: $&quot; + expenseList.getTotal());</b>
+&nbsp;
+<b class="nc">&nbsp;            ui.printLine(&quot;Deleted expense #&quot; + index + &quot;: $&quot; + removed.getAmount());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Current Total: $&quot; + expenseList.getTotal());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;        } catch (InvalidIndexException e) {
+&nbsp;            // Log at WARNING: user provided an invalid index that was rejected
+<b class="nc">&nbsp;            logger.warning(&quot;handleDelete rejected | reason: &quot; + e.getMessage().trim());</b>
+<b class="nc">&nbsp;            ui.printLine(e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Handles the deletion of a recurring expense based on user input.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Expected input format:
+&nbsp;     * {@code deleterecurring &lt;index&gt;}&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method parses the index provided by the user, validates it against the
+&nbsp;     * {@link RecurringExpenseList}, and removes the corresponding recurring expense.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Upon successful deletion:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *     &lt;li&gt;The recurring expense is removed from the list.&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;The total recurring expenditure is updated accordingly.&lt;/li&gt;
+&nbsp;     *     &lt;li&gt;A confirmation message is displayed to the user.&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;If the input format is invalid or the index is out of bounds, an appropriate
+&nbsp;     * error message is shown to the user.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param userInput Full user input string starting with {@code deleterecurring}.
+&nbsp;     *                  Must not be {@code null} and must start with {@code deleterecurring}.
+&nbsp;     */
+&nbsp;    public void handleDeleteRecurring(String userInput) {
+<b class="nc">&nbsp;        assert userInput != null : &quot;User input should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert userInput.startsWith(&quot;deleterecurring&quot;) : &quot;Input should start with &#39;deleterecurring&#39;&quot;;</b>
+&nbsp;
+&nbsp;        try {
+<b class="nc">&nbsp;            String rest = userInput.substring(&quot;deleterecurring&quot;.length()).trim();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (rest.isEmpty()) {</b>
+<b class="nc">&nbsp;                throw new InvalidIndexException(&quot;Format: deleterecurring &lt;index&gt;\n&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            int index = Parser.parseIndex(rest);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (!recurringExpenseList.isValidIndex(index)) {</b>
+<b class="nc">&nbsp;                throw new InvalidIndexException(&quot;Invalid recurring expense index!\n&quot;);</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            BigDecimal oldTotal = recurringExpenseList.getTotal();</b>
+<b class="nc">&nbsp;            RecurringExpense removed = recurringExpenseList.delete(index);</b>
+&nbsp;
+<b class="nc">&nbsp;            assert removed != null : &quot;Deleted recurring expense should not be null&quot;;</b>
+<b class="nc">&nbsp;            assert recurringExpenseList.getTotal().compareTo(oldTotal.subtract(removed.getAmount())) == 0</b>
+&nbsp;                    : &quot;Recurring expense total should decrease by removed amount&quot;;
+&nbsp;
+<b class="nc">&nbsp;            ui.printLine(&quot;Deleted recurring expense #&quot; + index + &quot;: &quot; + removed);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Recurring Total: $&quot; + recurringExpenseList.getTotal());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;
+&nbsp;        } catch (InvalidIndexException e) {
+<b class="nc">&nbsp;            ui.printLine(e.getMessage());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Clears all expenses from the {@link ExpenseList} after user confirmation.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method prompts the user with a confirmation question.
+&nbsp;     * Only a response of {@code &quot;y&quot;} (case-insensitive after trimming) will proceed.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Side effect: Mutates the {@link ExpenseList} by removing all entries if confirmed.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param in Scanner used to read the user&#39;s confirmation response.
+&nbsp;     */
+&nbsp;    public void handleClear(Scanner in) {
+<b class="nc">&nbsp;        assert in != null : &quot;Scanner should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;WARNING: This will permanently delete ALL one-off expenses. Are you sure? (Input Y to clear)&quot;);</b>
+<b class="nc">&nbsp;        String response = in.nextLine().trim().toLowerCase();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (response.equals(&quot;y&quot;)) {</b>
+<b class="nc">&nbsp;            expenseList.clear();</b>
+&nbsp;
+&nbsp;            // Log at INFO: clearing all expenses is a significant application event
+<b class="nc">&nbsp;            logger.info(&quot;handleClear executed | all one-off expenses cleared by user confirmation&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Current month&#39;s one-off expenses have been wiped clean. Recurring expenses are kept.&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;        } else {
+&nbsp;            // Log at INFO: user chose not to clear — still worth recording the decision
+<b class="nc">&nbsp;            logger.info(&quot;handleClear cancelled | user did not confirm&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;            ui.printLine(&quot;Clear cancelled. Your data is still there, bro.&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a specified amount to the user&#39;s current total savings.
+&nbsp;     *
+&nbsp;     * @param in Scanner used to read the user&#39;s deposit input.
+&nbsp;     */
+&nbsp;    public void handleSavings(Scanner in) {
+<b class="nc">&nbsp;        assert in != null : &quot;Scanner should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        BigDecimal current = profile.getCurrentSavings();</b>
+<b class="nc">&nbsp;        assert current != null : &quot;Current savings should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;Current total savings: &quot; + InputUtil.formatMoney(current));</b>
+&nbsp;
+&nbsp;        // Prompt for the amount to add
+<b class="nc">&nbsp;        BigDecimal depositAmount = InputUtil.readMoney(ui, in, &quot;Enter amount to add to your savings:&quot;);</b>
+<b class="nc">&nbsp;        assert depositAmount.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;Deposit amount should not be negative&quot;;</b>
+&nbsp;
+&nbsp;        // Update profile by adding to the current balance
+<b class="nc">&nbsp;        BigDecimal updatedSavings = current.add(depositAmount);</b>
+<b class="nc">&nbsp;        profile.setCurrentSavings(updatedSavings);</b>
+<b class="nc">&nbsp;        assert profile.getCurrentSavings().compareTo(updatedSavings) == 0</b>
+&nbsp;                : &quot;Profile savings should match updated savings&quot;;
+&nbsp;
+&nbsp;        // Log at INFO: savings update is a key profile state change
+<b class="nc">&nbsp;        logger.info(&quot;handleSavings executed | deposited: $&quot; + depositAmount</b>
+&nbsp;                + &quot; | new savings total: $&quot; + updatedSavings);
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;Transaction successful!&quot;);</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;Added: &quot; + InputUtil.formatMoney(depositAmount));</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;New total savings: &quot; + InputUtil.formatMoney(updatedSavings));</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays the current monthly allowance and prompts the user to update it.
+&nbsp;     *
+&nbsp;     * @param in Scanner used to read the user&#39;s input.
+&nbsp;     */
+&nbsp;    public void handleAllowance(Scanner in) {
+<b class="nc">&nbsp;        assert in != null : &quot;Scanner should not be null&quot;;</b>
+<b class="nc">&nbsp;        BigDecimal current = profile.getMonthlyAllowance();</b>
+<b class="nc">&nbsp;        assert current != null : &quot;Current allowance in profile should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.promptForAllowance(current);</b>
+<b class="nc">&nbsp;        BigDecimal newAllowance = InputUtil.readMoney(ui, in, &quot;Enter new monthly allowance:&quot;);</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        profile.setMonthlyAllowance(newAllowance);</b>
+<b class="nc">&nbsp;        assert profile.getMonthlyAllowance().equals(newAllowance) : &quot;Profile failed to update allowance&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;handleAllowance executed | old: &quot; + current + &quot; | new: &quot; + newAllowance);</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;Success! Your monthly allowance is now &quot; + InputUtil.formatMoney(newAllowance));</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Displays the current contribution ratio and prompts the user to update it.
+&nbsp;     *
+&nbsp;     * @param in Scanner used to read the user&#39;s input.
+&nbsp;     */
+&nbsp;    public void handleRatio(Scanner in) {
+<b class="nc">&nbsp;        assert in != null : &quot;Scanner should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        BigDecimal current = profile.getContributionRatio();</b>
+<b class="nc">&nbsp;        assert current != null : &quot;Current ratio in profile should not be null&quot;;</b>
+&nbsp;
+&nbsp;        // Show current state
+<b class="nc">&nbsp;        ui.promptForRatio(current);</b>
+<b class="nc">&nbsp;        BigDecimal newRatio = InputUtil.readRatio(ui, in, &quot;Enter new ratio (0.0 to 1.0):&quot;);</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        profile.setContributionRatio(newRatio);</b>
+<b class="nc">&nbsp;        assert profile.getContributionRatio().equals(newRatio) : &quot;Profile failed to update ratio&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;handleRatio executed | old: &quot; + current + &quot; | new: &quot; + newRatio);</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;Success! Your contribution ratio is now &quot; + newRatio);</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Computes and displays a BTO Readiness Report based on the user&#39;s current financial profile.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Calculates the following metrics from {@link Profile} and {@link ExpenseList}:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Distance to goal (BTO goal - current savings)&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Monthly surplus (monthly allowance - total expenses)&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Percentage progress towards the BTO goal&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Estimated months to reach the goal, or a status message if already reached
+&nbsp;     *       or surplus is non-positive&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Results are passed to {@link Ui#showSummaryReport} for display.&lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void handleSummary() {
+&nbsp;
+&nbsp;        // Log at INFO: summary generation is a deliberate user-initiated action
+<b class="nc">&nbsp;        logger.info(&quot;handleSummary executed | generating BTO readiness report&quot;);</b>
+<b class="nc">&nbsp;        ui.showSummaryReport(new SummaryReport(profile, expenseList, recurringExpenseList));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Completely resets the user profile and expense list after confirmation.
+&nbsp;     * @param in Scanner used for user confirmation.
+&nbsp;     */
+&nbsp;    public void handleReset(Scanner in) {
+<b class="nc">&nbsp;        assert in != null : &quot;Scanner should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;WARNING: This will wipe your profile and ALL expenses. Type &#39;Y&#39; to continue: &quot;);</b>
+<b class="nc">&nbsp;        String response = in.nextLine().trim().toLowerCase();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (response.equals(&quot;y&quot;)) {</b>
+&nbsp;            // 1. Reset in-memory objects
+<b class="nc">&nbsp;            profile.reset();</b>
+<b class="nc">&nbsp;            expenseList.clear();</b>
+&nbsp;
+<b class="nc">&nbsp;            assert expenseList.getTotal().compareTo(BigDecimal.ZERO) == 0</b>
+&nbsp;                    : &quot;Expense total should be zero after reset&quot;;
+&nbsp;
+&nbsp;            // 2. Overwrite the save file with the empty data
+&nbsp;            try {
+<b class="nc">&nbsp;                storage.save(profile, expenseList, recurringExpenseList);</b>
+&nbsp;
+&nbsp;                // Log at INFO: full system reset is the most significant application event
+<b class="nc">&nbsp;                logger.info(&quot;handleReset executed | profile and expenses cleared, save file overwritten&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                ui.printLine(&quot;System reset successful. Please restart or type &#39;bye&#39; to exit.&quot;);</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;&quot;);</b>
+&nbsp;            } catch (IOException e) {
+&nbsp;                // Log at WARNING: in-memory reset succeeded but disk write failed
+<b class="nc">&nbsp;                logger.warning(&quot;handleReset | in-memory reset succeeded but save file write failed: &quot;</b>
+<b class="nc">&nbsp;                        + e.getMessage());</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;Error: Could not reset the save file on disk.&quot;);</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;&quot;);</b>
+&nbsp;            }
+&nbsp;        } else {
+&nbsp;            // Log at INFO: user chose not to reset — still worth recording the decision
+<b class="nc">&nbsp;            logger.info(&quot;handleReset cancelled | user did not confirm&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Reset aborted. Your data is safe!&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Parses and validates an amount string.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;The amount must be a valid non-negative number with at most
+&nbsp;     * 2 decimal places.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param amountString Raw amount string to parse.
+&nbsp;     * @return Parsed amount as a {@link BigDecimal}.
+&nbsp;     * @throws InvalidAmountException If the amount is empty, non-numeric,
+&nbsp;     *                                negative, or has more than 2 decimal places.
+&nbsp;     */
+&nbsp;    public BigDecimal parseAmount(String amountString) throws InvalidAmountException {
+<b class="nc">&nbsp;        assert amountString != null : &quot;Amount input should not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        if (amountString.isBlank()) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;parseAmount rejected | reason: empty input&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Amount cannot be empty.\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        BigDecimal amount;
+&nbsp;        try {
+<b class="nc">&nbsp;            amount = new BigDecimal(amountString);</b>
+&nbsp;        } catch (NumberFormatException e) {
+<b class="nc">&nbsp;            logger.warning(&quot;parseAmount rejected | reason: non-numeric input &#39;&quot; + amountString + &quot;&#39;&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Amount must be a valid number.\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (amount.compareTo(BigDecimal.ZERO) &lt; 0) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;parseAmount rejected | reason: negative value &quot; + amount);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Amount cannot be negative bro who you trying to scam?\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (amount.scale() &gt; 2) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;parseAmount rejected | reason: more than 2 decimal places, value: &quot; + amount);</b>
+<b class="nc">&nbsp;            throw new InvalidAmountException(&quot;Amount must not exceed 2 decimal places bro!\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        assert amount.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;Amount should be non-negative&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.fine(&quot;parseAmount succeeded | parsed value: $&quot; + amount);</b>
+<b class="nc">&nbsp;        return amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int parseDeleteIndex(String rest) throws InvalidIndexException {
+<b class="nc">&nbsp;        assert rest != null : &quot;Delete index input should not be null&quot;;</b>
+&nbsp;
+&nbsp;        // If there is no input after delete
+<b class="nc">&nbsp;        if (rest.isEmpty()) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;parseDeleteIndex rejected | reason: empty input&quot;);</b>
+<b class="nc">&nbsp;            throw new InvalidIndexException(&quot;Format: delete &lt;index&gt; bro! where is the INDEXXX\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        int index = Parser.parseIndex(rest);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!expenseList.isValidIndex(index)) {</b>
+<b class="nc">&nbsp;            logger.warning(&quot;parseDeleteIndex rejected | reason: index &quot; + index</b>
+<b class="nc">&nbsp;                    + &quot; out of range, list size: &quot; + expenseList.size());</b>
+<b class="nc">&nbsp;            throw new InvalidIndexException(&quot;Invalid index bro! do you even know how much you&#39;ve spent?\n&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Log at FINE: successful parse is a low-level detail, not a key app event
+<b class="nc">&nbsp;        logger.fine(&quot;parseDeleteIndex succeeded | parsed index: &quot; + index);</b>
+&nbsp;        
+<b class="nc">&nbsp;        return index;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sorts the expense list by the specified sort argument.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Expected format: {@code sort &lt;argument&gt;}&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Recognised arguments:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;{@code category} — sorts expenses by category sort order&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;{@code recent} — restores expenses to original insertion order&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Any other argument is rejected with an error message.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param userInput Full command line entered by the user, beginning with {@code sort}.
+&nbsp;     */
+&nbsp;    public void handleSort(String userInput) {
+<b class="nc">&nbsp;        assert userInput != null : &quot;User input should not be null&quot;;</b>
+<b class="nc">&nbsp;        assert userInput.startsWith(&quot;sort&quot;) : &quot;Input should start with &#39;sort&#39;!&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        String arg = userInput.substring(&quot;sort&quot;.length()).trim();</b>
+&nbsp;
+<b class="nc">&nbsp;        switch (arg.toLowerCase()) {</b>
+&nbsp;        case &quot;name&quot;:
+<b class="nc">&nbsp;            expenseList.sortByName();</b>
+<b class="nc">&nbsp;            logger.info(&quot;handleSort executed | sort type: name&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Expenses sorted alphabetically by name.&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;            break;
+&nbsp;        case &quot;category&quot;:
+<b class="nc">&nbsp;            expenseList.sortByCategory();</b>
+<b class="nc">&nbsp;            logger.info(&quot;handleSort executed | sort type: category&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Expenses sorted by category.&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;            break;
+&nbsp;        case &quot;recent&quot;:
+<b class="nc">&nbsp;            expenseList.sortByRecent();</b>
+<b class="nc">&nbsp;            logger.info(&quot;handleSort executed | sort type: recent&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Expenses sorted by insertion order.&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;
+&nbsp;            break;
+&nbsp;        default:
+<b class="nc">&nbsp;            logger.warning(&quot;handleSort rejected | unknown argument: &quot; + arg);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Wrong argument la bro! Use &#39;sort name&#39;, &#39;sort category&#39; or &#39;sort recent&#39; ONLY!&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;            break;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Handles the &#39;save&#39; command to archive current month&#39;s expenses and advance to next month.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Archives the current month&#39;s expenses to a file (Month{N})&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Calculates unspent allowance: monthlyAllowance - currentMonthExpenses&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Transfers unspent amount to savings&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Clears the monthly expense list for the next month&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Increments the month counter&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void handleSaveMonth() {
+&nbsp;
+<b class="nc">&nbsp;        int currentMonth = profile.getCurrentMonth();</b>
+<b class="nc">&nbsp;        BigDecimal monthlyExpenses = expenseList.getTotal();</b>
+<b class="nc">&nbsp;        BigDecimal monthlyAllowance = profile.getMonthlyAllowance();</b>
+<b class="nc">&nbsp;        BigDecimal unspentAmount = monthlyAllowance.subtract(monthlyExpenses);</b>
+&nbsp;
+<b class="nc">&nbsp;        logger.info(&quot;handleSaveMonth start | month=&quot; + currentMonth</b>
+&nbsp;                + &quot; | monthlyAllowance=&quot; + monthlyAllowance
+&nbsp;                + &quot; | monthlyExpenses=&quot; + monthlyExpenses
+&nbsp;                + &quot; | unspentAmount=&quot; + unspentAmount);
+&nbsp;
+&nbsp;        // Archive current month&#39;s expenses
+&nbsp;        try {
+<b class="nc">&nbsp;            MonthlyArchive archive = new MonthlyArchive(&quot;.&quot;);</b>
+<b class="nc">&nbsp;            archive.saveMonthlyExpenses(currentMonth, expenseList);</b>
+<b class="nc">&nbsp;            logger.info(&quot;Month &quot; + currentMonth + &quot; expenses archived successfully&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;Month &quot; + currentMonth + &quot; expenses archived to &#39;monthly_archives&#39;&quot;);</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            logger.log(java.util.logging.Level.SEVERE,</b>
+&nbsp;                    &quot;Failed to archive Month &quot; + currentMonth + &quot; expenses&quot;, e);
+<b class="nc">&nbsp;            ui.printLine(&quot;Error: Could not archive expenses for Month &quot; + currentMonth);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;&quot;);</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+&nbsp;        // Transfer unspent allowance to savings
+<b class="nc">&nbsp;        if (unspentAmount.compareTo(BigDecimal.ZERO) &gt; 0) {</b>
+<b class="nc">&nbsp;            BigDecimal newSavings = profile.getCurrentSavings().add(unspentAmount);</b>
+<b class="nc">&nbsp;            profile.setCurrentSavings(newSavings);</b>
+<b class="nc">&nbsp;            logger.info(&quot;Transferred unspent amount to savings | amount=&quot; + unspentAmount</b>
+&nbsp;                    + &quot; | newSavings=&quot; + newSavings);
+<b class="nc">&nbsp;            ui.printLine(&quot;Transferred &quot; + InputUtil.formatMoney(unspentAmount) + &quot; of unspent &quot;</b>
+&nbsp;                    + &quot;allowance to savings&quot;);
+<b class="nc">&nbsp;        } else if (unspentAmount.compareTo(BigDecimal.ZERO) &lt; 0) {</b>
+<b class="nc">&nbsp;            logger.info(&quot;Overspent this month | deficit=&quot; + unspentAmount.negate());</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;You overspent by &quot; + InputUtil.formatMoney(unspentAmount.negate()));</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            logger.info(&quot;No unspent allowance this month&quot;);</b>
+<b class="nc">&nbsp;            ui.printLine(&quot;You spent exactly your monthly allowance&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Clear expense list for next month
+<b class="nc">&nbsp;        expenseList.clear();</b>
+<b class="nc">&nbsp;        logger.info(&quot;Expense list cleared for next month&quot;);</b>
+&nbsp;
+&nbsp;        // Advance to next month
+<b class="nc">&nbsp;        profile.advanceMonth();</b>
+<b class="nc">&nbsp;        int nextMonth = profile.getCurrentMonth();</b>
+<b class="nc">&nbsp;        logger.info(&quot;Advanced to next month | currentMonth=&quot; + nextMonth);</b>
+&nbsp;
+<b class="nc">&nbsp;        ui.printLine(&quot;Advanced to Month &quot; + nextMonth);</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;Current Savings: &quot; + InputUtil.formatMoney(profile.getCurrentSavings()));</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;Monthly Allowance: &quot; + InputUtil.formatMoney(monthlyAllowance));</b>
+<b class="nc">&nbsp;        ui.printLine(&quot;&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

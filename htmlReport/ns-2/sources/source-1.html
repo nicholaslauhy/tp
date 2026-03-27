@@ -1,0 +1,232 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Category</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.category</a>
+</div>
+
+<h1>Coverage Summary for Class: Category (seedu.duke.category)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Category</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.category;
+&nbsp;
+&nbsp;import java.util.logging.Logger;
+&nbsp;import seedu.duke.util.LoggerUtil;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a classification label for a financial expense.
+&nbsp; *
+&nbsp; * &lt;p&gt;Each concrete subclass defines a specific category (e.g., FOOD, TRANSPORT)
+&nbsp; * and its sort priority for ordered display in the expense list.&lt;/p&gt;
+&nbsp; *
+&nbsp; * &lt;p&gt;Categories are compared by their hard-coded sort order via {@link #compareTo},
+&nbsp; * allowing expense lists to be sorted by category using standard Java sorting utilities.&lt;/p&gt;
+&nbsp; *
+&nbsp; * &lt;p&gt;New categories should extend this class and implement {@link #getName()}
+&nbsp; * and {@link #getSortOrder()}.&lt;/p&gt;
+&nbsp; */
+<b class="nc">&nbsp;public abstract class Category implements Comparable&lt;Category&gt; {</b>
+&nbsp;
+<b class="nc">&nbsp;    private static final Logger logger = LoggerUtil.getLogger(Category.class);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns {@code true} if the given string maps to a known category.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Used by {@link seedu.duke.CommandHandler} to validate user input
+&nbsp;     * before calling {@link #fromString}, since {@code fromString} defaults
+&nbsp;     * to {@link OtherCategory} for unrecognised input rather than throwing.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param categoryString The string to check. Must not be null.
+&nbsp;     * @return {@code true} if the input matches a known category name.
+&nbsp;     */
+&nbsp;    public static boolean isValid(String categoryString) {
+<b class="nc">&nbsp;        assert categoryString != null : &quot;Category input string must not be null&quot;;</b>
+<b class="nc">&nbsp;        return switch (categoryString.toUpperCase()) {</b>
+<b class="nc">&nbsp;        case &quot;FOOD&quot;, &quot;TRANSPORT&quot;, &quot;ENTERTAINMENT&quot;, &quot;UTILITIES&quot;, &quot;OTHER&quot; -&gt; true;</b>
+<b class="nc">&nbsp;        default -&gt; false;</b>
+&nbsp;        };
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the display name of this category in uppercase.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This value is used for display output and file persistence.
+&nbsp;     * It must be consistent with the keys recognised by {@link #fromString}.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @return The uppercase name of this category (e.g., {@code &quot;FOOD&quot;}).
+&nbsp;     */
+&nbsp;    public abstract String getName();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the sort priority of this category.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Lower values appear first when expenses are sorted by category.
+&nbsp;     * Each concrete subclass should return a unique positive integer.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @return A positive integer representing sort order.
+&nbsp;     */
+&nbsp;    public abstract int getSortOrder();
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Compares this category to another by sort order.
+&nbsp;     *
+&nbsp;     * @param other The category to compare against.
+&nbsp;     * @return A negative integer, zero, or positive integer if this category&#39;s
+&nbsp;     *         sort order is less than, equal to, or greater than {@code other}&#39;s.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public int compareTo(Category other) {
+<b class="nc">&nbsp;        assert other != null : &quot;Cannot compare against a null category&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        return Integer.compare(this.getSortOrder(), other.getSortOrder());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the name of this category as its string representation.
+&nbsp;     *
+&nbsp;     * @return The result of {@link #getName()}.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return getName();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a {@code Category} instance corresponding to the given string.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Matching is case-insensitive. If the input does not match a recognised
+&nbsp;     * category, an {@link IllegalArgumentException} is thrown. Callers should
+&nbsp;     * validate input using {@link #isValid} before calling this method.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Recognised values: {@code FOOD}, {@code TRANSPORT},
+&nbsp;     * {@code ENTERTAINMENT}, {@code UTILITIES}, {@code OTHER}.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param input The string to parse. Must not be null.
+&nbsp;     * @return The matching {@code Category} instance.
+&nbsp;     * @throws IllegalArgumentException If the input does not match a recognised category.
+&nbsp;     */
+&nbsp;    public static Category fromString(String input) {
+<b class="nc">&nbsp;        assert input != null : &quot;Category input string must not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        Category result = switch (input.toUpperCase()) {</b>
+<b class="nc">&nbsp;        case &quot;FOOD&quot; -&gt; new FoodCategory();</b>
+<b class="nc">&nbsp;        case &quot;TRANSPORT&quot; -&gt; new TransportCategory();</b>
+<b class="nc">&nbsp;        case &quot;ENTERTAINMENT&quot; -&gt; new EntertainmentCategory();</b>
+<b class="nc">&nbsp;        case &quot;UTILITIES&quot; -&gt; new UtilitiesCategory();</b>
+<b class="nc">&nbsp;        case &quot;OTHER&quot; -&gt; new OtherCategory();</b>
+<b class="nc">&nbsp;        default -&gt; throw new IllegalArgumentException(</b>
+&nbsp;                &quot;Unknown category: &quot; + input);
+&nbsp;        }
+&nbsp;        ;
+&nbsp;
+<b class="nc">&nbsp;        logger.fine(&quot;fromString succeeded | input: &quot; + input + &quot; -&gt; &quot; + result.getName());</b>
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

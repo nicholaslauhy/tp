@@ -1,3 +1,4 @@
+//@@author wKynaston
 package seedu.duke.data;
 
 import java.math.BigDecimal;

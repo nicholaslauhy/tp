@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Expense</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.data</a>
+</div>
+
+<h1>Coverage Summary for Class: Expense (seedu.duke.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Expense</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.data;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import seedu.duke.category.Category;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents an individual financial expense within the FinTrackPro system.
+&nbsp; * * &lt;p&gt;Each expense maintains a monetary amount.&lt;/p&gt;
+&nbsp; */
+<b class="nc">&nbsp;public class Expense {</b>
+&nbsp;    private final String name;
+&nbsp;    private final BigDecimal amount;
+&nbsp;    private final Category category;
+&nbsp;    private final int insertionOrder;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new {@code Expense} with the specified name, amount, category and insertion order
+&nbsp;     *
+&nbsp;     * @param name Name or description of the expense.
+&nbsp;     * @param amount Monetary value of the expense.
+&nbsp;     * @param category Category assigned to the expense.
+&nbsp;     * @param insertionOrder Insertion order assigned to the expense, used for sorting.
+&nbsp;     */
+<b class="nc">&nbsp;    public Expense(String name, BigDecimal amount, Category category, int insertionOrder) {</b>
+&nbsp;        //Invariant: Name added must never be null
+<b class="nc">&nbsp;        assert name != null &amp;&amp; !name.isBlank() : &quot;Expense name should not be null or blank&quot;;</b>
+&nbsp;        //Invariant: Amount added must never be null
+<b class="nc">&nbsp;        assert amount != null : &quot;Expense amount should not be null&quot;;</b>
+&nbsp;        //Invariant: Amount added must never be negative
+<b class="nc">&nbsp;        assert amount.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;Expense amount must be non-negative&quot;;</b>
+&nbsp;        //Invariant: Category Added should not be null
+<b class="nc">&nbsp;        assert category != null : &quot;Expense category should not be null&quot;;</b>
+&nbsp;        //Invariant: Insertion order should be more than 0
+<b class="nc">&nbsp;        assert insertionOrder &gt;= 0 : &quot;Insertion order must be non-negative&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        this.name = name;</b>
+<b class="nc">&nbsp;        this.amount = amount;</b>
+<b class="nc">&nbsp;        this.category = category;</b>
+<b class="nc">&nbsp;        this.insertionOrder = insertionOrder;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the name of this expense.
+&nbsp;     *
+&nbsp;     * @return Expense name or description.
+&nbsp;     */
+&nbsp;    public String getName() {
+<b class="nc">&nbsp;        assert name != null : &quot;Expense name should never be null&quot;;</b>
+<b class="nc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Gets the monetary amount of this expense.
+&nbsp;     *
+&nbsp;     * @return The expense amount as a {@code BigDecimal}.
+&nbsp;     */
+&nbsp;    public BigDecimal getAmount() {
+&nbsp;        //Invariant: Amount must never be null after successful construction
+<b class="nc">&nbsp;        assert amount != null : &quot;Expense should never be null after construction.&quot;;</b>
+<b class="nc">&nbsp;        return amount;</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns the category of this expense.
+&nbsp;     *
+&nbsp;     * @return Expense category.
+&nbsp;     */
+&nbsp;    public Category getCategory() {
+<b class="nc">&nbsp;        assert category != null : &quot;Expense category should never be null&quot;;</b>
+<b class="nc">&nbsp;        return category;</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns a formatted string representation of this expense.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;The output includes the category, name, and amount of the expense
+&nbsp;     * in a user-friendly format.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @return a {@code String} in the format {@code &quot;[CATEGORY] name $amount&quot;},
+&nbsp;     *         e.g. {@code &quot;[FOOD] lunch $12.50&quot;}
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return &quot;[&quot; + category + &quot;] &quot; + name + &quot; $&quot; + amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getInsertionOrder() {
+<b class="nc">&nbsp;        return insertionOrder;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

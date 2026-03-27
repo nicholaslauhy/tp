@@ -1,0 +1,274 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > MonthlyArchive</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.data</a>
+</div>
+
+<h1>Coverage Summary for Class: MonthlyArchive (seedu.duke.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MonthlyArchive</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/48)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.data;
+&nbsp;
+&nbsp;import seedu.duke.util.LoggerUtil;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.io.FileWriter;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.logging.Level;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+&nbsp;/**
+&nbsp; * Manages the archival of monthly expenses into dedicated files.
+&nbsp; *
+&nbsp; * &lt;p&gt;This class handles creating and maintaining a directory structure for storing
+&nbsp; * monthly financial records. Each month&#39;s expenses are saved to a file named
+&nbsp; * MonthN where N is the month number.&lt;/p&gt;
+&nbsp; */
+<b class="nc">&nbsp;public class MonthlyArchive {</b>
+<b class="nc">&nbsp;    private static final Logger logger = LoggerUtil.getLogger(MonthlyArchive.class);</b>
+&nbsp;    private static final String ARCHIVE_DIR = &quot;monthly_archives&quot;;
+&nbsp;    private final String archiveDirectoryPath;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initializes the MonthlyArchive with a base directory path.
+&nbsp;     *
+&nbsp;     * @param baseDir The base directory path where the archive folder will be created.
+&nbsp;     */
+<b class="nc">&nbsp;    public MonthlyArchive(String baseDir) {</b>
+<b class="nc">&nbsp;        assert baseDir != null &amp;&amp; !baseDir.trim().isEmpty() : &quot;Base directory cannot be null or empty&quot;;</b>
+<b class="nc">&nbsp;        this.archiveDirectoryPath = baseDir + File.separator + ARCHIVE_DIR;</b>
+<b class="nc">&nbsp;        ensureArchiveDirectoryExists();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the archive directory if it does not exist.
+&nbsp;     */
+&nbsp;    private void ensureArchiveDirectoryExists() {
+<b class="nc">&nbsp;        File archiveDir = new File(archiveDirectoryPath);</b>
+<b class="nc">&nbsp;        if (!archiveDir.exists()) {</b>
+<b class="nc">&nbsp;            boolean created = archiveDir.mkdirs();</b>
+<b class="nc">&nbsp;            if (created) {</b>
+<b class="nc">&nbsp;                logger.log(Level.INFO, &quot;Archive directory created at: &quot; + archiveDirectoryPath);</b>
+<b class="nc">&nbsp;            } else if (!archiveDir.isDirectory()) {</b>
+<b class="nc">&nbsp;                logger.log(Level.WARNING, &quot;Failed to create archive directory: &quot; + archiveDirectoryPath);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Saves the expenses for a given month to a dedicated file.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;File format: One expense per line as &quot;name | amount | category&quot;&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param monthNumber The month number (1-indexed).
+&nbsp;     * @param expenseList The list of expenses to archive.
+&nbsp;     * @throws IOException If there is an error writing to the file.
+&nbsp;     */
+&nbsp;    public void saveMonthlyExpenses(int monthNumber, ExpenseList expenseList) throws IOException {
+<b class="nc">&nbsp;        assert monthNumber &gt; 0 : &quot;Month number must be positive&quot;;</b>
+<b class="nc">&nbsp;        assert expenseList != null : &quot;Expense list cannot be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        File monthFile = getMonthFile(monthNumber);</b>
+<b class="nc">&nbsp;        logger.log(Level.INFO, &quot;Archiving Month &quot; + monthNumber + &quot; expenses to: &quot; + monthFile.getAbsolutePath());</b>
+&nbsp;
+<b class="nc">&nbsp;        try (FileWriter fw = new FileWriter(monthFile)) {</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; expenseList.size(); i++) {</b>
+<b class="nc">&nbsp;                Expense e = expenseList.get(i);</b>
+<b class="nc">&nbsp;                fw.write(String.format(&quot;%s | %s | %s%n&quot;,</b>
+<b class="nc">&nbsp;                        e.getName(),</b>
+<b class="nc">&nbsp;                        e.getAmount(),</b>
+<b class="nc">&nbsp;                        e.getCategory()));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            logger.log(Level.INFO, &quot;Month &quot; + monthNumber + &quot; archived successfully with &quot;</b>
+<b class="nc">&nbsp;                    + expenseList.size() + &quot; expenses&quot;);</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            logger.log(Level.SEVERE, &quot;Failed to archive Month &quot; + monthNumber, e);</b>
+&nbsp;            throw e;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Loads archived one-off expenses for a given month.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Lines are expected to be in the format: {@code name | amount | category}.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param monthNumber The month number (1-indexed).
+&nbsp;     * @return Parsed archived entries; empty list if no archive file exists.
+&nbsp;     * @throws IOException If there is an error reading the file.
+&nbsp;     */
+&nbsp;    public List&lt;ArchivedExpense&gt; loadMonthlyExpenses(int monthNumber) throws IOException {
+<b class="nc">&nbsp;        assert monthNumber &gt; 0 : &quot;Month number must be positive&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        File monthFile = getMonthFile(monthNumber);</b>
+<b class="nc">&nbsp;        List&lt;ArchivedExpense&gt; archivedExpenses = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (!monthFile.exists()) {</b>
+<b class="nc">&nbsp;            return archivedExpenses;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        try (Scanner scanner = new Scanner(monthFile)) {</b>
+<b class="nc">&nbsp;            while (scanner.hasNextLine()) {</b>
+<b class="nc">&nbsp;                String line = scanner.nextLine().trim();</b>
+<b class="nc">&nbsp;                if (line.isEmpty()) {</b>
+&nbsp;                    continue;
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                String[] parts = line.split(&quot;\\s*\\|\\s*&quot;);</b>
+<b class="nc">&nbsp;                if (parts.length &lt; 3) {</b>
+<b class="nc">&nbsp;                    logger.log(Level.WARNING, &quot;Skipping malformed archived expense line: &quot; + line);</b>
+&nbsp;                    continue;
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                archivedExpenses.add(new ArchivedExpense(parts[0], parts[1], parts[2]));</b>
+&nbsp;            }
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            logger.log(Level.SEVERE, &quot;Failed to load archived expenses for Month &quot; + monthNumber, e);</b>
+&nbsp;            throw e;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return archivedExpenses;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves the file object for a given month number.
+&nbsp;     *
+&nbsp;     * @param monthNumber The month number (1-indexed).
+&nbsp;     * @return A File object pointing to the month&#39;s archive file.
+&nbsp;     */
+&nbsp;    private File getMonthFile(int monthNumber) {
+<b class="nc">&nbsp;        assert monthNumber &gt; 0 : &quot;Month number must be positive&quot;;</b>
+<b class="nc">&nbsp;        String fileName = &quot;Month&quot; + monthNumber;</b>
+<b class="nc">&nbsp;        return new File(archiveDirectoryPath, fileName);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks if a monthly archive file exists for the given month number.
+&nbsp;     *
+&nbsp;     * @param monthNumber The month number (1-indexed).
+&nbsp;     * @return {@code true} if the file exists; {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public boolean monthlyFileExists(int monthNumber) {
+<b class="nc">&nbsp;        assert monthNumber &gt; 0 : &quot;Month number must be positive&quot;;</b>
+<b class="nc">&nbsp;        return getMonthFile(monthNumber).exists();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the path to the archive directory.
+&nbsp;     *
+&nbsp;     * @return The path to the monthly_archives directory.
+&nbsp;     */
+&nbsp;    public String getArchiveDirectoryPath() {
+<b class="nc">&nbsp;        return archiveDirectoryPath;</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

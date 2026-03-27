@@ -1,0 +1,224 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RecurringExpenseList</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.data</a>
+</div>
+
+<h1>Coverage Summary for Class: RecurringExpenseList (seedu.duke.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RecurringExpenseList</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.5%
+  </span>
+  <span class="absValue">
+    (3/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.data;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.math.BigDecimal;
+&nbsp;
+<b class="fc">&nbsp;public class RecurringExpenseList {</b>
+&nbsp;
+<b class="fc">&nbsp;    private final ArrayList&lt;RecurringExpense&gt; recurringExpenses = new ArrayList&lt;&gt;();</b>
+&nbsp;    /**
+&nbsp;     * Adds a recurring expense template to the list.
+&nbsp;     *
+&nbsp;     * @param recurringExpense recurring expense template to add
+&nbsp;     */
+&nbsp;    public void add(RecurringExpense recurringExpense) {
+<b class="nc">&nbsp;        assert recurringExpense != null : &quot;Recurring expense must not be null&quot;;</b>
+<b class="nc">&nbsp;        recurringExpenses.add(recurringExpense);</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Deletes and returns the recurring expense at the specified 1-based index.
+&nbsp;     *
+&nbsp;     * @param indexInList 1-based index of the recurring expense
+&nbsp;     * @return removed recurring expense
+&nbsp;     */
+&nbsp;    public RecurringExpense delete(int indexInList) {
+<b class="nc">&nbsp;        int indexToDelete = indexInList - 1;</b>
+<b class="nc">&nbsp;        return recurringExpenses.remove(indexToDelete);</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns the recurring expense at the specified 0-based index.
+&nbsp;     *
+&nbsp;     * @param index 0-based index
+&nbsp;     * @return recurring expense at the specified index
+&nbsp;     */
+&nbsp;    public RecurringExpense get(int index) {
+<b class="nc">&nbsp;        return recurringExpenses.get(index);</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns the number of recurring expense templates stored.
+&nbsp;     *
+&nbsp;     * @return size of recurring expense list
+&nbsp;     */
+&nbsp;    public int size() {
+<b class="fc">&nbsp;        return recurringExpenses.size();</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns whether the recurring expense list is empty.
+&nbsp;     *
+&nbsp;     * @return {@code true} if empty, {@code false} otherwise
+&nbsp;     */
+&nbsp;    public boolean isEmpty() {
+<b class="nc">&nbsp;        return recurringExpenses.isEmpty();</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns whether the given 1-based index is valid.
+&nbsp;     *
+&nbsp;     * @param inputIndex index to validate
+&nbsp;     * @return {@code true} if valid, {@code false} otherwise
+&nbsp;     */
+&nbsp;    public boolean isValidIndex(int inputIndex) {
+<b class="nc">&nbsp;        return inputIndex &gt;= 1 &amp;&amp; inputIndex &lt;= recurringExpenses.size();</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns the total amount of all recurring expenses currently stored.
+&nbsp;     *
+&nbsp;     * @return cumulative total of recurring expenses
+&nbsp;     */
+&nbsp;    public BigDecimal getTotal() {
+<b class="nc">&nbsp;        BigDecimal total = java.math.BigDecimal.ZERO;</b>
+&nbsp;
+<b class="nc">&nbsp;        for (RecurringExpense recurringExpense : recurringExpenses) {</b>
+<b class="nc">&nbsp;            assert recurringExpense != null : &quot;Recurring expense in list must not be null&quot;;</b>
+<b class="nc">&nbsp;            total = total.add(recurringExpense.getAmount());</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        assert total.compareTo(java.math.BigDecimal.ZERO) &gt;= 0</b>
+&nbsp;                : &quot;Recurring expense total must never be negative&quot;;
+<b class="nc">&nbsp;        return total;</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Removes all recurring expense templates from the list.
+&nbsp;     */
+&nbsp;    public void clear() {
+<b class="nc">&nbsp;        recurringExpenses.clear();</b>
+&nbsp;    }
+&nbsp;    /**
+&nbsp;     * Returns all recurring expenses whose name or category contains the given keyword.
+&nbsp;     *
+&nbsp;     * @param keyword keyword to search for
+&nbsp;     * @return matching recurring expenses
+&nbsp;     */
+&nbsp;    public ArrayList&lt;RecurringExpense&gt; findMatches(String keyword) {
+<b class="nc">&nbsp;        assert keyword != null : &quot;Find keyword must not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;RecurringExpense&gt; matches = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        String normalizedKeyword = keyword.toLowerCase();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (RecurringExpense recurringExpense : recurringExpenses) {</b>
+<b class="nc">&nbsp;            assert recurringExpense != null : &quot;Recurring expense in list must not be null&quot;;</b>
+&nbsp;
+<b class="nc">&nbsp;            if (recurringExpense.getName().toLowerCase().contains(normalizedKeyword)</b>
+<b class="nc">&nbsp;                    || recurringExpense.getCategory().getName().toLowerCase().contains(normalizedKeyword)) {</b>
+<b class="nc">&nbsp;                matches.add(recurringExpense);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return matches;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

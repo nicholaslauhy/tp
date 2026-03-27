@@ -1,0 +1,312 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ExpenseList</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.data</a>
+</div>
+
+<h1>Coverage Summary for Class: ExpenseList (seedu.duke.data)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExpenseList</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15.4%
+  </span>
+  <span class="absValue">
+    (2/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/34)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    9.3%
+  </span>
+  <span class="absValue">
+    (4/43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.data;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Comparator;
+&nbsp;import seedu.duke.category.Category;
+&nbsp;
+&nbsp;/**
+&nbsp; * Manages a collection of {@link Expense} objects and tracks the cumulative total.
+&nbsp; *
+&nbsp; * &lt;p&gt;This class provides methods to add, delete, and retrieve expenses while
+&nbsp; * automatically updating the running total using {@code BigDecimal} for precision.&lt;/p&gt;
+&nbsp; */
+<b class="fc">&nbsp;public class ExpenseList {</b>
+&nbsp;    //List to save expenses
+<b class="fc">&nbsp;    private final ArrayList&lt;Expense&gt; expenses = new ArrayList&lt;&gt;();</b>
+&nbsp;    //place to store total
+<b class="fc">&nbsp;    private BigDecimal total = BigDecimal.ZERO;</b>
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new expense with the specified name, amount, and category,
+&nbsp;     * adds it to the list, and updates the running total.
+&nbsp;     *
+&nbsp;     * @param name Name or description of the expense.
+&nbsp;     * @param amount Monetary value of the expense.
+&nbsp;     * @param category Category assigned to the expense.
+&nbsp;     */
+&nbsp;    public void add(String name, BigDecimal amount, Category category){
+<b class="nc">&nbsp;        assert name != null &amp;&amp; !name.isBlank() : &quot;Expense name should not be null or blank.&quot;;</b>
+<b class="nc">&nbsp;        assert amount != null : &quot;Expense amount should not be null.&quot;;</b>
+<b class="nc">&nbsp;        assert category != null : &quot;Expense category should not be null.&quot;;</b>
+&nbsp;        //Added to capture pre mutation state for post mutation assertions
+<b class="nc">&nbsp;        int sizeBeforeAdd = expenses.size();</b>
+<b class="nc">&nbsp;        int insertionOrder = expenses.size();</b>
+<b class="nc">&nbsp;        BigDecimal totalBeforeAdd = total;</b>
+&nbsp;
+<b class="nc">&nbsp;        Expense expense = new Expense(name, amount, category, insertionOrder);</b>
+<b class="nc">&nbsp;        expenses.add(expense);</b>
+<b class="nc">&nbsp;        total = total.add(amount);</b>
+&nbsp;        //Post add invariant: List must have grown by exactly ony entry
+<b class="nc">&nbsp;        assert expenses.size() == sizeBeforeAdd + 1</b>
+&nbsp;                : &quot;List size should have increaseed by 1 after add&quot;;
+&nbsp;        // Post-add invariant: total must have been increased only by the amount that was added
+<b class="nc">&nbsp;        assert total.compareTo(totalBeforeAdd.add(amount)) == 0</b>
+&nbsp;                : &quot;Total should increase by exactly the added amount.&quot;;
+&nbsp;
+&nbsp;        // Post-add invariant: total must never be negative
+<b class="nc">&nbsp;        assert total.compareTo(BigDecimal.ZERO) &gt;= 0</b>
+&nbsp;                : &quot;Total must never be negative.&quot;;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a new expense with the specified name, amount, category and insertion order,
+&nbsp;     * adds it to the list, and updates the running total.
+&nbsp;     *
+&nbsp;     * @param name Name or description of the expense.
+&nbsp;     * @param amount Monetary value of the expense.
+&nbsp;     * @param category Category assigned to the expense.
+&nbsp;     * @param insertionOrder Insertion order assigned to the expense, used for sorting.
+&nbsp;     */
+&nbsp;    // Used by Storage only — preserves original insertion order from file
+&nbsp;    public void add(String name, BigDecimal amount, Category category, int insertionOrder) {
+<b class="nc">&nbsp;        assert insertionOrder &gt;= 0 : &quot;Insertion order should be non-negative&quot;;</b>
+<b class="nc">&nbsp;        Expense expense = new Expense(name, amount, category, insertionOrder);</b>
+<b class="nc">&nbsp;        expenses.add(expense);</b>
+<b class="nc">&nbsp;        total = total.add(amount);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes an expense from the list based on its 1-based index and subtracts
+&nbsp;     * its value from the total.
+&nbsp;     *
+&nbsp;     * @param indexInList The 1-based index of the expense as displayed to the user.
+&nbsp;     * @return The {@link Expense} object that was removed.
+&nbsp;     */
+&nbsp;    public Expense delete(int indexInList){
+&nbsp;        //Capture pre-mutation size to use in post delete assertions
+<b class="nc">&nbsp;        int sizeBeforeDelete = expenses.size();</b>
+<b class="nc">&nbsp;        BigDecimal totalBeforeDelete = total;</b>
+<b class="nc">&nbsp;        int indexToDelete = indexInList - 1;</b>
+<b class="nc">&nbsp;        Expense removed = expenses.remove(indexToDelete);</b>
+<b class="nc">&nbsp;        total = total.subtract(removed.getAmount());</b>
+&nbsp;        // Post-delete invariant: list must have shrunk by exactly one entry
+<b class="nc">&nbsp;        assert expenses.size() == sizeBeforeDelete - 1</b>
+&nbsp;                : &quot;List size should have decreased by 1 after delete.&quot;;
+&nbsp;        //Post-delete invariant: List must have been excartly deleted by the amoutn that was removed
+<b class="nc">&nbsp;        assert total.compareTo(totalBeforeDelete.subtract(removed.getAmount())) == 0</b>
+&nbsp;                : &quot;Total should decrease exactly by removed amount.&quot;;
+&nbsp;        // Post-delete invariant: total must never be negative
+<b class="nc">&nbsp;        assert total.compareTo(BigDecimal.ZERO) &gt;= 0</b>
+&nbsp;                : &quot;Total must never be negative.&quot;;
+<b class="nc">&nbsp;        return removed;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets the cumulative total of all expenses currently in the list.
+&nbsp;     *
+&nbsp;     * @return The total expenditure as a {@code BigDecimal}.
+&nbsp;     */
+&nbsp;    public BigDecimal getTotal(){
+&nbsp;        // Invariant: total should never be null or negative at any point
+<b class="nc">&nbsp;        assert total != null : &quot;Total should never be null.&quot;;</b>
+<b class="nc">&nbsp;        assert total.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;Total must never be negative.&quot;;</b>
+<b class="nc">&nbsp;        return total;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Validates if a given 1-based index is within the bounds of the current list.
+&nbsp;     *
+&nbsp;     * @param inputIndex The index to check.
+&nbsp;     * @return {@code true} if the index is valid; {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public boolean isValidIndex(int inputIndex){
+&nbsp;        //returns true if index input is within range and false if not
+<b class="nc">&nbsp;        return inputIndex &gt;= 1 &amp;&amp; inputIndex &lt;= expenses.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of expenses currently in the list.
+&nbsp;     *
+&nbsp;     * @return The size of the expense list.
+&nbsp;     */
+&nbsp;    public int size(){
+&nbsp;        //returns size of the List
+<b class="fc">&nbsp;        return expenses.size();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Checks whether the expense list is empty.
+&nbsp;     *
+&nbsp;     * @return {@code true} if there are no expenses; {@code false} otherwise.
+&nbsp;     */
+&nbsp;    public boolean isEmpty() {
+<b class="nc">&nbsp;        return expenses.isEmpty();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Retrieves an expense from the list at the specified 0-based index.
+&nbsp;     *
+&nbsp;     * @param index The 0-based position of the expense in the internal list.
+&nbsp;     * @return The {@link Expense} at the specified position.
+&nbsp;     */
+&nbsp;    public Expense get(int index) {
+<b class="nc">&nbsp;        Expense expense = expenses.get(index);</b>
+&nbsp;
+&nbsp;        // Invariant: entries stored in the list must never be null
+<b class="nc">&nbsp;        assert expense != null : &quot;Retrieved expense should never be null.&quot;;</b>
+<b class="nc">&nbsp;        return expense;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Removes all expenses from the list and resets the running total to zero.
+&nbsp;     */
+&nbsp;    public void clear() {
+<b class="nc">&nbsp;        expenses.clear();</b>
+<b class="nc">&nbsp;        total = BigDecimal.ZERO;</b>
+&nbsp;        // Post-clear invariant: total must be reset to exactly zero
+<b class="nc">&nbsp;        assert total.compareTo(BigDecimal.ZERO) == 0 : &quot;Total should be zero after clear.&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sorts the expense list in place by category sort order.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Uses the natural ordering defined by {@link seedu.duke.category.Category#compareTo},
+&nbsp;     * where each category&#39;s sort priority determines its position.
+&nbsp;     * The sort is stable, so expenses within the same category
+&nbsp;     * retain their relative insertion order.&lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void sortByCategory() {
+<b class="nc">&nbsp;        expenses.sort(Comparator.comparing(Expense::getCategory));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sorts the expense list in place by original insertion order.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Restores the list to the order in which expenses were added,
+&nbsp;     * using the insertion index stored on each {@link Expense} at the time
+&nbsp;     * it was created.&lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void sortByRecent() {
+<b class="nc">&nbsp;        expenses.sort(Comparator.comparingInt(Expense::getInsertionOrder));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sorts the expense list in place alphabetically by expense name.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Uses a case-insensitive comparison by converting names to lowercase
+&nbsp;     * during the sorting process. The sort is stable, so expenses with the
+&nbsp;     * same name (regardless of case) retain their relative insertion order.&lt;/p&gt;
+&nbsp;     */
+&nbsp;    public void sortByName() {
+<b class="nc">&nbsp;        expenses.sort(Comparator.comparing(expense -&gt; expense.getName().toLowerCase()));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

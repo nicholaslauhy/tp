@@ -1,0 +1,335 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > InputUtil</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">seedu.duke.util</a>
+</div>
+
+<h1>Coverage Summary for Class: InputUtil (seedu.duke.util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InputUtil</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/47)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package seedu.duke.util;
+&nbsp;
+&nbsp;import seedu.duke.CommandHandler;
+&nbsp;import seedu.duke.ui.Ui;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.text.NumberFormat;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.format.DateTimeParseException;
+&nbsp;import java.util.Locale;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+&nbsp;/**
+&nbsp; * Utility class for validated user input handling in FinTrackPro.
+&nbsp; *
+&nbsp; * &lt;p&gt;Provides helper methods to:
+&nbsp; * &lt;ul&gt;
+&nbsp; *   &lt;li&gt;Format monetary values consistently&lt;/li&gt;
+&nbsp; *   &lt;li&gt;Read and validate monetary inputs&lt;/li&gt;
+&nbsp; *   &lt;li&gt;Read and validate future dates&lt;/li&gt;
+&nbsp; * &lt;/ul&gt;
+&nbsp; * &lt;/p&gt;
+&nbsp; *
+&nbsp; * &lt;p&gt;This class performs input validation loops and only returns values
+&nbsp; * once valid input has been received.&lt;/p&gt;
+&nbsp; */
+<b class="nc">&nbsp;public class InputUtil {</b>
+<b class="nc">&nbsp;    private static final Logger logger = LoggerUtil.getLogger(CommandHandler.class);</b>
+<b class="nc">&nbsp;    private static final NumberFormat MONEY_FMT =</b>
+<b class="nc">&nbsp;            NumberFormat.getCurrencyInstance(Locale.US);</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Formats a monetary amount using US currency formatting.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Ensures:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Two decimal places&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Comma thousands separator&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Currency symbol prefix&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * Example: 12250 -&gt; $12,250.00&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param amount Monetary value to format.
+&nbsp;     * @return Formatted currency string.
+&nbsp;     */
+&nbsp;    public static String formatMoney(BigDecimal amount) {
+<b class="nc">&nbsp;        assert amount != null : &quot;formatMoney: amount must not be null&quot;;</b>
+&nbsp;        // Log at INFO: user provided valid string input which is accepted
+<b class="nc">&nbsp;        logger.info(&quot;formatMoney succeeded | amount: &quot; + amount + &quot;, formatted: &quot; + MONEY_FMT.format(amount));</b>
+<b class="nc">&nbsp;        return MONEY_FMT.format(amount);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Prompts the user to enter a monetary value and validates the input.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Accepted formats:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Whole numbers (e.g., 10250)&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Numbers with up to 2 decimal places (e.g., 10250.5, 10250.50)&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Rejected inputs include:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Negative numbers&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;More than 2 decimal places&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Currency symbols or commas&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Malformed numeric strings&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method repeatedly prompts until valid input is received.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Note: The returned value represents 2.5% of the entered amount
+&nbsp;     * (calculated as amount × 0.025).&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param ui UI component used for displaying prompts and messages.
+&nbsp;     * @param in Scanner used to read user input.
+&nbsp;     * @param prompt Prompt message shown to the user.
+&nbsp;     * @return 2.5% of the validated monetary amount.
+&nbsp;     */
+&nbsp;    public static BigDecimal readMoney(Ui ui, Scanner in, String prompt) {
+<b class="nc">&nbsp;        assert ui != null : &quot;readMoney: ui must not be null&quot;;</b>
+<b class="nc">&nbsp;        assert in != null : &quot;readMoney: in must not be null&quot;;</b>
+<b class="nc">&nbsp;        assert prompt != null : &quot;readMoney: prompt must not be null&quot;;</b>
+&nbsp;
+&nbsp;        while (true) {
+<b class="nc">&nbsp;            String moneyString = ui.readLine(in, prompt).trim();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (!moneyString.matches(&quot;\\d+(\\.\\d{1,2})?&quot;)) {</b>
+&nbsp;                // Log at WARNING: user provided invalid format string which is rejected
+<b class="nc">&nbsp;                logger.warning(&quot;readMoney unsuccessful | reason: invalid formatting&quot;);</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;Bruh I need a valid amount like &quot; +</b>
+&nbsp;                        &quot;10250 or 10250.50 (numbers only, max 2 dp). Try again.&quot;);
+&nbsp;                continue;
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            BigDecimal result = new BigDecimal(moneyString);</b>
+<b class="nc">&nbsp;            assert result.compareTo(BigDecimal.ZERO) &gt;= 0 : &quot;readMoney: parsed amount must be non-negative&quot;;</b>
+<b class="nc">&nbsp;            return result;</b>
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Prompts the user to enter a future date in ISO format (YYYY-MM-DD).
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Validation rules:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     *   &lt;li&gt;Input must follow the format YYYY-MM-DD&lt;/li&gt;
+&nbsp;     *   &lt;li&gt;Date must be strictly after today&#39;s date&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;If validation fails, the user is re-prompted until valid input is provided.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param ui UI component used for displaying prompts and messages.
+&nbsp;     * @param in Scanner used to read user input.
+&nbsp;     * @param prompt Prompt message shown to the user.
+&nbsp;     * @return A {@link LocalDate} that is strictly after today.
+&nbsp;     */
+&nbsp;    public static LocalDate readFutureDate(Ui ui, Scanner in, String prompt) {
+<b class="nc">&nbsp;        assert ui != null : &quot;readFutureDate: ui must not be null&quot;;</b>
+<b class="nc">&nbsp;        assert in != null : &quot;readFutureDate: in must not be null&quot;;</b>
+<b class="nc">&nbsp;        assert prompt != null : &quot;readFutureDate: prompt must not be null&quot;;</b>
+&nbsp;        while (true) {
+<b class="nc">&nbsp;            String s = ui.readLine(in, prompt).trim();</b>
+&nbsp;
+&nbsp;            try {
+<b class="nc">&nbsp;                LocalDate date = LocalDate.parse(s);</b>
+<b class="nc">&nbsp;                LocalDate today = LocalDate.now();</b>
+&nbsp;
+<b class="nc">&nbsp;                if (!date.isAfter(today)) {</b>
+&nbsp;                    // Log at WARNING: user provided non-future date which is rejected
+<b class="nc">&nbsp;                    logger.warning(&quot;readFutureDate unsuccessful | reason: date input is not a future date&quot;);</b>
+<b class="nc">&nbsp;                    ui.printLine(&quot;Deadline must be a future date. Try again.&quot;);</b>
+&nbsp;                    continue;
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                assert date.isAfter(LocalDate.now()) : &quot;readFutureDate: returned date must be strictly in the future&quot;;</b>
+&nbsp;                // Log at FINE: readFutureDate is a low-level detail, not a key app event
+<b class="nc">&nbsp;                logger.fine(&quot;readFutureDate successful | date: &quot; + date);</b>
+<b class="nc">&nbsp;                return date;</b>
+&nbsp;
+&nbsp;            } catch (DateTimeParseException e) {
+&nbsp;                // Log at WARNING: user provided invalid formatted string which is rejected
+<b class="nc">&nbsp;                logger.warning(&quot;readFutureDate unsuccessful | reason: invalid formatting&quot;);</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;Date format needs to be YYYY-MM-DD (e.g., 2026-12-31). Try again.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Prompts the user to enter a contribution ratio and validates the input range.
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Accepted formats:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     * &lt;li&gt;Decimals between 0.0 and 1.0 inclusive (e.g., 0, 1, 0.5, 0.75)&lt;/li&gt;
+&nbsp;     * &lt;li&gt;Max 2 decimal places&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;Rejected inputs include:
+&nbsp;     * &lt;ul&gt;
+&nbsp;     * &lt;li&gt;Negative numbers (e.g., -0.6)&lt;/li&gt;
+&nbsp;     * &lt;li&gt;Values greater than 1 (e.g., 1.1)&lt;/li&gt;
+&nbsp;     * &lt;li&gt;More than 2 decimal places (e.g., 0.555)&lt;/li&gt;
+&nbsp;     * &lt;li&gt;Non-numeric strings&lt;/li&gt;
+&nbsp;     * &lt;/ul&gt;
+&nbsp;     * &lt;/p&gt;
+&nbsp;     *
+&nbsp;     * &lt;p&gt;This method repeatedly prompts until a valid ratio is received.&lt;/p&gt;
+&nbsp;     *
+&nbsp;     * @param ui UI component used for displaying prompts and messages.
+&nbsp;     * @param in Scanner used to read user input.
+&nbsp;     * @param prompt Prompt message shown to the user.
+&nbsp;     * @return A validated {@link BigDecimal} between 0 and 1.
+&nbsp;     */
+&nbsp;    public static BigDecimal readRatio(Ui ui, Scanner in, String prompt) {
+<b class="nc">&nbsp;        assert ui != null : &quot;readRatio: ui must not be null&quot;;</b>
+<b class="nc">&nbsp;        assert in != null : &quot;readRatio: in must not be null&quot;;</b>
+<b class="nc">&nbsp;        assert prompt != null : &quot;readRatio: prompt must not be null&quot;;</b>
+&nbsp;
+&nbsp;        while (true) {
+<b class="nc">&nbsp;            String input = ui.readLine(in, prompt).trim();</b>
+&nbsp;
+&nbsp;            // Regex: Digits followed by a dot and 1-2 digits.
+&nbsp;            // This prevents negative signs (-), symbols, and excessive decimals.
+<b class="nc">&nbsp;            if (!input.matches(&quot;\\d+(\\.\\d{1,2})?&quot;)) {</b>
+&nbsp;                // Log at WARNING: user provided invalid formatted string which is rejected
+<b class="nc">&nbsp;                logger.warning(&quot;readRatio unsuccessful | reason: invalid formatting&quot;);</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;EH WRONG FORMAT! Enter a decimal between 0 and 1 (e.g., 0.5).&quot;);</b>
+&nbsp;                continue;
+&nbsp;            }
+&nbsp;            try {
+<b class="nc">&nbsp;                BigDecimal ratio = new BigDecimal(input);</b>
+&nbsp;
+&nbsp;                // Check if between 0.0 &amp; 1.0
+<b class="nc">&nbsp;                if (ratio.compareTo(BigDecimal.ZERO) &lt; 0 || ratio.compareTo(BigDecimal.ONE) &gt; 0) {</b>
+&nbsp;                    // Log at WARNING: user provided out of bounds input which is rejected
+<b class="nc">&nbsp;                    logger.warning(&quot;readRatio unsuccessful | reason: out of specified bounds&quot;);</b>
+<b class="nc">&nbsp;                    ui.printLine(&quot;Brother...Ratio must be between 0 and 1. Try again!&quot;);</b>
+&nbsp;                    continue;
+&nbsp;                }
+&nbsp;
+<b class="nc">&nbsp;                assert ratio.compareTo(BigDecimal.ZERO) &gt;= 0 &amp;&amp; ratio.compareTo(BigDecimal.ONE) &lt;= 0</b>
+&nbsp;                        : &quot;readRatio: returned ratio must be between 0.0 and 1.0 inclusive&quot;;
+&nbsp;                // Log at FINE: readRatio is a low-level detail, not a key app event
+<b class="nc">&nbsp;                logger.fine(&quot;readRatio successful | ratio: &quot; + ratio);</b>
+<b class="nc">&nbsp;                return ratio;</b>
+&nbsp;            } catch (NumberFormatException e) {
+&nbsp;                // Log at WARNING: user provided non-numeric string which is rejected
+<b class="nc">&nbsp;                logger.warning(&quot;readRatio unsuccessful | reason: input is not a number&quot;);</b>
+<b class="nc">&nbsp;                ui.printLine(&quot;Pleaseee input a number. Try again!!!&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-03-26 14:13</div>
+</div>
+</body>
+</html>

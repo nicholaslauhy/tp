@@ -1,3 +1,4 @@
+//@@author AK2003x
 package seedu.duke.data;
 
 import java.math.BigDecimal;
@@ -179,6 +180,7 @@ public class Profile {
      * @return The current month as an integer (starting from 1).
      */
     public int getCurrentMonth() {
+
         return currentMonth;
     }
 
