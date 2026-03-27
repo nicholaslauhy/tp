@@ -235,4 +235,83 @@ public class ExpenseListTest {
 
         assertEquals(0, expenseList.size());
     }
+
+    @Test
+    void isValidIndex_boundaryChecks() {
+        expenseList.add("item", new BigDecimal("1.00"), Category.fromString("FOOD"));
+
+        // Boundary: 0 is always invalid
+        assertFalse(expenseList.isValidIndex(0));
+
+        // Boundary: 1 is valid
+        assertTrue(expenseList.isValidIndex(1));
+
+        // Boundary: exactly the size is valid
+        assertTrue(expenseList.isValidIndex(expenseList.size()));
+
+        // Boundary: size + 1 is invalid
+        assertFalse(expenseList.isValidIndex(expenseList.size() + 1));
+    }
+
+    @Test
+    void sortByName_duplicateNames_maintainsStability() {
+        // Both named "Coffee" but different insertion orders
+        expenseList.add("Coffee", new BigDecimal("5.00"), Category.fromString("FOOD"));
+        expenseList.add("Coffee", new BigDecimal("2.00"), Category.fromString("OTHER"));
+
+        expenseList.sortByName();
+
+        // Verify relative order is preserved
+        assertEquals(new BigDecimal("5.00"), expenseList.get(0).getAmount());
+        assertEquals(new BigDecimal("2.00"), expenseList.get(1).getAmount());
+    }
+
+    @Test
+    void delete_firstAndLastExpenses_updatesCorrectly() {
+        expenseList.add("First", new BigDecimal("1.00"), Category.fromString("FOOD"));
+        expenseList.add("Middle", new BigDecimal("2.00"), Category.fromString("FOOD"));
+        expenseList.add("Last", new BigDecimal("3.00"), Category.fromString("FOOD"));
+
+        // Delete the tail
+        expenseList.delete(3);
+        assertEquals(2, expenseList.size());
+        assertEquals("Middle", expenseList.get(1).getName());
+
+        // Delete the head
+        expenseList.delete(1);
+        assertEquals(1, expenseList.size());
+        assertEquals("Middle", expenseList.get(0).getName());
+    }
+
+    @Test
+    void clear_populatedList_resetsEverything() {
+        expenseList.add("item 1", new BigDecimal("10.00"), Category.fromString("FOOD"));
+        expenseList.add("item 2", new BigDecimal("20.00"), Category.fromString("TRANSPORT"));
+
+        expenseList.clear();
+
+        assertEquals(0, expenseList.size());
+        assertEquals(new BigDecimal("0"), expenseList.getTotal());
+        assertTrue(expenseList.isEmpty());
+    }
+
+    @Test
+    void add_withCustomInsertionOrder_setsCorrectValue() {
+        // Simulate loading from a file where items are out of order
+        expenseList.add("Oldest", new BigDecimal("1.00"), Category.fromString("FOOD"), 10);
+        expenseList.add("Newest", new BigDecimal("2.00"), Category.fromString("FOOD"), 1);
+
+        expenseList.sortByRecent();
+
+        assertEquals("Newest", expenseList.get(0).getName());
+    }
+
+    @Test
+    void add_manySmallExpenses_calculatesExactTotal() {
+        // Adding $0.10 ten times
+        for (int i = 0; i < 10; i++) {
+            expenseList.add("cent", new BigDecimal("0.10"), Category.fromString("OTHER"));
+        }
+        assertEquals(new BigDecimal("1.00"), expenseList.getTotal());
+    }
 }

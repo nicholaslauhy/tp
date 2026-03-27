@@ -107,16 +107,15 @@ public class Storage {
      * @param expenseList The {@link ExpenseList} object to be populated with saved expenses.
      * @throws IOException If there is an error reading from the file.
      */
+    //@@author Jairusljr
     public void load(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList)
             throws IOException {
-        assert profile != null : "Cannot load into a null profile!";
-        assert expenseList != null : "Cannot load into a null expense list!";
-        assert recurringExpenseList != null : "Cannot load into a null recurring expense list!";
+        assert profile != null && expenseList != null && recurringExpenseList != null;
 
         File f = new File(filePath);
         if (!f.exists()) {
-            logger.log(Level.WARNING, "No save file found. Starting fresh.");
-            return; // No save file yet, start with fresh data
+            logger.log(Level.INFO, "No save file found. Starting fresh.");
+            return;
         }
 
         try (Scanner s = new Scanner(f)) {
@@ -124,60 +123,68 @@ public class Storage {
                 String line = s.nextLine();
                 String[] parts = line.split(" \\| ");
 
+                // 1. Skip lines that are obviously too short
                 if (parts.length < 2) {
                     logger.log(Level.WARNING, "Skipping malformed line: " + line);
                     continue;
                 }
 
-                if (parts[0].equals("P")) {
-                    if (parts.length < 7) {
-                        logger.log(Level.WARNING, "Skipping malformed profile line: " + line);
-                        continue;
+                // 2. Wrap each line in its own try-catch so one bad line doesn't kill the loop
+                try {
+                    switch (parts[0]) {
+                    case "P":
+                        loadProfile(profile, parts);
+                        break;
+                    case "E":
+                        loadExpense(expenseList, parts);
+                        break;
+                    case "R":
+                        loadRecurring(recurringExpenseList, parts);
+                        break;
+                    default:
+                        logger.log(Level.WARNING, "Unknown record type: " + parts[0]);
                     }
-
-                    profile.setName(parts[1]);
-                    profile.setMonthlyAllowance(new BigDecimal(parts[2]));
-                    profile.setCurrentSavings(new BigDecimal(parts[3]));
-                    profile.setBtoGoal(new BigDecimal(parts[4]));
-                    profile.setContributionRatio(new BigDecimal(parts[5]));
-                    profile.setDeadline(java.time.LocalDate.parse(parts[6]));
-                } else if (parts[0].equals("E")) {
-                    if (parts.length == 2) {
-                        // Old format: E | amount
-                        BigDecimal amount = new BigDecimal(parts[1]);
-                        expenseList.add("Unnamed Expense", amount, Category.fromString("OTHER"));
-                    } else if (parts.length == 4) {
-                        // New format: E | name | amount | category
-                        String name = parts[1];
-                        BigDecimal amount = new BigDecimal(parts[2]);
-                        Category category = Category.fromString(parts[3]);
-                        expenseList.add(name, amount, category);
-                    } else if (parts.length == 5) {
-                        String name = parts[1];
-                        BigDecimal amount = new BigDecimal(parts[2]);
-                        Category category = Category.fromString(parts[3]);
-                        int insertionOrder = Integer.parseInt(parts[4]);
-                        expenseList.add(name, amount, category, insertionOrder);
-                    } else {
-                        logger.log(Level.WARNING, "Skipping malformed expense line: " + line);
-                    }
-                }else if (parts[0].equals("R")) {
-                    if (parts.length != 4) {
-                        logger.log(Level.WARNING, "Skipping malformed recurring expense line: " + line);
-                        continue;
-                    }
-
-                    String name = parts[1];
-                    BigDecimal amount = new BigDecimal(parts[2]);
-                    Category category = Category.fromString(parts[3]);
-                    recurringExpenseList.add(new RecurringExpense(name, amount, category));
-                } else {
-                    logger.log(Level.WARNING, "Skipping unknown record type: " + line);
+                } catch (NumberFormatException | DateTimeParseException | AssertionError e) {
+                    // This catches bad numbers, bad dates, AND your Profile's "future date" assertions
+                    logger.log(Level.WARNING, "Skipping corrupted/invalid line: " + line
+                            + " | Reason: " + e.getMessage());
                 }
             }
-        } catch (IOException | NumberFormatException | DateTimeParseException e) {
-            logger.log(Level.SEVERE, "Failed to parse save file accurately.", e);
-            throw new IOException("The save file is corrupted and cannot be loaded.", e);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Fatal error reading file: " + filePath, e);
+            throw e;
         }
+    }
+
+    // Helper methods to keep the code clean and readable
+    private void loadProfile(Profile profile, String[] parts) {
+        if (parts.length < 7) {
+            return;
+        }
+        profile.setName(parts[1]);
+        profile.setMonthlyAllowance(new BigDecimal(parts[2]));
+        profile.setCurrentSavings(new BigDecimal(parts[3]));
+        profile.setBtoGoal(new BigDecimal(parts[4]));
+        profile.setContributionRatio(new BigDecimal(parts[5]));
+        profile.setDeadline(java.time.LocalDate.parse(parts[6]));
+    }
+
+    private void loadExpense(ExpenseList expenseList, String[] parts) {
+        int len = parts.length;
+        if (len == 2) { // Old format
+            expenseList.add("Unnamed Expense", new BigDecimal(parts[1]), Category.fromString("OTHER"));
+        } else if (len == 4) { // New format
+            expenseList.add(parts[1], new BigDecimal(parts[2]), Category.fromString(parts[3]));
+        } else if (len == 5) { // Format with insertion order
+            expenseList.add(parts[1], new BigDecimal(parts[2]), Category.fromString(parts[3]),
+                    Integer.parseInt(parts[4]));
+        }
+    }
+
+    private void loadRecurring(RecurringExpenseList recurringList, String[] parts) {
+        if (parts.length < 4) {
+            return;
+        }
+        recurringList.add(new RecurringExpense(parts[1], new BigDecimal(parts[2]), Category.fromString(parts[3])));
     }
 }

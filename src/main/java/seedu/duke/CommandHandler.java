@@ -452,31 +452,25 @@ public class CommandHandler {
         String response = in.nextLine().trim().toLowerCase();
 
         if (response.equals("y")) {
-            // 1. Reset in-memory objects
+            // Reset in-memory objects
             profile.reset();
             expenseList.clear();
+            recurringExpenseList.clear();
 
             assert expenseList.getTotal().compareTo(BigDecimal.ZERO) == 0
                     : "Expense total should be zero after reset";
 
-            // 2. Overwrite the save file with the empty data
+            // Overwrite the save file with the empty data
             try {
                 storage.save(profile, expenseList, recurringExpenseList);
-
-                // Log at INFO: full system reset is the most significant application event
-                logger.info("handleReset executed | profile and expenses cleared, save file overwritten");
-
+                logger.info("handleReset executed | All data cleared and save file overwritten");
                 ui.printLine("System reset successful. Please restart or type 'bye' to exit.");
                 ui.printLine("");
             } catch (IOException e) {
-                // Log at WARNING: in-memory reset succeeded but disk write failed
-                logger.warning("handleReset | in-memory reset succeeded but save file write failed: "
-                        + e.getMessage());
+                logger.warning("handleReset | Disk write failed: " + e.getMessage());
                 ui.printLine("Error: Could not reset the save file on disk.");
-                ui.printLine("");
             }
         } else {
-            // Log at INFO: user chose not to reset — still worth recording the decision
             logger.info("handleReset cancelled | user did not confirm");
             ui.printLine("Reset aborted. Your data is safe!");
             ui.printLine("");

@@ -1,6 +1,7 @@
 package seedu.duke;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.category.Category;
 import seedu.duke.data.ExpenseList;
 import seedu.duke.data.Profile;
 import seedu.duke.data.RecurringExpenseList;
@@ -9,7 +10,9 @@ import seedu.duke.exception.InvalidAmountException;
 import seedu.duke.exception.InvalidIndexException;
 import seedu.duke.ui.Ui;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -183,5 +186,135 @@ class CommandHandlerTest {
         assertEquals("ENTERTAINMENT", expenseList.get(2).getCategory().getName());
         assertEquals("UTILITIES", expenseList.get(3).getCategory().getName());
         assertEquals("OTHER", expenseList.get(4).getCategory().getName());
+    }
+
+    @Test
+    void handleAllowance_validInput_updatesProfile() {
+        Scanner in = new Scanner(new ByteArrayInputStream("1500.00\n".getBytes()));
+
+        ch.handleAllowance(in);
+
+        assertEquals(new BigDecimal("1500.00"), profile.getMonthlyAllowance());
+    }
+
+    @Test
+    void handleRatio_validInput_updatesProfile() {
+        Scanner in = new Scanner(new ByteArrayInputStream("0.7\n".getBytes()));
+
+        ch.handleRatio(in);
+
+        assertEquals(new BigDecimal("0.7"), profile.getContributionRatio());
+    }
+
+    @Test
+    void handleSavings_validDeposit_incrementsTotalSavings() {
+        profile.setCurrentSavings(new BigDecimal("1000.00"));
+        Scanner in = new Scanner(new ByteArrayInputStream("500.00\n".getBytes()));
+
+        ch.handleSavings(in);
+
+        assertEquals(new BigDecimal("1500.00"), profile.getCurrentSavings());
+    }
+
+    @Test
+    void handleReset_userConfirms_wipesAllData() {
+        // Setup initial data
+        profile.setName("Jairus");
+        expenseList.add("Coffee", new BigDecimal("5.00"), Category.fromString("FOOD"));
+        recurringExpenseList.add(new seedu.duke.data.RecurringExpense("Gym",
+                new BigDecimal("80"), Category.fromString("OTHER")));
+
+        Scanner in = new Scanner(new java.io.ByteArrayInputStream("y\n".getBytes()));
+
+        ch.handleReset(in);
+
+        // Verify state is reset to defaults
+        assertEquals("friend", profile.getName());
+        assertEquals(0, expenseList.size());
+
+        // Ensure handleReset logic also clears the recurring list
+        assertEquals(0, recurringExpenseList.size());
+    }
+
+    @Test
+    void handleReset_userDeclines_preservesData() {
+        profile.setName("Jairus");
+        Scanner in = new Scanner(new java.io.ByteArrayInputStream("n\n".getBytes()));
+
+        ch.handleReset(in);
+
+        // Data should be untouched
+        assertEquals("Jairus", profile.getName());
+    }
+
+    @Test
+    void handleClear_userConfirms_wipesOneOffExpensesOnly() {
+        expenseList.add("Lunch", new BigDecimal("10.00"), Category.fromString("FOOD"));
+        recurringExpenseList.add(new seedu.duke.data.RecurringExpense("Rent",
+                new BigDecimal("1200"), Category.fromString("OTHER")));
+
+        Scanner in = new Scanner(new java.io.ByteArrayInputStream("y\n".getBytes()));
+
+        ch.handleClear(in);
+
+        // Clear only wipes one-off expenses, not recurring ones
+        assertEquals(0, expenseList.size());
+        assertEquals(1, recurringExpenseList.size());
+    }
+
+    @Test
+    public void handleAdd_multiWordName_correctlyParsed() {
+        // Test with spaces in the name
+        ch.handleAdd("add Hainanese Chicken Rice 6.50 FOOD");
+
+        assertEquals(1, expenseList.size());
+        assertEquals("Hainanese Chicken Rice", expenseList.get(0).getName());
+        assertEquals(new BigDecimal("6.50"), expenseList.get(0).getAmount());
+    }
+
+    @Test
+    public void handleAdd_recurringExpense_addsToRecurringList() {
+        int initialSize = recurringExpenseList.size();
+        ch.handleAdd("add Netflix Subscription 15.00 ENTERTAINMENT recurring");
+
+        assertEquals(initialSize + 1, recurringExpenseList.size());
+        assertEquals("Netflix Subscription", recurringExpenseList.get(initialSize).getName());
+    }
+
+    @Test
+    void handleSaveMonth_overspent_transfersZeroToSavings() {
+        profile.setMonthlyAllowance(new BigDecimal("500"));
+        profile.setCurrentSavings(new BigDecimal("1000"));
+
+        // Spend $600 (Overspent by $100)
+        expenseList.add("Shopping", new BigDecimal("600"), Category.fromString("OTHER"));
+
+        ch.handleSaveMonth();
+
+        // Savings should stay at 1000, not 900
+        assertEquals(new BigDecimal("1000"), profile.getCurrentSavings());
+        assertEquals(2, profile.getCurrentMonth());
+    }
+
+    @Test
+    void handleAdd_caseInsensitivity_parsesCorrectly() {
+        ch.handleAdd("add LUNCH 5.00 food"); // Mixed case name and category
+
+        assertEquals(1, expenseList.size());
+        assertEquals("LUNCH", expenseList.get(0).getName());
+        assertEquals("FOOD", expenseList.get(0).getCategory().getName());
+    }
+
+    @Test
+    void handleRatio_boundaryValues_updatesProfile() {
+        // Test 0% share
+        Scanner inZero = new Scanner(new java.io.ByteArrayInputStream("0.0\n".getBytes()));
+        ch.handleRatio(inZero);
+        assertEquals(new BigDecimal("0.0"), profile.getContributionRatio());
+
+        // Test 100% share
+        Scanner inFull = new Scanner(new java.io.ByteArrayInputStream("1.0\n".getBytes()));
+        ch.handleRatio(inFull);
+        assertEquals(new BigDecimal("1.0"), profile.getContributionRatio());
     }
 }

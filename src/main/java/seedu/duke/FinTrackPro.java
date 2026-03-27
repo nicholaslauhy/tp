@@ -440,7 +440,7 @@ public class FinTrackPro {
         // If there are no expenses at all
         if (!hasArchivedExpenses && expenseList.isEmpty()) {
             logState("list.empty", "return to command loop", "oneOffCount=0, recurringCount=0");
-            ui.printLine("Your expense list is as empty as my wallet. Go spend some money!");
+            ui.printLine("Your one time off expense list is as empty as my wallet. Go spend some money!");
             ui.printLine("");
             return;
         }
