@@ -45,6 +45,50 @@
 ### Overview
 ![Architecture Diagram](diagram/Architecture-Diagram.png)
 
+The architecture is organized into layered components that interact with each other to deliver the application's core functionality: expense tracking, savings planning, and BTO downpayment goal management.
+
+### Main Components
+
+The app consists of the following main components:
+
+1. **Main (FinTrackPro)**: Responsible for app launch and shutdown.
+    - Initializes all other components in the correct sequence at startup.
+    - Connects components together and establishes their dependencies.
+    - Invokes cleanup methods during shutdown.
+
+2. **UI**: The user interface layer of the app.
+    - Displays messages and prompts to the user.
+    - Handles all command-line interaction and output formatting.
+
+3. **Logic**: The command execution engine.
+    - **CommandHandler**: Receives user commands, parses them, and executes the corresponding business logic.
+    - **Parser**: Receives and validates user input to extract command type and arguments.
+    - Coordinates between UI, Data, and Storage components to fulfill user requests.
+
+4. **Data**: Holds the data of the app in memory.
+    - **Profile**: Manages user financial information (name, salary, savings, BTO goal, deadline).
+    - **ExpenseList**: Manages the current month's regular expenses.
+    - **Expense**: Represents a single expense entry with amount, category, and timestamp.
+    - **RecurringExpenseList**: Manages monthly recurring expenses (e.g., subscriptions).
+    - **RecurringExpense**: Represents a recurring expense that occurs every month.
+    - **MonthlyArchive**: Manages archived monthly data when advancing to a new month.
+    - **ArchivedExpense**: Represents a historical expense record from a previous month.
+
+5. **Storage**: Reads data from and writes data to the hard disk.
+    - Persists the Profile, ExpenseList, RecurringExpenseList, and MonthlyArchive to a local file.
+    - Loads previously saved data at app startup for data continuity.
+    - Ensures no data loss through auto-save functionality after state-changing commands.
+
+6. **Categories**: A polymorphic system for expense classification.
+    - **Category**: Abstract base class defining the categorization interface.
+    - **FoodCategory, TransportCategory, EntertainmentCategory, UtilitiesCategory, OtherCategory**: Concrete category implementations.
+    - Enables type-safe expense categorization and sorting by priority.
+
+7. **Utilities**: A collection of helper classes used by multiple components.
+    - **BtoCalculator**: Performs financial calculations for BTO goal planning (savings needed, progress tracking).
+    - **InputUtil**: Validates and parses user input (amounts, dates, categories).
+    - **LoggerUtil**: Provides centralized logging functionality for debugging and monitoring.
+
 
 ## 3.2 UML Diagrams
 In this section, we will present the UML class diagrams, object diagrams and sequence diagrams to 
