@@ -29,8 +29,8 @@ class StorageTest {
         profile.setCurrentSavings(new BigDecimal("500"));
         profile.setBtoGoal(new BigDecimal("20000"));
         profile.setContributionRatio(new BigDecimal("0.5"));
-        // Always in the future relative to the test run
         profile.setDeadline(LocalDate.now().plusYears(2));
+        profile.setCurrentMonth(1);
         return profile;
     }
 
@@ -238,5 +238,35 @@ class StorageTest {
         Profile profile = new Profile();
 
         storage.load(profile, new ExpenseList(), new RecurringExpenseList());
+    }
+
+    @Test
+    void save_multipleCalls_updatesFileProgressively(@TempDir Path tempDir) throws IOException {
+        Path tempFile = tempDir.resolve("autosave_test.txt");
+        Storage storage = new Storage(tempFile.toString());
+
+        Profile profile = createValidProfile("AutoTester");
+        ExpenseList expenses = new ExpenseList();
+        RecurringExpenseList recurring = new RecurringExpenseList();
+
+        // Initial Save
+        storage.save(profile, expenses, recurring);
+
+        // Add an expense and save again (simulating the loop)
+        expenses.add("Coffee", new BigDecimal("5.00"), Category.fromString("FOOD"));
+        storage.save(profile, expenses, recurring);
+
+        // Increment month and save again
+        profile.setCurrentMonth(2);
+        storage.save(profile, expenses, recurring);
+
+        // Load into new objects to verify persistence
+        Profile loadedProfile = new Profile();
+        ExpenseList loadedExpenses = new ExpenseList();
+        storage.load(loadedProfile, loadedExpenses, recurring);
+
+        assertEquals(2, loadedProfile.getCurrentMonth(), "Month should be updated to 2");
+        assertEquals(1, loadedExpenses.size(), "Expense should be persisted");
+        assertEquals("Coffee", loadedExpenses.get(0).getName());
     }
 }
