@@ -21,25 +21,25 @@
 
 # 2. Acknowledgements
 
-## 2.1 Frameworks and Base Code
+## 2.1 Frameworks and base code
 * **[AddressBook-Level 3 (AB3)](https://se-education.org/addressbook-level3/)**: FinTrack Pro's architectural patterns and initial codebase were adapted from the AddressBook-Level 3 project created by the **[SE-EDU initiative](https://se-education.org/)**.
 * **[JavaFX](https://openjfx.io/)**: Used for the Graphical User Interface (GUI) components of the application.
 
-## 2.2 Third-Party Libraries
+## 2.2 Third-party libraries
 * **[JUnit 5](https://junit.org/junit5/)**: Utilized for unit testing and ensuring code reliability.
 * **[Jackson](https://github.com/FasterXML/jackson)**: Used for JSON parsing and data persistence in the storage component.
 * **[PlantUML](https://plantuml.com/)**: Used for generating all UML diagrams (Sequence, Class, and Object diagrams) within this documentation.
 
-## 2.3 Educational Resources
+## 2.3 Educational resources
 * **[SE-EDU Guides](https://se-education.org/guides/)**: We referred to the various guides provided by the SE-EDU team for best practices in software documentation and testing.
 * **[CS2113 Module Website](https://nus-cs2113-ay2526s2.github.io/website/)**: Special thanks to the professors and tutors of CS2113 for their guidance and feedback throughout the development lifecycle of v1.0 to v2.1.
 
-# 3 Design & implementation
+# 3 Design & Implementation
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+# 4 Product Scope
 
-# 4 Product scope
 ## 4.1 Target user profile
 FinTrack Pro was created for individual students in a relationship who are planning to set aside finances for their share of a BTO downpayment.
 
@@ -74,15 +74,15 @@ An individual BTO budget planner for university students planning to apply for B
 
 # 5 Non-Functional Requirements
 
-##  5.1 Performance and Scalability
+##  5.1 Performance and scalability
 * Response Time: Any command should return a result within 200 milliseconds under normal operating conditions.
 * Capacity: The system should be able to handle up to 1,000 unique expenditure entries and 5 years of archived monthly data without any perceptible degradation in performance or lag in CLI responsiveness.
 
-## 5.2 Data Integrity
+## 5.2 Data integrity
 * Auto-save: To prevent loss of critical financial planning data, the application must automatically save the state of the budget and expenses to the local database after every valid state-changing command. 
 * Fault Tolerance: The application should not crash or corrupt the local database if the user inputs malformed data. Instead it should provide a clear, non-technical error message and maintain the previous valid state.
 
-## 5.3 Security and Privacy
+## 5.3 Security and privacy
 * Local Storage Only: Since the application handles sensitive information like salary, savings, and BTO targets, all data must be stored locally on the user's device. No financial data should be transmitted over a network or stored in the cloud.
 
 ## 5.4 Usability
@@ -98,18 +98,18 @@ An individual BTO budget planner for university students planning to apply for B
 * *BTO (Build-To-Order)* - a subsidised public housing option scheme in Singapore where new flats are constructed only after a sufficient number of units (typically 65-70%) have been pre-booked by applicants
 * *Contribution ratio* - the user's fractional share of the downpayment (0.0 to 1.0)
 
-# 7 Instructions for manual testing
+# 7 Instructions for Manual Testing
 
 {Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
 
-## 7.1 Test Cases
+## 7.1 Test cases
 
-### Managing Expenses
+### Managing expenses
 (to be added by Kynaston)
 
 ---
 
-### Sorting Expenses
+### Sorting expenses
 
 1. **Sorting by category**
     1. Prerequisites: Multiple expenses of different categories in the list.
@@ -120,15 +120,15 @@ An individual BTO budget planner for university students planning to apply for B
 
 ---
 
-### Managing Profile
+### Managing profile
 (to be added by Adam)
 ---
 
-### Reset and Clear
+### Reset and clear
 (to be added)
 ---
 
-### Category Validation
+### Category validation
 
 1. **Parsing a category from string**
     1. Test case: `FOOD`, `food`, `fOoD` Expected: All resolve to a `FoodCategory` instance (case-insensitive).
