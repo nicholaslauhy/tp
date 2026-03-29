@@ -39,7 +39,7 @@
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
 ## Category component
-![Class Diagram](/docs/diagram/Category-UML-Diagram.png)
+![Class Diagram](diagram/Category-UML-Diagram.png)
 
 
 # 4 Product Scope
