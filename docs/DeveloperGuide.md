@@ -21,29 +21,29 @@
 
 # 2. Acknowledgements
 
-### 2.1 Frameworks and Base Code
+## 2.1 Frameworks and Base Code
 * **[AddressBook-Level 3 (AB3)](https://se-education.org/addressbook-level3/)**: FinTrack Pro's architectural patterns and initial codebase were adapted from the AddressBook-Level 3 project created by the **[SE-EDU initiative](https://se-education.org/)**.
 * **[JavaFX](https://openjfx.io/)**: Used for the Graphical User Interface (GUI) components of the application.
 
-### 2.2 Third-Party Libraries
+## 2.2 Third-Party Libraries
 * **[JUnit 5](https://junit.org/junit5/)**: Utilized for unit testing and ensuring code reliability.
 * **[Jackson](https://github.com/FasterXML/jackson)**: Used for JSON parsing and data persistence in the storage component.
 * **[PlantUML](https://plantuml.com/)**: Used for generating all UML diagrams (Sequence, Class, and Object diagrams) within this documentation.
 
-### 2.3 Educational Resources
+## 2.3 Educational Resources
 * **[SE-EDU Guides](https://se-education.org/guides/)**: We referred to the various guides provided by the SE-EDU team for best practices in software documentation and testing.
 * **[CS2113 Module Website](https://nus-cs2113-ay2526s2.github.io/website/)**: Special thanks to the professors and tutors of CS2113 for their guidance and feedback throughout the development lifecycle of v1.0 to v2.1.
 
-## 3 Design & implementation
+# 3 Design & implementation
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
 
-## 4 Product scope
-### 4.1 Target user profile
+# 4 Product scope
+## 4.1 Target user profile
 FinTrack Pro was created for individual students in a relationship who are planning to set aside finances for their share of a BTO downpayment.
 
-### 4.2 Value proposition
+## 4.2 Value proposition
 An individual BTO budget planner for university students planning to apply for BTO that turns messy finances into a clear downpayment plan - showing how much the individual needs to save and whether additional financing is required.
 
 
