@@ -44,8 +44,11 @@ General Commands
 'summary' - generate your BTO readiness report based on your goals
 'bye'     - exit the program
 
-...
-...
+Daily Transaction Commands
+'add'      <name> <amount> <category> <recurring> - add a new expense
+(e.g., add lunch 5.50 FOOD for not recurring and add lunch 5.50 FOOD recurring for recurring)
+..
+..
 ```
 
 
@@ -68,32 +71,32 @@ New total savings: $2,000.00
 ```
 
 ### Adding an expense: ```add ```
-Adds a regular expense to your monthly tracker.<br>
-<b>Format:</b> ```add <NAME> <AMOUNT> <CATEGORY>``` <br>
+Adds a regular expense to your monthly tracker, with optional field recurring.<br>
+<b>Format:</b> ```add <NAME> <AMOUNT> <CATEGORY> <RECURRING>``` <br>
 <b>Example of Usage:</b> <br>
-```add NETFLIX 30 ENTERTAINMENT ```<br>
-```add HHO DINNER 15.90 FOOD``` <br>
+```add netflix 30 entertainment recurring ```<br>
+```add breakfast 25 food``` <br>
 <b>Expected Output:</b>
 ```
-add 30
-Added expense: $30
-Current Total: $30
+Added recurring expense: [RECURRING][ENTERTAINMENT] netflix $30
+Recurring Total: $30
 
-add 15.90
-Added expense: $15.90
-Current Total: $45.90
+Added expense: [FOOD] breakfast $25
+Month 1 Total: $25
 ```
 
 ### Listing all entries: ```list```
-Shows a list of current month expenses and income entries.<br>
+Shows a list of current month expenses, categorized by month, and recurring or not recurring.<br>
 <b>Format:</b> ```list``` <br>
 <b>Example of Usage:</b> ```list```<br>
 <b>Expected Output:</b>
 ```
-Here is your current expenditure list!
-1. NETFLIX $30.00 [ENTERTAINMENT]
-2. HHO DINNER $15.90 [FOOD]
-Total Expenditure: $45.90
+Here are your recurring monthly commitments!
+1. netflix $30.00 [ENTERTAINMENT]
+
+*** MONTH 1 EXPENSES
+1. breakfast $25.00 [FOOD]
+Month 1 Total: $25.00
 ```
 
 ### Sorting the expenditure list: ```sort <keyword>```
@@ -159,6 +162,19 @@ Exits the program<br>
 <b>Expected Output:</b>
 ```
 Goodbye nicholas. Stay disciplined and get that house that you always wanted!
+```
+
+### Archive monthly expenditures: ```save```
+Saves the current month of expenditures into monthly_archives, and resets the expenditure to 0, simulating a new month.<br>
+<b>Format:</b> ```save``` <br>
+<b>Example of Usage:</b> ```save``` <br>
+<b>Expected Output:</b>
+```
+Month 1 expenses archived to 'monthly_archives'
+Transferred $3,975.00 of unspent allowance to savings
+Advanced to Month 2
+Current Savings: $4,975.00
+Monthly Allowance: $4,000.00
 ```
 
 ### Data Storage
