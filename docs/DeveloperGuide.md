@@ -224,7 +224,7 @@ An individual BTO budget planner for university students planning to apply for B
 ---
 
 ### Reset and clear
-(to be added)
+(to be added by Jairus)
 ---
 
 ### Category validation
@@ -237,3 +237,29 @@ An individual BTO budget planner for university students planning to apply for B
 
 2. **Category sort ordering**
     1. Test case: Compare FOOD → TRANSPORT → ENTERTAINMENT → UTILITIES → OTHER. Expected: Each preceding category compares as less than the next, confirming sort priority.
+---
+
+### Archive Expenses
+
+1. **Archiving current month with `save`**
+    1. Prerequisites: At least 1 regular expense exists in the current month (e.g., `add lunch 10 food`).
+    2. Test case: `save` Expected: Current month's expenses are archived, month advances by 1, and monthly expense list is reset.
+    3. Test case: Run `list` after `save` Expected: Archived month section is shown, and current month has no regular expenses yet.
+    4. Test case: Run `save` immediately again (no new regular expenses added) Expected: New month is still created and advanced; archive for that month is empty.
+    5. Test case: Add expenses that exceed allowance, then run `save` Expected: Month still archives and advances; no unspent allowance is transferred.
+
+---
+
+### Monthly Archive
+
+1. **Viewing archived month history**
+    1. Prerequisites: At least 1 month has been archived via `save`.
+    2. Test case: `list` Expected: Output includes monthly sections in order (e.g., `*** MONTH 1 EXPENSES`, `*** MONTH 2 EXPENSES`) with expenses grouped under each month.
+    3. Test case: In the newest month with no expenses, run `list` Expected: Earlier month sections still appear; current month shows no regular expenses recorded yet.
+    4. Test case: Restart the app, then run `list` Expected: Archived month sections are reloaded from storage and remain visible.
+
+2. **Incorrect commands related to archiving**
+    1. Test case: `savee` Expected: Command is rejected as invalid; no month advancement or archive changes.
+    2. Test case: `save month` Expected: Treated as invalid command format; archive data remains unchanged.
+
+
