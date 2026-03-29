@@ -72,36 +72,37 @@ An individual BTO budget planner for university students planning to apply for B
 | v1.0    | Long Term User | Have a local database                | View all past inputs and historical data                                          |
 
 
-## 5 Non-Functional Requirements
+# 5 Non-Functional Requirements
 
-###  5.1 Performance and Scalability
+##  5.1 Performance and Scalability
 * Response Time: Any command should return a result within 200 milliseconds under normal operating conditions.
 * Capacity: The system should be able to handle up to 1,000 unique expenditure entries and 5 years of archived monthly data without any perceptible degradation in performance or lag in CLI responsiveness.
 
-### 5.2 Data Integrity
+## 5.2 Data Integrity
 * Auto-save: To prevent loss of critical financial planning data, the application must automatically save the state of the budget and expenses to the local database after every valid state-changing command. 
 * Fault Tolerance: The application should not crash or corrupt the local database if the user inputs malformed data. Instead it should provide a clear, non-technical error message and maintain the previous valid state.
 
-### 5.3 Security and Privacy
+## 5.3 Security and Privacy
 * Local Storage Only: Since the application handles sensitive information like salary, savings, and BTO targets, all data must be stored locally on the user's device. No financial data should be transmitted over a network or stored in the cloud.
 
-### 5.4 Usability
+## 5.4 Usability
 * CLI Efficiency: The system is designed for "Power Users." An experienced user (typing at 50+ WPM) should be able to input a new expense and view their updated "Distance to Goal" faster than they could using a standard spreadsheet or mobile banking app.
 * Documentation: A user who has never used a CLI should be able to perform basic tasks (adding salary/savings) within 5 minutes of reading the help command or the User Guide.
 
-### 5.5 Environment
+## 5.5 Environment
 * Platform Independence: The application must be cross-platform, functioning identically on Windows, macOS, and Linux distributions, provided the system has Java 17 installed.
 * Zero Installation: The product should be delivered as a single, executable JAR file that requires no complex installation process or external database setup. 
 
-## 6 Glossary
+# 6 Glossary
 
-* *glossary item* - Definition
+* *BTO (Build-To-Order)* - a subsidised public housing option scheme in Singapore where new flats are constructed only after a sufficient number of units (typically 65-70%) have been pre-booked by applicants
+* *Contribution ratio* - the user's fractional share of the downpayment (0.0 to 1.0)
 
-## 7 Instructions for manual testing
+# 7 Instructions for manual testing
 
 {Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
 
-## Use Cases
+## 7.1 Test Cases
 
 ### Managing Expenses
 (to be added by Kynaston)
