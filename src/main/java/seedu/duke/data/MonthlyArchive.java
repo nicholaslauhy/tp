@@ -125,12 +125,26 @@ public class MonthlyArchive {
                 }
 
                 String[] parts = line.split("\\s*\\|\\s*");
-                if (parts.length < 3) {
+                if (parts.length < 4) {
                     logger.log(Level.WARNING, "Skipping malformed archived expense line: " + line);
                     continue;
                 }
+                String recordType = parts[0];
+                String name = parts[1];
+                String amount = parts[2];
+                String category = parts[3];
 
-                archivedExpenses.add(new ArchivedExpense(parts[0], parts[1], parts[2]));
+                boolean isRecurring;
+                if (recordType.equals("E")) {
+                    isRecurring = false;
+                } else if (recordType.equals("R")) {
+                    isRecurring = true;
+                } else {
+                    logger.log(Level.WARNING, "Skipping unknown archived expense type: " + line);
+                    continue;
+                }
+
+                archivedExpenses.add(new ArchivedExpense(name, amount, category, isRecurring));
             }
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Failed to load archived expenses for Month " + monthNumber, e);
