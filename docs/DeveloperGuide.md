@@ -232,6 +232,8 @@ to print month-grouped history and totals.
 
 ### Managing Profile
 
+![Class Diagram](diagram/Profile-ClassDiagram.png)
+
 The `Profile` class is the central data object for the user's financial identity. It stores the name,
 monthly allowance, current savings, BTO goal, contribution ratio, and target deadline. All other
 components — `CommandHandler`, `SummaryReport`, `BtoCalculator` — read from or write to it by reference.
@@ -266,6 +268,8 @@ runs `performInitialSetup()` before entering the command loop. The steps are:
 
 On subsequent launches, the saved profile is loaded from `fintrack.txt` and setup is skipped.
 
+![Sequence Diagram](diagram/ProfileSetup-SequenceDiagram.png)
+
 #### Runtime Profile Updates
 
 Three commands allow the user to update their profile after initial setup:
@@ -278,6 +282,8 @@ Three commands allow the user to update their profile after initial setup:
 
 All three handlers use `InputUtil.readMoney()` or `InputUtil.readRatio()` to enforce valid input,
 re-prompting the user on invalid entries rather than throwing an exception to the caller.
+
+![Sequence Diagram](diagram/ProfileRatio-SequenceDiagram.png)
 
 #### BTO Summary Report (`summary` command)
 

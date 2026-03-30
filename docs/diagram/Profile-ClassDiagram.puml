@@ -1,0 +1,59 @@
+@startuml Profile-ClassDiagram
+
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+class Profile {
+    - name : String
+    - monthlyAllowance : BigDecimal
+    - currentSavings : BigDecimal
+    - btoGoal : BigDecimal
+    - contributionRatio : BigDecimal
+    - housePrice : BigDecimal
+    - deadline : LocalDate
+    - currentMonth : int
+    + setContributionRatio(contributionRatio : BigDecimal) : void
+    + setHousePrice(housePrice : BigDecimal) : void
+    + setBtoGoal(btoGoal : BigDecimal) : void
+    + advanceMonth() : void
+    + reset() : void
+}
+
+class BtoCalculator {
+    + totalDownpayment : BigDecimal
+    + yourShare : BigDecimal
+    + BtoCalculator(housePrice : BigDecimal, ratio : BigDecimal)
+}
+
+class CommandHandler {
+    + handleAllowance(in : Scanner) : void
+    + handleSavings(in : Scanner) : void
+    + handleRatio(in : Scanner) : void
+    + handleSummary() : void
+}
+
+class SummaryReport {
+    + SummaryReport(profile : Profile,\n  expenseList : ExpenseList,\n  recurringExpenseList : RecurringExpenseList)
+}
+
+class Storage {
+    + save(profile : Profile, ...) : void
+    + load(profile : Profile, ...) : void
+}
+
+class FinTrackPro {
+    - performInitialSetup(in : Scanner) : String
+}
+
+Profile ..> BtoCalculator : <<creates>>\non ratio change
+
+CommandHandler --> Profile : updates
+FinTrackPro --> Profile : initialises
+SummaryReport ..> Profile : reads
+Storage ..> Profile : persists / loads
+
+@enduml
