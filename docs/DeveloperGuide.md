@@ -51,7 +51,7 @@ strategies employed in the development of FinTrackPro.
 ## 3.1 Architecture Diagram
 
 ### Overview
-![Architecture Diagram](diagram/Architecture-Diagram.png)
+![Architecture Diagram](diagram/Architecture-Diagram.jpg)
 
 The architecture is organized into layered components that interact with each other to deliver the application's core functionality: expense tracking, savings planning, and BTO downpayment goal management.
 
