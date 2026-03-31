@@ -10,36 +10,48 @@ strategies employed in the development of FinTrackPro.
 
 ## Table of Contents
 * **2. [Acknowledgements](#2-acknowledgements)**
-  * **2.1 [Frameworks and base code](#21-frameworks-and-base-code)**
-  * **2.2 [Third-party libraries](#22-third-party-libraries)**
-  * **2.3 [Educational resources](#23-educational-resources)**
+   * **2.1 [Frameworks and base code](#21-frameworks-and-base-code)**
+   * **2.2 [Third-party libraries](#22-third-party-libraries)**
+   * **2.3 [Educational resources](#23-educational-resources)**
 * **3. [Design & Implementation](#3-design--implementation)**
-  * **3.1 [Architecture Diagram](#31-architecture-diagram)**
-  * **3.2 [UML Diagrams](#32-uml-diagrams)**
-    * **3.2.1 [Managing Profile](#managing-profile)**
+   * **3.1 [Architecture Diagram](#31-architecture-diagram)**
+   * **3.2 [UML Diagrams](#32-uml-diagrams)**
+      * **3.2.1 [Managing Expenses](#managing-expenses)**
+      * **3.2.2 [Category Component](#category-component)**
+      * **3.2.3 [Archive Expenses](#archive-expenses)**
+      * **3.2.4 [Managing Profile](#managing-profile)**
+      * **3.2.5 [BTO Summary Report](#bto-summary-report-summary-command)**
+      * **3.2.6 [Storage Component](#storage-component)**
 * **4. [Product Scope](#4-product-scope)**
-  * **4.1 [Target user profile](#41-target-user-profile)**
-  * **4.2 [Value proposition](#42-value-proposition)**
-  * **4.3 [User stories](#43-user-stories)**
+   * **4.1 [Target user profile](#41-target-user-profile)**
+   * **4.2 [Value proposition](#42-value-proposition)**
+   * **4.3 [User stories](#43-user-stories)**
 * **5. [Non-Functional Requirements](#5-non-functional-requirements)**
-  * **5.1 [Performance and scalability](#51-performance-and-scalability)**
-  * **5.2 [Data integrity](#52-data-integrity)**
-  * **5.3 [Security and privacy](#53-security-and-privacy)**
-  * **5.4 [Usability](#54-usability)**
-  * **5.5 [Environment](#55-environment)**
+   * **5.1 [Performance and scalability](#51-performance-and-scalability)**
+   * **5.2 [Data integrity](#52-data-integrity)**
+   * **5.3 [Security and privacy](#53-security-and-privacy)**
+   * **5.4 [Usability](#54-usability)**
+   * **5.5 [Environment](#55-environment)**
 * **6. [Glossary](#6-glossary)**
 * **7. [Instructions For Manual Testing](#7-instructions-for-manual-testing)**
-  * **7.1 [Test Cases](#71-test-cases)**
+   * **7.1 [Test Cases](#71-test-cases)**
+      * **7.1.1 [Managing Expenses](#managing-expenses-1)**
+      * **7.1.2 [Sorting Expenses](#sorting-expenses)**
+      * **7.1.3 [Managing Profile](#managing-profile-1)**
+      * **7.1.4 [Reset and Clear](#reset-and-clear)**
+      * **7.1.5 [Category Validation](#category-validation)**
+      * **7.1.6 [Archive Expenses](#archive-expenses-1)**
+      * **7.1.7 [Monthly Archive](#monthly-archive)**
+      * **7.1.8 [Storage and Data Integrity](#storage-and-data-integrity)**
+      * **7.1.9 [Summary Report](#summary-report-summary)**
 
 # 2. Acknowledgements
 
 ## 2.1 Frameworks and base code
 * **[AddressBook-Level 3 (AB3)](https://se-education.org/addressbook-level3/)**: FinTrack Pro's architectural patterns and initial codebase were adapted from the AddressBook-Level 3 project created by the **[SE-EDU initiative](https://se-education.org/)**.
-* **[JavaFX](https://openjfx.io/)**: Used for the Graphical User Interface (GUI) components of the application.
 
 ## 2.2 Third-party libraries
 * **[JUnit 5](https://junit.org/junit5/)**: Utilized for unit testing and ensuring code reliability.
-* **[Jackson](https://github.com/FasterXML/jackson)**: Used for JSON parsing and data persistence in the storage component.
 * **[PlantUML](https://plantuml.com/)**: Used for generating all UML diagrams (Sequence, Class, and Object diagrams) within this documentation.
 
 ## 2.3 Educational resources
@@ -48,7 +60,6 @@ strategies employed in the development of FinTrackPro.
 
 # 3 Design & Implementation
 
-{Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 ## 3.1 Architecture Diagram
 
 ### Overview
@@ -89,8 +100,7 @@ The app consists of the following main components:
     - Ensures no data loss through auto-save functionality after state-changing commands.
 
 6. **Categories**: A polymorphic system for expense classification.
-    - **Category**: Abstract base class defining the categorization interface.
-    - **FoodCategory, TransportCategory, EntertainmentCategory, UtilitiesCategory, OtherCategory**: Concrete category implementations.
+    - **Category**: An enum defining the supported expense categories (`FOOD`, `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER`) and their sort priority.
     - Enables type-safe expense categorization and sorting by priority.
 
 7. **Utilities**: A collection of helper classes used by multiple components.
@@ -133,10 +143,10 @@ illustrate how each main component of FinTrackPro integrates with the rest of th
 ### Managing Expenses 
 #### Class Diagram
 ![Class Diagram](diagram/Expense-ClassDiagram.png)
-Tha above class diagram illustrates the overall design of the expense management system and the classes that directly participate 
+The above class diagram illustrates the overall design of the expense management system and the classes that directly participate 
 in handling user commands and managing expense data.
 
-FinTrackPro serves as the main controller of the application. It coordinates bewteen the user interface(Ui), the command
+FinTrackPro serves as the main controller of the application. It coordinates between the user interface(Ui), the command
 processing component (CommandHandler), and the data storage structures (ExpenseList and RecurringExpenseList). It receives
 user input and delegates command execution accordingly
 
@@ -285,22 +295,185 @@ re-prompting the user on invalid entries rather than throwing an exception to th
 
 ![Sequence Diagram](diagram/ProfileRatio-SequenceDiagram.png)
 
-#### BTO Summary Report (`summary` command)
+### BTO Summary Report (`summary` command)
+The `SummaryReport` is a logic-heavy component that aggregates data from the user's `Profile`, `ExpenseList`, and 
+`RecurringExpenseList` to provide a real-time "BTO Readiness" assessment. It acts as a data-processing layer that 
+transforms raw financial figures into actionable insights.
 
-`handleSummary()` instantiates a `SummaryReport` from the current `Profile`, `ExpenseList`, and
-`RecurringExpenseList`. The report derives the following metrics at construction time:
+#### Calculation Logic
+The `SummaryReport` constructor performs all necessary financial computations at the moment of instantiation. 
+This ensures that the `Ui` component remains clean, while the logic is encapsulated within the report object.
 
-| Metric                   | Formula                                                                            |
-|--------------------------|------------------------------------------------------------------------------------|
-| Distance to goal         | `btoGoal − currentSavings`                                                         |
-| Monthly surplus          | `monthlyAllowance − (oneOffExpenses + recurringExpenses)`                          |
-| Percentage progress      | `(currentSavings / btoGoal) × 100`, capped at 100%                                |
-| Estimated months         | `distanceToGoal ÷ monthlySurplus` (only shown when surplus > 0 and goal not met)  |
-| Monthly required savings | `distanceToGoal ÷ monthsUntilDeadline`                                             |
-| Readiness level          | Mapped from percentage: ≥100% → Ready, ≥75% → Secure, ≥50% → On Track, ≥25% → Making Progress, else → Barely Started |
+| Metric                   | Logic / Formula                                                |
+|--------------------------|----------------------------------------------------------------|
+| Distance to goal         | `btoGoal − currentSavings`                                     |
+| Monthly surplus          | `monthlyAllowance − (totalOneOffExpenses + recurringExpenses)` |
+| Percentage progress      | `(currentSavings / btoGoal) × 100`(capped at 100%)             |
+| Estimated months         | `distanceToGoal ÷ monthlySurplus` (only if surplus > 0)        |
+| Monthly required savings | `distanceToGoal ÷ monthsUntilDeadline`                         |
+| Readiness level          | A qualitative status mapped from the progress percentage.      |
 
-The computed report is passed to `Ui.showSummaryReport()` for display. No data in `Profile` or
-`ExpenseList` is mutated by this command.
+The computed report is passed to `Ui.showSummaryReport()` for display. 
+
+#### Readiness Level Classification
+The report assigns a "Readiness Level" to provide the user with immediate psychological feedback on their progress.
+
+| Progress Range | Readiness Level | Description                                        |
+|----------------|-----------------|----------------------------------------------------|
+| 100%           | READY           | Goal met; funds available for downpayment.         |
+| 70% – 99%      | SECURE          | High probability of meeting the goal early.        |
+| 50% – 70%      | ON TRACK        | Midway point reached; consistent saving required.  |
+| 10% – 50%      | MAKING PROGRESS | Foundations laid; spending habits may need review. |
+| < 10%          | BARELY STARTED  | Initial phase; significant saving effort required. |
+
+#### Interaction Flow
+When the summary command is triggered, the interaction follows this sequence:
+
+1. `CommandHandler.handleSummary()` is invoked.
+2. A new `SummaryReport` object is instantiated, pulling the latest data from `Profile` and the `ExpenseLists`.
+3. The constructor calculates the surpluses, percentages, and estimations.
+4. The populated `SummaryReport` is passed to `Ui.showSummaryReport()`, which prints the dashboard to the console.
+
+No data within the `Profile` or `ExpenseList` is mutated during this process, ensuring that the summary command is a 
+"read-only" operation.
+
+### Storage Component
+The `Storage` component manages the persistence of user data, ensuring that financial profiles and expense lists are 
+saved to a local text file (`fintrack.txt`) and reloaded upon application startup. It acts as the bridge between the 
+in-memory data structures and the hard disk.
+
+#### Class Diagram
+![Storage Class Diagram](diagram/Storage-ClassDiagram.png)
+
+The above class diagram shows the relationship between `Storage` and the three core data classes. `Storage`
+depends on `Profile`, `ExpenseList`, and `RecurringExpenseList` — reading from all three during a `save()`
+call, and writing back into all three during a `load()` call. The arrow direction is therefore intentionally
+asymmetric: `save()` is a read operation from `Storage`'s perspective, while `load()` is an update operation
+on the data classes.
+
+#### Data Persistence Format
+The data is stored in a plain-text file using a pipe-delimited format. Each line is prefixed with a "Record Type" 
+identifier that determines how the line is parsed:
+| Prefix | Record Type      | Format                                                              |
+|--------|------------------|---------------------------------------------------------------------|
+| `P`    | Profile          | `P \| Name \| Allowance \| Savings \| BtoGoal \| Ratio \| Deadline \| CurrentMonth` |
+| `E`    | One-off Expense  | `E \| Name \| Amount \| Category \| InsertionOrder`                |
+| `R`    | Recurring Expense| `R \| Name \| Amount \| Category`                                  |
+
+Lines that do not match any known prefix, or that are too short to be parsed safely, are silently skipped
+with a `WARNING`-level log entry. This ensures that a single corrupted line does not abort the entire load.
+
+#### Object Diagram: In-Memory State After Load
+
+The object diagram below shows a concrete snapshot of the application's in-memory state after
+`Storage#load()` has successfully parsed the following `fintrack.txt` file:
+```
+P | Alice | 2000.00 | 5000.00 | 25000.00 | 0.50 | 2028-10-24 | 3
+E | Lunch | 5.50 | FOOD | 0
+E | Bus fare | 1.80 | TRANSPORT | 1
+R | Netflix | 10.90 | ENTERTAINMENT
+```
+
+![Storage Object Diagram](diagram/Storage-ObjectDiagram.png)
+
+This snapshot illustrates three key design points:
+
+1. **All six Profile fields are restored** — name, allowance, savings, BTO goal, ratio, deadline,
+   and the optional `currentMonth` field are all populated from the `P` line.
+2. **Insertion order is preserved** — `e1` has `insertionOrder = 0` and `e2` has
+   `insertionOrder = 1`, meaning a subsequent `sort recent` command will restore this exact sequence.
+3. **Recurring and one-off expenses are held separately** — `expenseList` and `recurringList` are
+   distinct objects, reflecting the architectural decision to track them independently while still
+   allowing the system to aggregate their totals for the summary report.
+
+#### Implementation: Auto-Save Policy
+To prioritize data integrity, FinTrackPro implements an **auto-save** mechanism. Rather than saving only at
+application exit, `Storage#save()` is invoked at the end of **every command cycle** within the main loop in
+`FinTrackPro#run()`. This means that even if the application crashes mid-session, at most one command's worth
+of data is lost.
+
+A final save is also performed **after the loop exits** (when the user types `bye`), providing a guarantee
+that the last command's state is always written to disk even under a clean exit.
+
+      // Inside FinTrackPro#run() — simplified
+      while (!userInput.equalsIgnoreCase("bye")) {
+          handleCommand(userInput, in);
+          storage.save(profile, expenseList, recurringExpenseList); // auto-save after every command
+          userInput = ui.readLine(in, "");
+      }
+
+If either save call fails, a `WARNING`-level log entry is written and the user sees a console warning. 
+The application does **not** crash — it continues running with the in-memory state intact, so the user can attempt 
+to resolve the issue and exit cleanly.
+
+#### Sequence Diagram: Saving Data
+
+The save process is triggered after every command and once more on clean exit. `Storage` opens a
+`FileWriter` and writes all in-memory data sequentially: the profile record first, followed by all
+one-off expenses, then all recurring expenses.
+
+![Storage Save Sequence Diagram](diagram/StorageSave-SequenceDiagram.png)
+
+The following sequence of actions occurs during the save process:
+
+1. **FinTrackPro** calls `storage.save(profile, expenseList, recurringExpenseList)` after each command.
+2. **Storage** opens a `FileWriter` pointed at `fintrack.txt`, overwriting its previous contents.
+3. **Storage** reads all fields from **Profile** and writes a single `P | ...` line.
+4. **Storage** iterates over **ExpenseList** and writes one `E | ...` line per expense, including its
+   insertion order so that sort state can be restored on reload.
+5. **Storage** iterates over **RecurringExpenseList** and writes one `R | ...` line per entry.
+6. The `FileWriter` is closed automatically via try-with-resources, guaranteeing the file is flushed
+   even if an exception occurs mid-write.
+
+#### Sequence Diagram: Loading Data
+
+The load process occurs **once** during application startup, before the command loop begins. `Storage`
+reads `fintrack.txt` line by line and dispatches each line to a private helper method based on its prefix.
+
+A key robustness feature is the **backward-compatibility check** inside `loadProfile`: if a save file
+was written by an older version of the application that did not yet include the `currentMonth` field,
+the parser gracefully falls back to the default value of `1` rather than throwing an exception.
+
+![Storage Load Sequence Diagram](diagram/StorageLoad-SequenceDiagram.png)
+
+The following sequence of actions occurs during the load process:
+
+1. **FinTrackPro** calls `storage.load(profile, expenseList, recurringExpenseList)` at startup.
+2. **Storage** initializes a `Scanner` to read `fintrack.txt`. If the file does not exist, the method
+   returns immediately and the application starts with a fresh in-memory state.
+3. For each line starting with `P`, **Storage** delegates to `loadProfile`, which invokes all six
+   setters on **Profile**: `setName`, `setMonthlyAllowance`, `setCurrentSavings`, `setBtoGoal`,
+   `setContributionRatio`, and `setDeadline`.
+4. If the line contains an 8th segment (`parts.length >= 8`), `profile.setCurrentMonth()` is also
+   called. Otherwise, the month counter remains at its default value of `1`.
+5. For lines starting with `E`, **Storage** delegates to `loadExpense`, which calls `expenseList.add()`
+   with the preserved insertion order, restoring the original sort sequence.
+6. For lines starting with `R`, **Storage** delegates to `loadRecurring`, which adds a new
+   `RecurringExpense` object to **RecurringExpenseList**.
+7. The `Scanner` is closed automatically via try-with-resources once EOF is reached.
+
+#### Design Considerations
+
+**Why a flat text file instead of a database or JSON?**
+A plain pipe-delimited file requires no external libraries, is human-readable, and can be inspected or
+edited by the user directly. This aligns with the project's constraint of keeping dependencies minimal.
+The trade-off is that the parser must handle malformed lines defensively, which is addressed by wrapping
+each line's parse logic in a `try-catch` block so one bad line cannot corrupt the entire load.
+
+**Why pipe (`|`) as a delimiter instead of a comma?**
+Expense names entered by users may naturally contain commas (e.g., `"rice, chicken"`), which would break
+a CSV-style parser. The pipe character is unlikely to appear in any of the stored fields, making it a
+safer choice without requiring any escape logic.
+
+**Future enhancement — JSON format (post-v2.1)**
+A planned future improvement is to migrate the storage format to JSON using a library such as Gson. This
+would make the format more robust to schema changes: new fields can be added without breaking old save
+files, since missing JSON keys simply resolve to `null` defaults rather than causing an
+`ArrayIndexOutOfBoundsException`. The `Storage` class is already isolated from the rest of the system
+via a clean interface, so this migration would require changes only within `Storage` itself due to the 
+**Separation of Concerns** principle in the current design.
+
+---
 
 # 4 Product Scope
 
@@ -313,27 +486,27 @@ An individual BTO budget planner for university students planning to apply for B
 
 ## 4.3 User Stories
 
-| Version | As a ...       | I want to ...                        | So that I can ...                                                                 |
-|---------|----------------|--------------------------------------|-----------------------------------------------------------------------------------|
-| v1.0    | New User       | Add regular expenses                 | Track all costs that might slow down my progress toward my goals                  |
-| v1.0    | New User       | Add my salary                        | Visualize my spending proportions relative to my total income                     |
-| v1.0    | New User       | Add my savings                       | Track my current liquid assets compared to my target goal                         |
-| v1.0    | New User       | Add ratio of downpayment             | Establish a concrete savings goal to pay my share of my future home               |
-| v1.0    | New User       | Add downpayment price                | Adjust the downpayment to its actual value, since BTO flats are priced differently|
-| v1.0    | New User       | Delete entries                       | Update my list to only show relevant expenditures                                 |
-| v1.0    | New User       | Edit entries                         | Correct input errors or update my salary to reflect my current financial status   |
-| v1.0    | New User       | View a financial summary             | Visualize my progress toward the downpayment goal in one glance                   |
-| v2.0    | New User       | Categorize expenses                  | Identify which spending categories occupy the largest portion of my budget        |
-| v1.0    | New User       | View "Distance to Goal" metrics      | Stay motivated by seeing exactly how close I am to reaching my downpayment target |
-| v1.0    | New User       | View salary and savings              | Know how much I am saving relative to my salary                                   |
-| v1.0    | New User       | Have a help command                  | Easily use the app's commands                                                     |
-| v2.0    | Regular User   | Add recurring monthly expenses       | Never be blindsided by hidden or automated costs that occur every month           |
-| v2.0    | Regular User   | Add comments to expenses             | Provide context for specific spending habits to better understand them later      |
-| v1.0    | Regular User   | Set a specific target date           | Know the monthly savings rate needed to meet my deadline                          |
-| v1.0    | Regular User   | Sort expenditure from highest to lowest | Know which expenditures are hindering me from reaching my downpayment goal     |
-| v2.0    | Long Term User | Archive financial phases monthly     | Keep my dashboard uncluttered while preserving historical data                    |
-| v2.0    | Long Term User | Assign a financial readiness level   | Know how ready I am to pay off my share of the downpayment                        |
-| v1.0    | Long Term User | Have a local database                | View all past inputs and historical data                                          |
+| Version | As a ...       | I want to ...                           | So that I can ...                                                                  |
+|---------|----------------|-----------------------------------------|------------------------------------------------------------------------------------|
+| v1.0    | New User       | Add regular expenses                    | Track all costs that might slow down my progress toward my goals                   |
+| v1.0    | New User       | Add my salary                           | Visualize my spending proportions relative to my total income                      |
+| v1.0    | New User       | Add my savings                          | Track my current liquid assets compared to my target goal                          |
+| v1.0    | New User       | Add ratio of downpayment                | Establish a concrete savings goal to pay my share of my future home                |
+| v1.0    | New User       | Add downpayment price                   | Adjust the downpayment to its actual value, since BTO flats are priced differently |
+| v1.0    | New User       | Delete entries                          | Update my list to only show relevant expenditures                                  |
+| v1.0    | New User       | Edit allowance, savings and ratio       | Update allowance, savings and ratio to reflect my current financial status         |
+| v1.0    | New User       | View a financial summary                | Visualize my progress toward the downpayment goal in one glance                    |
+| v2.0    | New User       | Categorize expenses                     | Identify which spending categories occupy the largest portion of my budget         |
+| v1.0    | New User       | View "Distance to Goal" metrics         | Stay motivated by seeing exactly how close I am to reaching my downpayment target  |
+| v1.0    | New User       | View salary and savings                 | Know how much I am saving relative to my salary                                    |
+| v1.0    | New User       | Have a help command                     | Easily use the app's commands                                                      |
+| v2.0    | Regular User   | Add recurring monthly expenses          | Never be blindsided by hidden or automated costs that occur every month            |
+| v2.0    | Regular User   | Add comments to expenses                | Provide context for specific spending habits to better understand them later       |
+| v1.0    | Regular User   | Set a specific target date              | Know the monthly savings rate needed to meet my deadline                           |
+| v1.0    | Regular User   | Sort expenditure from highest to lowest | Know which expenditures are hindering me from reaching my downpayment goal         |
+| v2.0    | Long Term User | Archive financial phases monthly        | Keep my dashboard uncluttered while preserving historical data                     |
+| v2.0    | Long Term User | Assign a financial readiness level      | Know how ready I am to pay off my share of the downpayment                         |
+| v1.0    | Long Term User | Have a local database                   | View all past inputs and historical data                                           |
 
 
 # 5 Non-Functional Requirements
@@ -361,22 +534,24 @@ An individual BTO budget planner for university students planning to apply for B
 
 * *BTO (Build-To-Order)* - a subsidized public housing option scheme in Singapore where new flats are constructed only after a sufficient number of units (typically 65-70%) have been pre-booked by applicants
 * *Contribution ratio* - the user's fractional share of the downpayment (0.0 to 1.0)
-* *Recurring expenses* - expenses that occur on a monthly basis following the same rates (eg Netflix subscription of $5.98/month), then you can run `addrecurring Netflix Subscription 5.98 entertainment recurring`
+* *Recurring expenses* - expenses that occur on a monthly basis following the same rates (eg Netflix subscription of $5.98/month), then you can run `add Netflix Subscription 5.98 entertainment recurring`
 * *Adjusted Minimum Savings* - minimum amount you need to save per month given your distance to goal and number of months remaining till the deadline 
 * *Estimated Goal Achievement* - number of months you need to take to achieve your goal, given the current month's savings and distance to goal
 
 # 7 Instructions for Manual Testing
-
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}
+Before running any test case, ensure you are starting from a clean state by deleting
+`fintrack.txt` and any files in the `monthly_archives/` folder if they exist. Launch
+the application with `java -jar FinTrackPro.jar` and complete the initial setup when
+prompted to establish a valid profile before testing profile-dependent commands.
 
 ## 7.1 Test cases
 
 ### Managing expenses
-(to be added by Kynaston)
+
 1. **Adding a one-off expense**
    1. Prerequisites: Application started with a valid profile setup.
    2. Test case: `add lunch 5 FOOD` Expected: Expense added to the one-off expense list. Total expenditure updated.
-   3. Test case: `add grab home 20` TRANSPORT Expected: Multi-word expense name added successfully under TRANSPORT.
+   3. Test case: `add grab home 20 TRANSPORT` Expected: Multi-word expense name added successfully under TRANSPORT.
    4. Test case: `add` Expected: Error shown for missing arguments. No expense added.
    5. Test case: `add lunch -1 FOOD` Expected: Error shown for negative amount. No expense added.
    6. Test case: `add lunch abc FOOD` Expected: Error shown for invalid amount format. No expense added.
@@ -399,6 +574,7 @@ An individual BTO budget planner for university students planning to apply for B
    3. Test case: `deleterecurring 0` Expected: Error shown for invalid index. List unchanged.
    4. Test case: `deleterecurring 99` Expected: Error shown for out-of-range index. List unchanged.
    5. Test case: `deleterecurring abc` Expected: Error shown for invalid index format. List unchanged.
+
 ### Sorting expenses
 
 1. **Sorting by category**
@@ -447,19 +623,29 @@ An individual BTO budget planner for university students planning to apply for B
 ---
 
 ### Reset and clear
-(to be added by Jairus)
+1. **Clearing one-off expenses**
+   1. Prerequisites: At least one one-off expense exists in the list.
+   2. Test case: `clear`, then enter `n` when prompted. Expected: Confirmation message for cancellation shown. No expenses deleted.
+   3. Test case: `clear`, then enter `y` when prompted. Expected: Success message shown. All one-off expenses are wiped from memory and `fintrack.txt`.
+   4. Test case: `clear` followed by `y` while recurring expenses exist. Expected: One-off expenses are cleared, but recurring expenses remain in the list.
+
+2. **System reset**
+   1. Prerequisites: Application is running with an existing profile and expenses.
+   2. Test case: `reset`, then enter `y` when prompted. Expected: Success message shown. All profile data and all expense lists (one-off and recurring) are wiped.
+   3. Test case: Restarting the app after a successful `reset`. Expected: App triggers the "Initial Setup" sequence (asking for name, etc.) as the save file is now empty.
+
 ---
 
 ### Category validation
 
 1. **Parsing a category from string**
-    1. Test case: `FOOD`, `food`, `fOoD` Expected: All resolve to a `FoodCategory` instance (case-insensitive).
-    2. Test case: `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER` Expected: Each resolves to its corresponding category class.
-    3. Test case: `HELLO` Expected: `IllegalArgumentException` thrown.
-    4. Test case: `Category.isValid("FOO")`, `Category.isValid("hello")` Expected: Returns `false`.
+    1. Test case: `FOOD`, `food`, `fOoD` Expected: All accepted as valid category input when used in an add command.
+    2. Test case: `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER` Expected: Each accepted as valid category input when used in an `add` command.
+    3. Test case: `add lunch 5 HELLO` Expected: Error message shown for invalid category. No expense added.
+    4. Test case: `add lunch 5 FOO` Expected: Error message shown for invalid category. No expense added.
 
 2. **Category sort ordering**
-    1. Test case: Compare FOOD → TRANSPORT → ENTERTAINMENT → UTILITIES → OTHER. Expected: Each preceding category compares as less than the next, confirming sort priority.
+    1. Test case: Add one expense of each category in reverse order (`OTHER`, `UTILITIES`, `ENTERTAINMENT`, `TRANSPORT`, `FOOD`), then run `sort category`. Expected: Expenses reordered as `FOOD`, `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER`
 
 ---
 
@@ -486,4 +672,36 @@ An individual BTO budget planner for university students planning to apply for B
     1. Test case: `savee` Expected: Command is rejected as invalid; no month advancement or archive changes.
     2. Test case: `save month` Expected: Treated as invalid command format; archive data remains unchanged.
 
+---
 
+### Storage and Data Integrity
+1. **Verification of Auto-Save**
+   1. Prerequisites: Application is running with a valid profile.
+   2. Test case: `add coffee 5.50 FOOD`, then immediately close the terminal window without typing `bye`.
+   3. Expected: Re-open the application and run `list`. The "coffee" expense is visible, confirming the data was persisted immediately.
+
+2. **Handling corrupted data in fintrack.txt**
+   1. Prerequisites: Application is closed.
+   2. Test case: Manually edit `fintrack.txt` and change an expense amount to `abc`. Start the application.
+   3. Expected: Application starts normally. A warning log/message indicates that a corrupted line was skipped. Other valid data is loaded successfully.
+
+3. **Backward compatibility (Missing Month Data)**
+   1. Prerequisites: Application is closed.
+   2. Test case: Manually edit `fintrack.txt` to remove the 8th pipe-delimited field (the currentMonth integer) from the `P` line. Start the application.
+   3. Expected: Application loads successfully. The current month defaults to `1` without crashing.
+
+--- 
+
+### Summary Report (`summary`)
+1. **Surplus and Estimation Accuracy**
+   1. Prerequisites: Profile initialized with Allowance: $1000, Savings: $0, BTO Goal: $5000.
+   2. Test case: `add dinner 200 FOOD`, then `summary`.
+   3. Expected: Report shows Surplus: $800.00, Distance to Goal: $5000.00, and Estimate: 7 months.
+   4. Test case: `add rent 900 UTILITIES` (Total expenses: $1100), then `summary`.
+   5. Expected: Report shows Surplus: -$100.00 and Estimate: "Goal unreachable (Negative or Zero Surplus)".
+
+2. **Readiness Level Mapping**
+   1. Test case: Adjust savings so they are exactly 50% of the BTO goal. Run `summary`.
+   2. Expected: Readiness Level shows `ON TRACK`.
+   3. Test case: Adjust savings to meet or exceed the BTO goal. Run `summary`.
+   4. Expected: Readiness Level shows `READY` 
