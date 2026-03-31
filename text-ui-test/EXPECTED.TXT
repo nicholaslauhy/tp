@@ -25,7 +25,7 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 5 months and 26 days remaining.
+You have 1 years and 5 months and 24 days remaining.
 Nice! Based on your current savings, you have already met your goal.
 
 Type 'help' to view my currently supported commands!
@@ -48,7 +48,7 @@ Daily Transaction Commands
 'deleterecurring' <index> - remove a recurring monthly expense
 
 Profile & Goal Management
-'sort'   <keyword> - sort the expenditure list by category or recency (e.g sort recent, sort category)
+'sort'   <keyword> - sort the expenditure list by category, alphabetical order or recency (e.g sort name, sort recent, sort category)
 'savings'   - add a surplus amount to your existing savings
 'allowance' - update your monthly allowance
 'ratio'     - update your BTO contribution ratio (0.0 to 1.0)

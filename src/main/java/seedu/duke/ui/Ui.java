@@ -114,8 +114,8 @@ public class Ui {
         printLine("");
 
         printLine("Profile & Goal Management");
-        printLine("'sort'   <keyword> - sort the expenditure list by category or recency " +
-                "(e.g sort recent, sort category)");
+        printLine("'sort'   <keyword> - sort the expenditure list by category, alphabetical order or recency " +
+                "(e.g sort name, sort recent, sort category)");
         printLine("'savings'   - add a surplus amount to your existing savings");
         printLine("'allowance' - update your monthly allowance");
         printLine("'ratio'     - update your BTO contribution ratio (0.0 to 1.0)");
