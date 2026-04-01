@@ -295,7 +295,7 @@ Each concrete subclass (`FoodCategory`, `TransportCategory`, `EntertainmentCateg
 label and its position in the sorted expense list. `Category` implements `Comparable<Category>` so that standard
 Java sorting utilities can order expenses by category without any sorting logic in `ExpenseList` itself.
 
-### Archive Expenses 
+### Archive Expenses
 #### Class Diagram
 ![Class Diagram](diagram/ArchiveExpense-ClassDiagram.jpg)
 The above class diagram illustrates the design of the month archiving feature and the classes that directly participate
@@ -415,7 +415,7 @@ The report assigns a "Readiness Level" to provide the user with immediate psycho
 When the summary command is triggered, the interaction follows this sequence:
 
 1. `CommandHandler.handleSummary()` is invoked.
-2. A new `SummaryReport` object is instantiated, pulling the latest data from `Profile` and the `ExpenseLists`.
+2. A new `SummaryReport` object is instantiated, pulling the latest data from `Profile`, `ExpenseList`, and `RecurringExpenseList`.
 3. The constructor calculates the surpluses, percentages, and estimations.
 4. The populated `SummaryReport` is passed to `Ui.showSummaryReport()`, which prints the dashboard to the console.
 
@@ -649,13 +649,13 @@ prompted to establish a valid profile before testing profile-dependent commands.
    3. Test case: `delete 0` Expected: Error shown for invalid index. List unchanged.
    4. Test case: `delete 99` Expected: Error shown for out-of-range index. List unchanged.
    5. Test case: `delete abc` Expected: Error shown for invalid index format. List unchanged.
-3. **Adding a Recurring expense**
+3. **Adding a recurring expense**
    1. Prerequisites: Application started with a valid profile setup.
    2. Test case: `add netflix 30 ENTERTAINMENT recurring` Expected: Recurring expense added to recurring expense list.
    3. Test case: `add phone bill 20 UTILITIES RECURRING` Expected: Recurring expense added successfully (case-insensitive keyword).
    4. Test case: `add netflix -1 ENTERTAINMENT recurring` Expected: Error shown for invalid amount. No recurring expense added.
    5. Test case: `add netflix 30 HELLO recurring` Expected: Error shown for invalid category. No recurring expense added.
-4. **Deleting a recurring Expense**
+4. **Deleting a recurring expense**
    1. Prerequisites: At least one recurring expense exists.
    2. Test case: `deleterecurring 1` Expected: First recurring expense removed.
    3. Test case: `deleterecurring 0` Expected: Error shown for invalid index. List unchanged.
@@ -733,7 +733,7 @@ prompted to establish a valid profile before testing profile-dependent commands.
     4. Test case: `add lunch 5 FOO` Expected: Error message shown for invalid category. No expense added.
 
 2. **Category sort ordering**
-    1. Test case: Add one expense of each category in reverse order (`OTHER`, `UTILITIES`, `ENTERTAINMENT`, `TRANSPORT`, `FOOD`), then run `sort category`. Expected: Expenses reordered as `FOOD`, `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER`
+    1. Test case: Add one expense of each category in reverse order (`OTHER`, `UTILITIES`, `ENTERTAINMENT`, `TRANSPORT`, `FOOD`), then run `sort category`. Expected: Expenses reordered as `FOOD`, `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER`.
 
 ---
 
