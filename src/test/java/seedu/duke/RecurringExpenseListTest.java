@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -208,5 +209,45 @@ public class RecurringExpenseListTest {
         ArrayList<RecurringExpense> matches = recurringExpenseList.findMatches("transport");
 
         assertTrue(matches.isEmpty());
+    }
+
+    /**
+     * Verifies that {@code getTotal()} returns zero on an empty list.
+     */
+    @Test
+    void getTotal_emptyList_returnsZero() {
+        assertEquals(BigDecimal.ZERO, recurringExpenseList.getTotal());
+    }
+
+    /**
+     * Verifies that deleting with index 0 throws AssertionError (1-based indexing).
+     */
+    @Test
+    void delete_invalidIndexZero_throwsAssertionError() {
+        recurringExpenseList.add(
+                new RecurringExpense("Netflix", new BigDecimal("30.00"), Category.fromString("ENTERTAINMENT"))
+        );
+
+        assertThrows(AssertionError.class, () -> recurringExpenseList.delete(0));
+    }
+
+    /**
+     * Verifies that deleting with an index beyond the list size throws AssertionError.
+     */
+    @Test
+    void delete_invalidIndexBeyondSize_throwsAssertionError() {
+        recurringExpenseList.add(
+                new RecurringExpense("Netflix", new BigDecimal("30.00"), Category.fromString("ENTERTAINMENT"))
+        );
+
+        assertThrows(AssertionError.class, () -> recurringExpenseList.delete(2));
+    }
+
+    /**
+     * Verifies that deleting from an empty list throws AssertionError.
+     */
+    @Test
+    void delete_emptyList_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> recurringExpenseList.delete(1));
     }
 }

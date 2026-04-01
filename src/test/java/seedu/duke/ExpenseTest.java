@@ -3,6 +3,7 @@ package seedu.duke;
 import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import seedu.duke.data.Expense;
 import seedu.duke.category.Category;
 
@@ -58,5 +59,41 @@ public class ExpenseTest {
         Expense expense = new Expense("lunch", new BigDecimal("12.50"), Category.fromString("FOOD"), 0);
 
         assertEquals(0, expense.getInsertionOrder());
+    }
+
+    @Test
+    void constructor_nullName_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new Expense(null, new BigDecimal("10.00"), Category.fromString("FOOD"), 1));
+    }
+
+    @Test
+    void constructor_blankName_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new Expense("   ", new BigDecimal("10.00"), Category.fromString("FOOD"), 1));
+    }
+
+    @Test
+    void constructor_nullAmount_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new Expense("lunch", null, Category.fromString("FOOD"), 1));
+    }
+
+    @Test
+    void constructor_negativeAmount_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new Expense("lunch", new BigDecimal("-1.00"), Category.fromString("FOOD"), 1));
+    }
+
+    @Test
+    void constructor_nullCategory_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new Expense("lunch", new BigDecimal("10.00"), null, 1));
+    }
+
+    @Test
+    void constructor_negativeInsertionOrder_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new Expense("lunch", new BigDecimal("10.00"), Category.fromString("FOOD"), -1));
     }
 }

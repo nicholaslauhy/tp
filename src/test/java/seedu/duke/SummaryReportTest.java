@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SummaryReportTest {
     @Test
@@ -259,18 +258,31 @@ public class SummaryReportTest {
     }
 
     @Test
-    void profile_setDeadlinePastOrToday_throwsAssertionError() {
+    void profile_setDeadlinePastOrToday_isAccepted() {
         Profile profile = new Profile();
 
-        // Testing Today (assuming your assertion requires strictly AFTER today)
-        assertThrows(AssertionError.class, () -> {
-            profile.setDeadline(LocalDate.now());
-        });
+        // Past and today dates are accepted by the setter; validation is enforced at input via InputUtil
+        LocalDate today = LocalDate.now();
+        profile.setDeadline(today);
+        assertEquals(today, profile.getDeadline());
 
-        // Testing Past
-        assertThrows(AssertionError.class, () -> {
-            profile.setDeadline(LocalDate.now().minusDays(1));
-        });
+        LocalDate past = LocalDate.now().minusDays(1);
+        profile.setDeadline(past);
+        assertEquals(past, profile.getDeadline());
+    }
+
+    @Test
+    void summaryReport_pastDeadline_doesNotCrash() {
+        Profile profile = new Profile();
+        profile.setBtoGoal(new BigDecimal("10000"));
+        profile.setCurrentSavings(new BigDecimal("2000"));
+        profile.setMonthlyAllowance(new BigDecimal("4000"));
+        profile.setDeadline(LocalDate.now().minusMonths(3));
+
+        // Should not throw AssertionError — monthsLeft clamped to 1 in SummaryReport
+        SummaryReport report = new SummaryReport(profile, new ExpenseList(), new RecurringExpenseList());
+
+        assertEquals(new BigDecimal("8000.00"), report.monthlyRequired);
     }
 
     @Test

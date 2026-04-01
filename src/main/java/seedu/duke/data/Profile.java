@@ -41,6 +41,8 @@ public class Profile {
         assert housePrice != null && housePrice.compareTo(BigDecimal.ZERO) >= 0
                 : "House price cannot be null or negative";
         this.housePrice = housePrice;
+        BtoCalculator calc = new BtoCalculator(this.housePrice, this.contributionRatio);
+        this.btoGoal = calc.yourShare;
     }
 
     /**
@@ -71,7 +73,6 @@ public class Profile {
      */
     public void setDeadline(LocalDate deadline) {
         assert deadline != null : "Deadline cannot be null";
-        assert deadline.isAfter(LocalDate.now()) : "Deadline must be in the future";
         this.deadline = deadline;
     }
 
@@ -136,6 +137,7 @@ public class Profile {
      */
     public void setCurrentSavings(BigDecimal currentSavings) {
         assert currentSavings != null : "Current savings cannot be null";
+        assert currentSavings.compareTo(BigDecimal.ZERO) >= 0 : "Current savings cannot be negative";
         this.currentSavings = currentSavings;
     }
 
@@ -210,5 +212,7 @@ public class Profile {
         this.currentSavings = BigDecimal.ZERO;
         this.contributionRatio = new BigDecimal("0.5");
         this.currentMonth = 1;
+        this.housePrice = null;
+        this.deadline = LocalDate.now();
     }
 }

@@ -145,7 +145,11 @@ public class SummaryReport {
             return "Infinite (Surplus is $0 or negative!)";
         }
 
-        int months = distance.divide(monthlySurplus, 0, RoundingMode.CEILING).intValue();
+        BigDecimal monthsBig = distance.divide(monthlySurplus, 0, RoundingMode.CEILING);
+        if (monthsBig.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) > 0) {
+            return "A very long time (goal is too far away)";
+        }
+        int months = monthsBig.intValue();
 
         assert months >= 0 : "Estimated months should be a positive value";
         return months + " months";

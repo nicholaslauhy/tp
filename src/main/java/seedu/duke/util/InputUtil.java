@@ -72,9 +72,6 @@ public class InputUtil {
      *
      * <p>This method repeatedly prompts until valid input is received.</p>
      *
-     * <p>Note: The returned value represents 2.5% of the entered amount
-     * (calculated as amount × 0.025).</p>
-     *
      * @param ui UI component used for displaying prompts and messages.
      * @param in Scanner used to read user input.
      * @param prompt Prompt message shown to the user.

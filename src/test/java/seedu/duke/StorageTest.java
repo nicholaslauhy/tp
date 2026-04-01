@@ -3,7 +3,6 @@ package seedu.duke;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import seedu.duke.category.Category;
 import seedu.duke.data.ExpenseList;
@@ -101,18 +100,17 @@ class StorageTest {
     }
 
     @Test
-    void profile_setDeadlinePastOrToday_throwsAssertionError() {
+    void profile_setDeadlinePastOrToday_isAccepted() {
         Profile profile = new Profile();
 
-        // Testing Today
-        assertThrows(AssertionError.class, () -> {
-            profile.setDeadline(LocalDate.now());
-        }, "Assertion should trigger for current date");
+        // Past and today dates are accepted by the setter; validation is enforced at input via InputUtil
+        LocalDate today = LocalDate.now();
+        profile.setDeadline(today);
+        assertEquals(today, profile.getDeadline());
 
-        // Testing Past
-        assertThrows(AssertionError.class, () -> {
-            profile.setDeadline(LocalDate.now().minusDays(1));
-        }, "Assertion should trigger for past dates");
+        LocalDate past = LocalDate.now().minusDays(1);
+        profile.setDeadline(past);
+        assertEquals(past, profile.getDeadline());
     }
 
     @Test

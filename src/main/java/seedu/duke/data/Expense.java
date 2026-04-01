@@ -31,7 +31,7 @@ public class Expense {
         assert amount.compareTo(BigDecimal.ZERO) >= 0 : "Expense amount must be non-negative";
         //Invariant: Category Added should not be null
         assert category != null : "Expense category should not be null";
-        //Invariant: Insertion order should be more than 0
+        //Invariant: Insertion order must be non-negative (0 is valid for the first item)
         assert insertionOrder >= 0 : "Insertion order must be non-negative";
 
         this.name = name;

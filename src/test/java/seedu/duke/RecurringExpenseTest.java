@@ -7,6 +7,7 @@ import seedu.duke.data.RecurringExpense;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for {@link RecurringExpense}.
@@ -53,5 +54,35 @@ public class RecurringExpenseTest {
                 new RecurringExpense("Netflix", new BigDecimal("30.00"), Category.fromString("ENTERTAINMENT"));
 
         assertEquals("[RECURRING][ENTERTAINMENT] Netflix $30.00", recurringExpense.toString());
+    }
+
+    @Test
+    void constructor_nullName_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new RecurringExpense(null, new BigDecimal("30.00"), Category.fromString("ENTERTAINMENT")));
+    }
+
+    @Test
+    void constructor_blankName_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new RecurringExpense("   ", new BigDecimal("30.00"), Category.fromString("ENTERTAINMENT")));
+    }
+
+    @Test
+    void constructor_nullAmount_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new RecurringExpense("Netflix", null, Category.fromString("ENTERTAINMENT")));
+    }
+
+    @Test
+    void constructor_negativeAmount_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new RecurringExpense("Netflix", new BigDecimal("-1.00"), Category.fromString("ENTERTAINMENT")));
+    }
+
+    @Test
+    void constructor_nullCategory_throwsAssertionError() {
+        assertThrows(AssertionError.class, () ->
+                new RecurringExpense("Netflix", new BigDecimal("30.00"), null));
     }
 }

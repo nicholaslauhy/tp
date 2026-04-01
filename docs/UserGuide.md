@@ -131,6 +131,7 @@ Month 1 Total: $25
 <b>NOTE:</b>
 - The keyword `recurring` is optional.
 - If omitted, the expense will be treated as a one-off expense.
+- Expense name cannot contain the `|` character, as it is reserved as the file delimiter.
 
 ### Listing all entries: ```list```
 Shows a consolidated view of all your recorded expenses, neatly categorized by recurring commitments, previous months' 
@@ -220,7 +221,7 @@ Recurring Total: $0
 - Use `list` to view recurring expenses and their indices.  
 
 ### View financial summary: ```summary```
-Generates a comprehensive financial report based on your profile and current spending habits. Calculates your monthly 
+Generates a comprehensive financial report based on your profile and current spending habits. Calculates your monthly
 surplus, distance to your goal, and provides an estimate of how many months it will take to secure your downpayment.
 The Readiness Level reflects your percentage progress toward your BTO goal, ranging from `BARELY STARTED` to `READY`.<br>
 <b>Format:</b> ```summary``` <br>
@@ -296,7 +297,7 @@ FinTrackPro data is saved in the hard disk automatically after any command that 
 <b>Warning:</b><br> Advanced users can modify fintrack.txt directly. However, if the format is corrupted, FinTrackPro will safely skip the corrupted lines to prevent the app from crashing.
 <b>Expected Output:</b>
 ```
-P | Jairus | 1500 | 1000 | 18375.00 | 0.7 | 2028-10-10 | 1
+P | Jairus | 1500 | 1000 | 18375.00 | 0.7 | 2028-10-10 | 1 | null
 E | Chicken Rice | 7.3 | FOOD | 1
 E | Pizza | 10 | FOOD | 0
 E | Game | 12 | ENTERTAINMENT | 4
@@ -319,6 +320,7 @@ R | Netflix | 30 | ENTERTAINMENT
 | `0.7`        | contribution ratio | user is paying **70%** of the BTO cost                |
 | `2028-10-10` | deadline           | goal date (ISO format `YYYY-MM-DD`)                   |
 | `1`          | current month      | user is currently tracking month **1** of their data  |
+| `null`       | house price        | total BTO flat price; `null` if not set               |
 
 **Expenditure (`E`)**
 

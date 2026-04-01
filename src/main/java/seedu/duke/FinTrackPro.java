@@ -179,8 +179,18 @@ public class FinTrackPro {
         logState("setup.start", "collect name, finances and deadline", "scannerReady=true");
 
         // 1. Name handling
-        String name = ui.readLine(in, "What is your name?");
-        name = name.trim().isEmpty() ? "friend" : name.trim();
+        String name;
+        while (true) {
+            name = ui.readLine(in, "What is your name?").trim();
+            if (name.contains("|")) {
+                ui.printLine("Name cannot contain the '|' character. Try again.");
+                continue;
+            }
+            if (name.isEmpty()) {
+                name = "friend";
+            }
+            break;
+        }
         logState("setup.name.captured", "collect current savings", "name=" + name);
 
         ui.printLine("");
@@ -421,8 +431,11 @@ public class FinTrackPro {
                     totalAllMonths = totalAllMonths.add(monthTotal);
                 }
             } catch (IOException e) {
-                logger.log(java.util.logging.Level.WARNING, 
+                logger.log(java.util.logging.Level.WARNING,
                     "Failed to load archived expenses for Month " + month, e);
+            } catch (NumberFormatException e) {
+                logger.log(java.util.logging.Level.WARNING,
+                    "Corrupted amount in archive for Month " + month + ": " + e.getMessage(), e);
             }
         }
 

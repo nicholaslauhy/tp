@@ -194,6 +194,11 @@ public class CommandHandler {
             throw new InvalidAmountException("Expense name cannot be empty.\n");
         }
 
+        if (name.contains("|")) {
+            logger.warning("handleAdd rejected | reason: expense name contains reserved character '|'");
+            throw new InvalidAmountException("Expense name cannot contain the '|' character.\n");
+        }
+
         if (!Category.isValid(categoryString)) {
             logger.warning("handleAdd rejected | reason: invalid category " + categoryString);
             throw new InvalidCategoryException("Invalid category! Valid categories: " +
@@ -321,7 +326,7 @@ public class CommandHandler {
         assert in != null : "Scanner should not be null";
 
         ui.printLine("WARNING: This will permanently delete ALL one-off expenses. Are you sure? (Input Y to clear)");
-        String response = in.nextLine().trim().toLowerCase();
+        String response = ui.readLine(in, "").trim().toLowerCase();
 
         if (response.equals("y")) {
             expenseList.clear();
@@ -453,7 +458,7 @@ public class CommandHandler {
         assert in != null : "Scanner should not be null";
 
         ui.printLine("WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: ");
-        String response = in.nextLine().trim().toLowerCase();
+        String response = ui.readLine(in, "").trim().toLowerCase();
 
         if (response.equals("y")) {
             // Reset in-memory objects

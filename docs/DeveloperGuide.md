@@ -440,9 +440,11 @@ The data is stored in a plain-text file using a pipe-delimited format. Each line
 identifier that determines how the line is parsed:
 | Prefix | Record Type      | Format                                                              |
 |--------|------------------|---------------------------------------------------------------------|
-| `P`    | Profile          | `P \| Name \| Allowance \| Savings \| BtoGoal \| Ratio \| Deadline \| CurrentMonth` |
+| `P`    | Profile          | `P \| Name \| Allowance \| Savings \| BtoGoal \| Ratio \| Deadline \| CurrentMonth \| HousePrice` |
 | `E`    | One-off Expense  | `E \| Name \| Amount \| Category \| InsertionOrder`                |
 | `R`    | Recurring Expense| `R \| Name \| Amount \| Category`                                  |
+
+> **Note:** `HousePrice` is written as `null` if the user has not set a house price. The `Name` field in `P` and `E` lines cannot contain the `|` character, as it is reserved as the field delimiter.
 
 Lines that do not match any known prefix, or that are too short to be parsed safely, are silently skipped
 with a `WARNING`-level log entry. This ensures that a single corrupted line does not abort the entire load.
@@ -452,7 +454,7 @@ with a `WARNING`-level log entry. This ensures that a single corrupted line does
 The object diagram below shows a concrete snapshot of the application's in-memory state after
 `Storage#load()` has successfully parsed the following `fintrack.txt` file:
 ```
-P | Alice | 2000.00 | 5000.00 | 25000.00 | 0.50 | 2028-10-24 | 3
+P | Alice | 2000.00 | 5000.00 | 25000.00 | 0.50 | 2028-10-24 | 3 | null
 E | Lunch | 5.50 | FOOD | 0
 E | Bus fare | 1.80 | TRANSPORT | 1
 R | Netflix | 10.90 | ENTERTAINMENT
@@ -462,8 +464,9 @@ R | Netflix | 10.90 | ENTERTAINMENT
 
 This snapshot illustrates three key design points:
 
-1. **All seven Profile fields are restored** — name, allowance, savings, BTO goal, ratio, deadline,
-   and the optional `currentMonth` field are all populated from the `P` line.
+1. **All eight Profile fields are restored** — name, allowance, savings, BTO goal, ratio, deadline,
+   `currentMonth`, and the optional `housePrice` field are all populated from the `P` line.
+   `housePrice` is written as `null` when not set and skipped during load.
 2. **Insertion order is preserved** — `e1` has `insertionOrder = 0` and `e2` has
    `insertionOrder = 1`, meaning a subsequent `sort recent` command will restore this exact sequence.
 3. **Recurring and one-off expenses are held separately** — `expenseList` and `recurringList` are
@@ -546,8 +549,9 @@ each line's parse logic in a `try-catch` block so one bad line cannot corrupt th
 
 **Why pipe (`|`) as a delimiter instead of a comma?**
 Expense names entered by users may naturally contain commas (e.g., `"rice, chicken"`), which would break
-a CSV-style parser. The pipe character is unlikely to appear in any of the stored fields, making it a
-safer choice without requiring any escape logic.
+a CSV-style parser. The pipe character is explicitly rejected in user-facing name fields (expense names
+and the user's own name) at the input layer, guaranteeing it never appears as data and making it a safe
+delimiter without requiring any escape logic.
 
 **Future enhancement — JSON format (post-v2.1)**
 A planned future improvement is to migrate the storage format to JSON using a library such as Gson. This
@@ -640,6 +644,7 @@ prompted to establish a valid profile before testing profile-dependent commands.
    5. Test case: `add lunch -1 FOOD` Expected: Error shown for negative amount. No expense added.
    6. Test case: `add lunch abc FOOD` Expected: Error shown for invalid amount format. No expense added.
    7. Test case: `add lunch 5 HELLO` Expected: Error shown for invalid category. No expense added.
+   8. Test case: `add rent | utilities 100 UTILITIES` Expected: Error shown for reserved `|` character in name. No expense added.
 2. **Deleting a one-off expense**
    1. Prerequisites: At least one expense exists in the list.
    2. Test case: `delete 1` Expected: First expense removed. Total expenditure updated.

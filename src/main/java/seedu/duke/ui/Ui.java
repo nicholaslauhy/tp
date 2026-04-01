@@ -174,6 +174,9 @@ public class Ui {
         if (period.getDays() > 0) {
             monthsLeft++;
         }
+        if (monthsLeft < 0) {
+            monthsLeft = 0;
+        }
 
         assert monthsLeft >= 0 : "Months left should not be negative";
 

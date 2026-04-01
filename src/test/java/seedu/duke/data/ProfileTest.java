@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProfileTest {
@@ -77,6 +78,11 @@ public class ProfileTest {
         BigDecimal large = new BigDecimal("999999999.99");
         profile.setCurrentSavings(large);
         assertEquals(large, profile.getCurrentSavings());
+    }
+
+    @Test
+    public void setCurrentSavings_negativeValue_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> profile.setCurrentSavings(new BigDecimal("-100")));
     }
 
     /**
@@ -163,6 +169,20 @@ public class ProfileTest {
         assertThrows(AssertionError.class, () -> profile.setHousePrice(new BigDecimal("-1")));
     }
 
+    @Test
+    public void setHousePrice_withDefaultRatio_recalculatesBtoGoal() {
+        profile.setHousePrice(new BigDecimal("400000"));
+        assertEquals(new BigDecimal("10500.00"), profile.getBtoGoal());
+    }
+
+    @Test
+    public void setHousePrice_afterChanging_recalculatesBtoGoal() {
+        profile.setContributionRatio(new BigDecimal("0.5"));
+        profile.setHousePrice(new BigDecimal("400000"));
+        profile.setHousePrice(new BigDecimal("500000"));
+        assertEquals(new BigDecimal("13125.00"), profile.getBtoGoal());
+    }
+
     /**
      * Unit tests for btoGoal.
      */
@@ -219,13 +239,17 @@ public class ProfileTest {
     }
 
     @Test
-    public void setDeadline_pastDate_throwsAssertionError() {
-        assertThrows(AssertionError.class, () -> profile.setDeadline(LocalDate.of(2020, 1, 1)));
+    public void setDeadline_pastDate_isAccepted() {
+        LocalDate past = LocalDate.of(2020, 1, 1);
+        profile.setDeadline(past);
+        assertEquals(past, profile.getDeadline());
     }
 
     @Test
-    public void setDeadline_today_throwsAssertionError() {
-        assertThrows(AssertionError.class, () -> profile.setDeadline(LocalDate.now()));
+    public void setDeadline_today_isAccepted() {
+        LocalDate today = LocalDate.now();
+        profile.setDeadline(today);
+        assertEquals(today, profile.getDeadline());
     }
 
     @Test
@@ -269,6 +293,8 @@ public class ProfileTest {
         profile.setMonthlyAllowance(new BigDecimal("2000"));
         profile.setBtoGoal(new BigDecimal("50000"));
         profile.setContributionRatio(new BigDecimal("0.7"));
+        profile.setHousePrice(new BigDecimal("400000"));
+        profile.setDeadline(LocalDate.now().plusYears(2));
         profile.advanceMonth();
 
         profile.reset();
@@ -279,5 +305,7 @@ public class ProfileTest {
         assertEquals(BigDecimal.ZERO, profile.getBtoGoal());
         assertEquals(new BigDecimal("0.5"), profile.getContributionRatio());
         assertEquals(1, profile.getCurrentMonth());
+        assertNull(profile.getHousePrice());
+        assertEquals(LocalDate.now(), profile.getDeadline());
     }
 }
