@@ -12,6 +12,8 @@ Nice to meet you, James Gosling!
 
 Hang tight... I have a few questions for you.
 How much do you currently have in savings?
+Bruh I need a valid amount like 10250 or 10250.50 (numbers only, max 2 dp). Try again.
+How much do you currently have in savings?
 
 What is your monthly allowance? (in dollars)
 
@@ -25,7 +27,7 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 5 months and 24 days remaining.
+You have 1 years and 5 months and 23 days remaining.
 Nice! Based on your current savings, you have already met your goal.
 
 Type 'help' to view my currently supported commands!
@@ -71,7 +73,7 @@ Month 1 Total: $5
 Format: add <name> <amount> <category>
 
 
-Amount cannot be negative bro who you trying to scam?
+Amount must be a plain number.
 
 
 Added recurring expense: [RECURRING][ENTERTAINMENT] netflix $30
@@ -136,8 +138,16 @@ Month 1 Total: $35.00
 
 Total Expenditure (All Months + Recurring): $85.00
 
+Invalid index bro! do you even know how much you've spent?
+
+Invalid recurring expense index!
+
+
 Deleted recurring expense #1: [RECURRING][ENTERTAINMENT] netflix $30
 Recurring Total: $20
+
+Amount must be a plain number.
+
 
 Here are your recurring monthly commitments!
 1. phone bill $20.00 [UTILITIES]
