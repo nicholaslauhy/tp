@@ -57,7 +57,9 @@ public class Parser {
 
     public static int parseIndex(String indexString) {
         assert indexString != null : "Index string should not be null";
-        if (!indexString.matches("\\d+")) return -1;
+        if (!indexString.matches("\\d+")) {
+            return -1;
+        }
         try {
             // Log at FINE: readRatio is a low-level detail, not a key app event
             logger.fine("parseIndex succeeded | index string: " + indexString);
