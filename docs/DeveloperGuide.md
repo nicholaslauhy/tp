@@ -17,6 +17,10 @@ strategies employed in the development of FinTrackPro.
    * **3.1 [Architecture Diagram](#31-architecture-diagram)**
    * **3.2 [UML Diagrams](#32-uml-diagrams)**
       * **3.2.1 [Managing Expenses](#managing-expenses)**
+         * **[Add Expenses](#add-expenses)**
+         * **[Delete One-Off Expenses](#delete-one-off-expenses)**
+         * **[Delete Recurring Expenses](#delete-recurring-expenses)**
+         * **[Sorting Expenses](#sorting-expenses)**
       * **3.2.2 [Category Component](#category-component)**
       * **3.2.3 [Archive Expenses](#archive-expenses)**
       * **3.2.4 [Managing Profile](#managing-profile)**
@@ -100,8 +104,11 @@ The app consists of the following main components:
     - Ensures no data loss through auto-save functionality after state-changing commands.
 
 6. **Categories**: A polymorphic system for expense classification.
-    - **Category**: An enum defining the supported expense categories (`FOOD`, `TRANSPORT`, `ENTERTAINMENT`, `UTILITIES`, `OTHER`) and their sort priority.
-    - Enables type-safe expense categorization and sorting by priority.
+   - **Category**: An abstract base class defining the classification contract via `getName()`
+     and `getSortOrder()`, with two static factory methods (`isValid` and `fromString`) for
+     safe resolution of user input strings into category instances.
+   - **FoodCategory, TransportCategory, EntertainmentCategory, UtilitiesCategory, OtherCategory**:
+     Concrete subclasses each implementing a fixed display name and sort priority.
 
 7. **Utilities**: A collection of helper classes used by multiple components.
     - **BtoCalculator**: Performs financial calculations for BTO goal planning (savings needed, progress tracking).
@@ -140,8 +147,7 @@ The sections below give more concrete details about each component.
 ## 3.2 UML Diagrams
 In this section, we will present the UML class diagrams, object diagrams and sequence diagrams to 
 illustrate how each main component of FinTrackPro integrates with the rest of the codebase.
-### Managing Expenses 
-#### Class Diagram
+### Managing Expenses
 ![Class Diagram](diagram/Expense-ClassDiagram.png)
 The above class diagram illustrates the overall design of the expense management system and the classes that directly participate 
 in handling user commands and managing expense data.
@@ -164,7 +170,7 @@ Both ExpenseList and RecurringExpenseList act as data source classes. They encap
 types and expose methods for manipulation and retrieval. The separation ensures that recurring and one-off expenses are 
 handled independently while still allowing the system to aggregate and display them together when needed.
 
-#### Sequence Diagram
+#### Add expenses
 ![Sequence Diagram](diagram/AddExpense-SequenceDiagram.png)
 The above sequence diagram illustrates how the system handles the add command for both one-off and recurring expenses.
 
@@ -184,6 +190,8 @@ It then retrieves the updated recurring total and displays the result through th
 This sequence diagram shows that the system uses the same command entry point for both types of expenses, but routes them 
 to different data structures depending on whether the recurring flag is present.
 
+
+#### Delete one off expenses
 ![Sequence Diagram](diagram/DeleteOneExpense-SequenceDiagram.png)
 
 The above sequence diagram illustrates how the system handles the deletion of a one-off expense.
@@ -198,6 +206,7 @@ the updated total.
 Finally, CommandHandler uses the Ui to display confirmation that the expense has been deleted together with the updated 
 total expenditure.
 
+#### Delete recurring expenses
 ![Sequence Diagram](diagram/DeleteRecurringExpense-SequenceDiagram.png)
 
 The above sequence diagram illustrates how the system handles the deletion of a recurring expense.
@@ -211,6 +220,7 @@ recurring total, removes the selected RecurringExpense, and then retrieves the u
 Finally, the result is shown to the user through the Ui, confirming the deletion of the recurring expense and displaying 
 the updated recurring total.
 
+#### Sorting Expenses
 ![Sequence Diagram](diagram/handleSort-SequenceDiagram.png)
 
 The above sequence diagram illustrates how the system routes the `sort` command to the
@@ -233,8 +243,8 @@ priority when `sort category` is entered.
 CommandHandler delegates to ExpenseList by calling sortByCategory. ExpenseList invokes
 Java's sort with a comparator based on each Expense's category. During the sort, each
 Expense's getCategory is called to retrieve its Category, and Category's compareTo is
-then called to determine relative ordering based on each category's fixed sort order
-(FOOD = 1, TRANSPORT = 2, ENTERTAINMENT = 3, UTILITIES = 4, OTHER = 5).
+then called to determine relative ordering based on each category's based on each category's 
+fixed sort priority as defined in the concrete subclass
 
 The sort is stable, meaning expenses within the same category retain their relative
 insertion order. No data is mutated beyond the reordering of the internal list.
