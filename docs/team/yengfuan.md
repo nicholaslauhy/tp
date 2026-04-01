@@ -54,17 +54,7 @@ individual needs to save and whether additional financing is required.
   allowing callers to route the failure through their own domain-specific exception (`InvalidIndexException`) with a
   user-facing message appropriate to their context.
 
-**4. help Command (`Ui.java — showHelpMessage`)**
-
-- **What it does**: Prints a formatted list of all supported commands and their usage, grouped into General Commands, Daily
-Transaction Commands, and Profile & Goal Management sections.
-- **Justification**: Without a help command, users would have no way to discover what the app can do after launching it,
-making the CLI inaccessible to anyone unfamiliar with the codebase.
-- **Highlights**: Keeping showHelpMessage inside Ui rather than CommandHandler ensures that display formatting stays in the
-presentation layer. As teammates added new commands, the grouped structure made it easy to slot new entries into the
-right section without restructuring the whole output.
-
-**5. `sort category`, `sort recent`, and `handleSort` (`ExpenseList.java`, `CommandHandler.java`)**
+**4. `sort category`, `sort recent`, and `handleSort` (`ExpenseList.java`, `CommandHandler.java`)**
 
 - **What it does:** `sort category` reorders the expense list by each category's defined sort priority; `sort recent`
   restores the original insertion order. `handleSort` dispatches between these and `sort name` based on the argument
@@ -77,22 +67,6 @@ right section without restructuring the whole output.
   list class. `sortByRecent` restores order using an `insertionOrder` field stamped on each `Expense` at creation time,
   ensuring the original sequence survives any number of intermediate sorts. `handleSort` applies `arg.toLowerCase()`
   before the switch so the command is case-insensitive.
-
-**6. Tests (`CategoryTest.java`, `CommandHandlerTest.java`, `SummaryReportTest.java`)**
-
-- **What it does:** `CategoryTest` verifies `fromString` for all five categories including case-insensitive matching,
-  `isValid` for valid and invalid inputs, `compareTo` sort ordering, and that an unknown string throws
-  `IllegalArgumentException`. The `CommandHandlerTest` cases for `parseAmount` cover empty input, non-numeric strings,
-  negative values, and values exceeding two decimal places; the `parseDeleteIndex` cases cover empty input, decimal
-  indices, out-of-bounds indices, zero, and non-numeric strings. `SummaryReportTest` verifies correctness of computed
-  metrics across edge cases including a zero BTO goal, non-positive surplus, and a goal that has already been reached.
-- **Justification:** These are the most critical parsing and computation paths in the application — every expense add
-  and delete flows through the parsers, and every `summary` call flows through `SummaryReport`. Comprehensive tests here
-  catch regressions early and document the exact boundary conditions each component is expected to enforce.
-- **Highlights:** The `parseDeleteIndex` tests call `handleAdd` as setup rather than directly manipulating the list,
-  keeping the happy-path test realistic end-to-end while isolating each individual rejection case. The
-  `SummaryReportTest` constructs `Profile` and `ExpenseList` objects directly, confirming that `SummaryReport` can be
-  instantiated and verified entirely in isolation from the command loop.
 
 ---
 
