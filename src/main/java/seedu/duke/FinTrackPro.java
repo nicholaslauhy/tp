@@ -179,8 +179,18 @@ public class FinTrackPro {
         logState("setup.start", "collect name, finances and deadline", "scannerReady=true");
 
         // 1. Name handling
-        String name = ui.readLine(in, "What is your name?");
-        name = name.trim().isEmpty() ? "friend" : name.trim();
+        String name;
+        while (true) {
+            name = ui.readLine(in, "What is your name?").trim();
+            if (name.contains("|")) {
+                ui.printLine("Name cannot contain the '|' character. Try again.");
+                continue;
+            }
+            if (name.isEmpty()) {
+                name = "friend";
+            }
+            break;
+        }
         logState("setup.name.captured", "collect current savings", "name=" + name);
 
         ui.printLine("");
