@@ -7,7 +7,8 @@ import java.math.RoundingMode;
  * Calculates the BTO downpayment amounts for a given house price and contribution ratio.
  *
  * <p>The total downpayment is derived from a 2.5% base rate on the house price,
- * plus an additional 10% legal fee surcharge on that base amount.
+ * plus legal fees equal to 110% of that base amount (i.e. base × 1.1), giving a
+ * combined total of 5.25% of the house price (base × 2.1).
  * The user's personal share is then computed by applying their contribution ratio
  * to the total downpayment.</p>
  *
@@ -27,10 +28,10 @@ public class BtoCalculator {
      *
      * <p>Calculation breakdown:
      * <ol>
-     *   <li>Base downpayment = {@code housePrice × 0.025}</li>
-     *   <li>Legal fees       = {@code baseDownpayment × 1.1}</li>
-     *   <li>Total downpayment = {@code baseDownpayment + legalFees}</li>
-     *   <li>Your share       = {@code totalDownpayment × ratio}</li>
+     *   <li>Base downpayment  = {@code housePrice × 0.025}</li>
+     *   <li>Legal fees        = {@code baseDownpayment × 1.1} (110% of base)</li>
+     *   <li>Total downpayment = {@code baseDownpayment + legalFees} (= {@code housePrice × 0.0525})</li>
+     *   <li>Your share        = {@code totalDownpayment × ratio}</li>
      * </ol>
      * </p>
      *

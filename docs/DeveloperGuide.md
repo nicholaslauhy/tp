@@ -90,7 +90,7 @@ The app consists of the following main components:
     - Coordinates between UI, Data, and Storage components to fulfill user requests.
 
 4. **Data**: Holds the data of the app in memory.
-    - **Profile**: Manages user financial information (name, salary, savings, BTO goal, deadline).
+    - **Profile**: Manages user financial information (name, monthly allowance, savings, BTO goal, deadline).
     - **ExpenseList**: Manages the current month's regular expenses.
     - **Expense**: Represents a single expense entry with amount, category, and timestamp.
     - **RecurringExpenseList**: Manages monthly recurring expenses (e.g., subscriptions).
@@ -317,7 +317,7 @@ The ArchiveExpense sequence diagram illustrates two runtime flows: saving a mont
 In the save flow, the user enters the `save` command, and CommandHandler creates and uses MonthlyArchive, and invokes monthly save logic. MonthlyArchive
 iterates through current one-time and recurring expense collections, then writes archive rows into the month's archive file (MonthN).
 
-After successful persistence, control returns to CommandHandler, which continue month advancement and post-save updates. 
+After successful persistence, control returns to CommandHandler, which continues month advancement and post-save updates.
 
 In the list flow, the user enters `list`, and FinTrackPro requests archive data from MonthlyArchive for previous months. MonthlyArchive
 reads each MonthN file and reconstructs rows as List<ArchivedExpense>. FinTrackPro then iterates through these archived entries (name, amount, category)
@@ -336,10 +336,10 @@ components — `CommandHandler`, `SummaryReport`, `BtoCalculator` — read from 
 `BtoCalculator` encodes the HDB downpayment rules as a reusable calculation. Given a house price
 and contribution ratio, it computes two values at construction time:
 
-| Field              | Formula                                                        |
-|--------------------|----------------------------------------------------------------|
-| `totalDownpayment` | `housePrice × 0.025` (2.5% HDB downpayment) + 10% legal fees |
-| `yourShare`        | `totalDownpayment × contributionRatio`                         |
+| Field              | Formula                                                                                          |
+|--------------------|--------------------------------------------------------------------------------------------------|
+| `totalDownpayment` | `base = housePrice × 0.025`; `legalFees = base × 1.1`; `totalDownpayment = base + legalFees` (= `housePrice × 0.0525`) |
+| `yourShare`        | `totalDownpayment × contributionRatio`                                                           |
 
 Both values are rounded to 2 decimal places (HALF_UP). `yourShare` is stored in `Profile` as the
 user's `btoGoal` and is the target all savings progress is measured against. Calling
@@ -354,8 +354,9 @@ runs `performInitialSetup()` before entering the command loop. The steps are:
 1. The user is prompted for their **name**.
 2. The user provides their **current savings** and **monthly allowance** (validated by `InputUtil.readMoney()`).
 3. The user provides the **total house price** and their **contribution ratio** (0.0–1.0, validated by `InputUtil.readRatio()`).
-4. `BtoCalculator` computes the **total downpayment** (2.5% of house price + 10% legal fees) and the
-   user's **personal share** (total downpayment × ratio). This value is stored in `Profile` as `btoGoal`.
+4. `BtoCalculator` computes the **total downpayment** (base of 2.5% of house price, plus legal fees
+   equal to 110% of that base, totalling 5.25% of house price) and the user's **personal share**
+   (total downpayment × ratio). This value is stored in `Profile` as `btoGoal`.
 5. The user provides a **future deadline** (ISO `YYYY-MM-DD`, validated by `InputUtil.readFutureDate()`).
 6. The app displays the time remaining and the required monthly savings rate needed to meet the goal.
 
@@ -391,7 +392,7 @@ This ensures that the `Ui` component remains clean, while the logic is encapsula
 |--------------------------|----------------------------------------------------------------|
 | Distance to goal         | `btoGoal − currentSavings`                                     |
 | Monthly surplus          | `monthlyAllowance − (totalOneOffExpenses + recurringExpenses)` |
-| Percentage progress      | `(currentSavings / btoGoal) × 100`(capped at 100%)             |
+| Percentage progress      | `(currentSavings / btoGoal) × 100` (capped at 100%)            |
 | Estimated months         | `distanceToGoal ÷ monthlySurplus` (only if surplus > 0)        |
 | Monthly required savings | `distanceToGoal ÷ monthsUntilDeadline`                         |
 | Readiness level          | A qualitative status mapped from the progress percentage.      |
@@ -461,7 +462,7 @@ R | Netflix | 10.90 | ENTERTAINMENT
 
 This snapshot illustrates three key design points:
 
-1. **All six Profile fields are restored** — name, allowance, savings, BTO goal, ratio, deadline,
+1. **All seven Profile fields are restored** — name, allowance, savings, BTO goal, ratio, deadline,
    and the optional `currentMonth` field are all populated from the `P` line.
 2. **Insertion order is preserved** — `e1` has `insertionOrder = 0` and `e2` has
    `insertionOrder = 1`, meaning a subsequent `sort recent` command will restore this exact sequence.
@@ -670,7 +671,7 @@ prompted to establish a valid profile before testing profile-dependent commands.
 
 ---
 
-### Managing profile
+### Managing Profile
 
 1. **Updating monthly allowance**
    1. Prerequisites: Application started and profile initialised.
