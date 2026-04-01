@@ -12,12 +12,28 @@ import seedu.duke.ui.Ui;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommandHandlerTest {
+    private static class CapturingUi extends Ui {
+        private final List<String> lines = new ArrayList<>();
+
+        @Override
+        public void printLine(String message) {
+            lines.add(message);
+        }
+
+        public List<String> getLines() {
+            return lines;
+        }
+    }
+
     Ui ui = new Ui();
     Profile profile = new Profile();
     ExpenseList expenseList = new ExpenseList();
@@ -343,7 +359,7 @@ class CommandHandlerTest {
 
     @Test
     void handleSavings_negativeInputThenValid_updatesProfile() {
-        // "-500" fails the readMoney regex (no leading digit pattern match), loops; "500.00" accepted
+        // "-500" is rejected as negative, then "500.00" is accepted
         Scanner in = new Scanner(new ByteArrayInputStream("-500\n500.00\n".getBytes()));
         ch.handleSavings(in);
         assertEquals(new BigDecimal("500.00"), profile.getCurrentSavings());
@@ -383,10 +399,24 @@ class CommandHandlerTest {
 
     @Test
     void handleAllowance_negativeInputThenValid_updatesProfile() {
-        // "-100" fails the readMoney regex, loops; "100.00" is accepted
+        // "-100" is rejected as negative, then "100.00" is accepted
         Scanner in = new Scanner(new ByteArrayInputStream("-100\n100.00\n".getBytes()));
         ch.handleAllowance(in);
         assertEquals(new BigDecimal("100.00"), profile.getMonthlyAllowance());
+    }
+
+    @Test
+    void handleAllowance_negativeInputThenValid_showsNegativeMessageAndUpdatesProfile() {
+        CapturingUi testUi = new CapturingUi();
+        Profile testProfile = new Profile();
+        CommandHandler testHandler = new CommandHandler(testUi, testProfile,
+                new ExpenseList(), new RecurringExpenseList(), new Storage("fintrack.txt"));
+
+        Scanner in = new Scanner(new ByteArrayInputStream("-100\n100.00\n".getBytes()));
+        testHandler.handleAllowance(in);
+
+        assertEquals(new BigDecimal("100.00"), testProfile.getMonthlyAllowance());
+        assertTrue(testUi.getLines().contains("Negative amounts are not accepted. Please enter 0 or more."));
     }
 
     @Test
