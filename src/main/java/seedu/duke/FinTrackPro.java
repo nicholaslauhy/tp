@@ -180,7 +180,7 @@ public class FinTrackPro {
 
         // 1. Name handling
         String name = ui.readLine(in, "What is your name?");
-        name = name.isEmpty() ? "friend" : name.trim();
+        name = name.trim().isEmpty() ? "friend" : name.trim();
         logState("setup.name.captured", "collect current savings", "name=" + name);
 
         ui.printLine("");

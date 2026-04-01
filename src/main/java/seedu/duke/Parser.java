@@ -25,7 +25,7 @@ public class Parser {
      * Logger for recording command handler events.
      * Routes all output to the central {@code logs/fintrack.log} via {@link LoggerUtil}.
      */
-    private static final Logger logger = LoggerUtil.getLogger(CommandHandler.class);
+    private static final Logger logger = LoggerUtil.getLogger(Parser.class);
 
     /**
      * Extracts the command keyword from a raw input string.
@@ -58,12 +58,16 @@ public class Parser {
     public static int parseIndex(String indexString) {
         assert indexString != null : "Index string should not be null";
         if (!indexString.matches("\\d+")) {
+            return -1;
+        }
+        try {
+            // Log at FINE: readRatio is a low-level detail, not a key app event
+            logger.fine("parseIndex succeeded | index string: " + indexString);
+            return Integer.parseInt(indexString);
+        } catch (NumberFormatException e) {
             // Log at WARNING: user provided invalid format string which is rejected
             logger.warning("Index string rejected | reason: Index string does not match integer format");
             return -1;
         }
-        // Log at FINE: readRatio is a low-level detail, not a key app event
-        logger.fine("parseIndex succeeded | index string: " + indexString);
-        return Integer.parseInt(indexString);
     }
 }

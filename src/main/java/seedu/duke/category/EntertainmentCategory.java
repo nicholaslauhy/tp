@@ -11,7 +11,7 @@ public class EntertainmentCategory extends Category {
     /**
      * {@inheritDoc}
      *
-     * @return {@code "FOOD"}
+     * @return {@code "ENTERTAINMENT"}
      */
     @Override public String getName() {
         return "ENTERTAINMENT";
