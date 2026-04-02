@@ -1,0 +1,86 @@
+[2026-04-02 12:44:48] [INFO] seedu.duke.FinTrackPro - state=startup | expected=run() entry | storagePath=fintrack.txt
+[2026-04-02 12:44:48] [INFO] seedu.duke.FinTrackPro - state=run.start | expected=show welcome and load persisted data | profileName=friend
+[2026-04-02 12:44:48] [INFO] seedu.duke.ui.Ui - Displaying welcome message and ASCII logo.
+[2026-04-02 12:44:48] [INFO] seedu.duke.FinTrackPro - state=run.load.success | expected=check if initial setup is required | profileName=friend, btoGoal=0, oneOffCount=0, recurringCount=0
+[2026-04-02 12:44:48] [INFO] seedu.duke.FinTrackPro - state=run.profile.new | expected=perform initial setup workflow | btoGoal=0
+[2026-04-02 12:44:48] [INFO] seedu.duke.FinTrackPro - state=setup.start | expected=collect name, finances and deadline | scannerReady=true
+[2026-04-02 12:44:48] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: What is your name?
+[2026-04-02 12:44:53] [INFO] seedu.duke.FinTrackPro - state=setup.name.captured | expected=collect current savings | name=Jairus
+[2026-04-02 12:44:53] [INFO] seedu.duke.ui.Ui - Greeting user: Jairus
+[2026-04-02 12:44:53] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: How much do you currently have in savings?
+[2026-04-02 12:45:04] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 1000, formatted: $1,000.00
+[2026-04-02 12:45:04] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Confirm current savings as $1,000.00? (Y to confirm, any key to re-enter)
+[2026-04-02 12:45:09] [INFO] seedu.duke.FinTrackPro - state=setup.savings.captured | expected=collect monthly allowance | currentSavings=1000
+[2026-04-02 12:45:09] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: What is your monthly allowance? (in dollars)
+[2026-04-02 12:45:18] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 2000, formatted: $2,000.00
+[2026-04-02 12:45:18] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Confirm monthly allowance as $2,000.00? (Y to confirm, any key to re-enter)
+[2026-04-02 12:45:20] [INFO] seedu.duke.FinTrackPro - state=setup.allowance.captured | expected=collect house price | monthlyAllowance=2000
+[2026-04-02 12:45:20] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: What is the total value that you and your partner have to pay for the house? (in dollars)
+[2026-04-02 12:45:28] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 100000, formatted: $100,000.00
+[2026-04-02 12:45:28] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Confirm house price as $100,000.00? (Y to confirm, any key to re-enter)
+[2026-04-02 12:45:30] [INFO] seedu.duke.FinTrackPro - state=setup.house-price.captured | expected=collect contribution ratio | housePrice=100000
+[2026-04-02 12:45:30] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: What is your share of the contribution? (e.g., 0.6 for 60%):
+[2026-04-02 12:45:33] [INFO] seedu.duke.FinTrackPro - state=setup.ratio.captured | expected=calculate user BTO goal | contributionRatio=0.7
+[2026-04-02 12:45:33] [INFO] seedu.duke.FinTrackPro - state=setup.bto-calculated | expected=persist goal and collect deadline | totalDownpayment=5250.00, userShare=3675.00
+[2026-04-02 12:45:33] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 5250.00, formatted: $5,250.00
+[2026-04-02 12:45:33] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 3675.00, formatted: $3,675.00
+[2026-04-02 12:45:33] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: When do you need to save this money by? (e.g., 2028-10-24)
+[2026-04-02 12:45:52] [INFO] seedu.duke.FinTrackPro - state=setup.deadline.captured | expected=compute timeline and monthly requirement | deadline=2028-10-10, today=2026-04-02
+[2026-04-02 12:45:52] [INFO] seedu.duke.FinTrackPro - state=setup.goal.in-progress | expected=enter command loop | remainingToSave=2675.00, monthsLeft=31, monthlyNeeded=86.29
+[2026-04-02 12:45:52] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 86.29, formatted: $86.29
+[2026-04-02 12:45:52] [INFO] seedu.duke.FinTrackPro - state=setup.end | expected=caller stores name in profile | name=Jairus, btoGoal=3675.00
+[2026-04-02 12:45:52] [INFO] seedu.duke.FinTrackPro - state=run.profile.initialized | expected=enter command loop | profileName=Jairus, btoGoal=3675.00, deadline=2028-10-10
+[2026-04-02 12:45:52] [INFO] seedu.duke.FinTrackPro - state=run.command-loop | expected=read command until bye | profileName=Jairus, oneOffCount=0, recurringCount=0
+[2026-04-02 12:46:01] [INFO] seedu.duke.FinTrackPro - state=command.received | expected=parse command token | rawInput='save'
+[2026-04-02 12:46:01] [INFO] seedu.duke.FinTrackPro - state=command.parsed | expected=dispatch to command handler | command=save, rawInput='save'
+[2026-04-02 12:46:01] [INFO] seedu.duke.FinTrackPro - state=command.dispatch | expected=handler.handleSaveMonth | command=save
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - handleSaveMonth start | month=1 | monthlyAllowance=2000 | oneOffExpenses=0 | recurringExpenses=0 | monthlyExpenses=0 | unspentAmount=2000
+[2026-04-02 12:46:01] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\Desktop\TP\.\monthly_archives\Month1
+[2026-04-02 12:46:01] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 0one-off expenses and 0 recurring expenses
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - Month 1 expenses archived successfully
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - Transferred unspent amount to savings | amount=2000 | newSavings=3000
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 2000, formatted: $2,000.00
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - Expense list cleared for next month
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - Advanced to next month | currentMonth=2
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 3000, formatted: $3,000.00
+[2026-04-02 12:46:01] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 2000, formatted: $2,000.00
+[2026-04-02 12:46:01] [INFO] seedu.duke.data.Storage - Saving financial data to fintrack.txt
+[2026-04-02 12:46:01] [INFO] seedu.duke.data.Storage - Save successful.
+[2026-04-02 12:46:19] [INFO] seedu.duke.FinTrackPro - state=command.received | expected=parse command token | rawInput='save'
+[2026-04-02 12:46:19] [INFO] seedu.duke.FinTrackPro - state=command.parsed | expected=dispatch to command handler | command=save, rawInput='save'
+[2026-04-02 12:46:19] [INFO] seedu.duke.FinTrackPro - state=command.dispatch | expected=handler.handleSaveMonth | command=save
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - handleSaveMonth start | month=2 | monthlyAllowance=2000 | oneOffExpenses=0 | recurringExpenses=0 | monthlyExpenses=0 | unspentAmount=2000
+[2026-04-02 12:46:19] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 2 expenses to: C:\Users\jairu\Desktop\TP\.\monthly_archives\Month2
+[2026-04-02 12:46:19] [INFO] seedu.duke.data.MonthlyArchive - Month 2 archived successfully with 0one-off expenses and 0 recurring expenses
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - Month 2 expenses archived successfully
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - Transferred unspent amount to savings | amount=2000 | newSavings=5000
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 2000, formatted: $2,000.00
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - Expense list cleared for next month
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - Advanced to next month | currentMonth=3
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 5000, formatted: $5,000.00
+[2026-04-02 12:46:19] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 2000, formatted: $2,000.00
+[2026-04-02 12:46:19] [INFO] seedu.duke.data.Storage - Saving financial data to fintrack.txt
+[2026-04-02 12:46:19] [INFO] seedu.duke.data.Storage - Save successful.
+[2026-04-02 12:46:40] [INFO] seedu.duke.FinTrackPro - state=command.received | expected=parse command token | rawInput='add movie 10 other'
+[2026-04-02 12:46:40] [INFO] seedu.duke.FinTrackPro - state=command.parsed | expected=dispatch to command handler | command=add, rawInput='add movie 10 other'
+[2026-04-02 12:46:40] [INFO] seedu.duke.FinTrackPro - state=command.dispatch | expected=handler.handleAdd | command=add
+[2026-04-02 12:46:40] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: movie | amount: $10 | category: OTHER | new total: $10
+[2026-04-02 12:46:40] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 10, formatted: $10.00
+[2026-04-02 12:46:40] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 10, formatted: $10.00
+[2026-04-02 12:46:40] [INFO] seedu.duke.data.Storage - Saving financial data to fintrack.txt
+[2026-04-02 12:46:40] [INFO] seedu.duke.data.Storage - Save successful.
+[2026-04-02 12:46:45] [INFO] seedu.duke.FinTrackPro - state=command.received | expected=parse command token | rawInput='save'
+[2026-04-02 12:46:45] [INFO] seedu.duke.FinTrackPro - state=command.parsed | expected=dispatch to command handler | command=save, rawInput='save'
+[2026-04-02 12:46:45] [INFO] seedu.duke.FinTrackPro - state=command.dispatch | expected=handler.handleSaveMonth | command=save
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - handleSaveMonth start | month=3 | monthlyAllowance=2000 | oneOffExpenses=10 | recurringExpenses=0 | monthlyExpenses=10 | unspentAmount=1990
+[2026-04-02 12:46:45] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 3 expenses to: C:\Users\jairu\Desktop\TP\.\monthly_archives\Month3
+[2026-04-02 12:46:45] [INFO] seedu.duke.data.MonthlyArchive - Month 3 archived successfully with 1one-off expenses and 0 recurring expenses
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - Month 3 expenses archived successfully
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - Transferred unspent amount to savings | amount=1990 | newSavings=6990
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 1990, formatted: $1,990.00
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - Expense list cleared for next month
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - Advanced to next month | currentMonth=4
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 6990, formatted: $6,990.00
+[2026-04-02 12:46:45] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 2000, formatted: $2,000.00
+[2026-04-02 12:46:45] [INFO] seedu.duke.data.Storage - Saving financial data to fintrack.txt
+[2026-04-02 12:46:45] [INFO] seedu.duke.data.Storage - Save successful.

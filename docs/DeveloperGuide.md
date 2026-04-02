@@ -539,7 +539,7 @@ The following sequence of actions occurs during the load process:
 1. **FinTrackPro** calls `storage.load(profile, expenseList, recurringExpenseList)` at startup.
 2. **Storage** initializes a `Scanner` to read `fintrack.txt`. If the file does not exist, the method
    returns immediately and the application starts with a fresh in-memory state.
-3. For each line starting with `P`, **Storage** delegates to `loadProfile`, which invokes all six
+3. For each line starting with `P`, **Storage** delegates to `loadProfile`, which invokes the core
    setters on **Profile**: `setName`, `setMonthlyAllowance`, `setCurrentSavings`, `setBtoGoal`,
    `setContributionRatio`, and `setDeadline`.
 4. The 8th segment (`currentMonth`) and 9th segment (`housePrice`) are also loaded if present.
@@ -550,6 +550,25 @@ The following sequence of actions occurs during the load process:
 6. For lines starting with `R`, **Storage** delegates to `loadRecurring`, which adds a new
    `RecurringExpense` object to **RecurringExpenseList**.
 7. The `Scanner` is closed automatically via try-with-resources once EOF is reached.
+
+#### Relationship Between Storage and MonthlyArchive
+
+FinTrackPro uses two separate persistence mechanisms that serve distinct purposes.
+
+`Storage` manages `fintrack.txt`, which holds the user's active profile, current month's
+expenses, and recurring expenses. This file is read once on startup and written after
+every command via auto-save.
+
+`MonthlyArchive` is a separate component that manages the `monthly_archives/` folder.
+When the user runs the `save` command, `MonthlyArchive` writes both the current month's
+one-off and recurring expenses to a dedicated archive file (e.g., `Month1`, `Month2`).
+These files are read back during the `list` command to display historical month-by-month
+data.
+
+The two mechanisms are intentionally decoupled: `Storage` handles live session state
+while `MonthlyArchive` handles historical records. Neither reads from or writes to the
+other's files, keeping their responsibilities cleanly separated in line with the
+**Separation of Concerns** principle.
 
 #### Design Considerations
 

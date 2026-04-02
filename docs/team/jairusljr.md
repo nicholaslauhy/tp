@@ -110,6 +110,7 @@ inconsistencies across the DG (heading levels, anchor links, placeholder text re
 ### Review/Mentoring Contributions
 
 PRs reviewed (from most recent to least recent):
+- [PR #167](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/167)
 - [PR #147](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/147)
 - [PR #126](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/126)
 - [PR #117](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/117)
