@@ -95,6 +95,7 @@ milestone, and ensuring that all issues were relevant and tagged appropriately.
 
 Lastly, I assisted with the splitting of tasks to ensure even contribution within the group, and ensured that everyone knew the
 deadlines for each of the tasks that we were required to do.
+
 ---
 ### Review/mentoring contributions: <br>
 As the first person to start on the tP, I had to figure out how to pass Gradle checks and how the system works. I

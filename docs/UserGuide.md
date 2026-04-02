@@ -358,6 +358,7 @@ Watch this space for more updates!!
 ## Command Summary
 
 ### General Commands
+
 | Action                    | Format, Examples                                              |
 |---------------------------|---------------------------------------------------------------|
 | Viewing Help              | `help`                                                        |
@@ -365,6 +366,7 @@ Watch this space for more updates!!
 | Exit Program              | `bye`                                                         |
 
 ### Daily Transaction Commands
+
 | Action                    | Format, Examples                                 |
 |---------------------------|--------------------------------------------------|
 | Add Expense               | `add <name> <amount> <category> [recurring]`     |
@@ -373,6 +375,7 @@ Watch this space for more updates!!
 | Delete Recurring          | `deleterecurring <index>` eg `deleterecurring 1` |
 
 ### Other Commands
+
 | Action                    | Format, Examples                                                |
 |---------------------------|-----------------------------------------------------------------|
 | Sort Entries              | `sort <keyword>` e.g. `sort category` `sort recent` `sort name` |
