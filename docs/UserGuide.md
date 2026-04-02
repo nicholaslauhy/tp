@@ -16,9 +16,9 @@ Let's get started!
 4. Open Terminal(Mac) or Windows Powershell(Windows), ```cd``` into the folder you put the jar file in, and use the ```java -jar FinTrackPro.jar``` command to run the application. 
 5. You should see an introduction page asking for your name.
 6. Type the command in the command line and press Enter to execute it.
-7. You can refer to the [Features](#features-) page for details of each command. Have fun!!
+7. You can refer to the [Features](#features) page for details of each command. Have fun!!
 
-## Features 
+## Features
 
 * <b>View all commands:</b> [help](#viewing-help-help)
 * <b>Add more savings:</b> [savings](#add-more-savings-savings)
