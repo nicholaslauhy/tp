@@ -796,7 +796,7 @@ a valid profile before testing profile-dependent commands.
    2. Test case: `add dinner 200 FOOD`, then `summary`.
    3. Expected: Report shows Surplus: $800.00, Distance to Goal: $5000.00, and Estimate: 7 months.
    4. Test case: `add rent 900 UTILITIES` (Total expenses: $1100), then `summary`.
-   5. Expected: Report shows Surplus: -$100.00 and Estimate: "Goal unreachable (Negative or Zero Surplus)".
+   5. Expected: Report shows Surplus: -$100.00 and Estimate: "Infinite (Surplus is $0 or negative!)".
 
 2. **Readiness Level Mapping**
    1. Test case: Adjust savings so they are exactly 50% of the BTO goal. Run `summary`.
