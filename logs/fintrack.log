@@ -331,3 +331,136 @@
 [2026-03-18 12:29:05] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
 [2026-03-18 12:29:05] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
 [2026-03-18 12:29:05] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - Index string rejected | reason: Index string does not match integer format
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index -1 out of range, list size: 0
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: negative value -1
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: more than 2 decimal places, value: 1200.555
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: lunch | amount: $3.00 | category: FOOD | new total: $3.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: bus fare | amount: $2.00 | category: TRANSPORT | new total: $5.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: movie | amount: $10.00 | category: ENTERTAINMENT | new total: $15.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: electricity | amount: $50.00 | category: UTILITIES | new total: $65.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: misc | amount: $1.00 | category: OTHER | new total: $66.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: transport fare | amount: $5.00 | category: TRANSPORT | new total: $5.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: caifan lunch | amount: $4.00 | category: FOOD | new total: $9.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: movie | amount: $10.00 | category: ENTERTAINMENT | new total: $19.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: popcorn | amount: $6.00 | category: FOOD | new total: $25.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleSort executed | sort type: category
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleSort executed | sort type: recent
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: more than 2 decimal places, value: 7.009
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: empty input
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: non-numeric input 'hello'
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: lunch | amount: $10.50 | category: FOOD | new total: $10.50
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - handleAdd rejected | reason: insufficient arguments
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index 2 out of range, list size: 0
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: transport fare | amount: $5.00 | category: TRANSPORT | new total: $5.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: caifan lunch | amount: $4.00 | category: FOOD | new total: $9.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: movie | amount: $10.00 | category: ENTERTAINMENT | new total: $19.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: popcorn | amount: $6.00 | category: FOOD | new total: $25.00
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - handleSort rejected | unknown argument: 
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseAmount rejected | reason: empty input
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - handleAdd rejected | reason: invalid category HELLO
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: transport fare | amount: $5.00 | category: TRANSPORT | new total: $5.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: caifan lunch | amount: $4.00 | category: FOOD | new total: $9.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: movie | amount: $10.00 | category: ENTERTAINMENT | new total: $19.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: popcorn | amount: $6.00 | category: FOOD | new total: $25.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleSort executed | sort type: category
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - Index string rejected | reason: Index string does not match integer format
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index -1 out of range, list size: 0
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: transport fare | amount: $5.00 | category: TRANSPORT | new total: $5.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: caifan lunch | amount: $4.00 | category: FOOD | new total: $9.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: movie | amount: $10.00 | category: ENTERTAINMENT | new total: $19.00
+[2026-03-26 14:09:16] [INFO] seedu.duke.CommandHandler - handleAdd succeeded | name: popcorn | amount: $6.00 | category: FOOD | new total: $25.00
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - handleSort rejected | unknown argument: foo
+[2026-03-26 14:09:16] [WARNING] seedu.duke.CommandHandler - parseDeleteIndex rejected | reason: index 0 out of range, list size: 0
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [WARNING] seedu.duke.CommandHandler - readRatio unsuccessful | reason: invalid formatting
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-26 14:09:17] [WARNING] seedu.duke.CommandHandler - readFutureDate unsuccessful | reason: date input is not a future date
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-26 14:09:17] [WARNING] seedu.duke.CommandHandler - readMoney unsuccessful | reason: invalid formatting
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 0, formatted: $0.00
+[2026-03-26 14:09:17] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 12250, formatted: $12,250.00
+[2026-03-26 14:09:17] [INFO] seedu.duke.CommandHandler - formatMoney succeeded | amount: 10250.5, formatted: $10,250.50
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [WARNING] seedu.duke.CommandHandler - readRatio unsuccessful | reason: out of specified bounds
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter ratio:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-26 14:09:17] [WARNING] seedu.duke.CommandHandler - readFutureDate unsuccessful | reason: invalid formatting
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter date:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-26 14:09:17] [WARNING] seedu.duke.CommandHandler - readMoney unsuccessful | reason: invalid formatting
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-26 14:09:17] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: Enter amount:
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit9470128124460640803\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit10908969709240769239\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit10908969709240769239\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 1 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit13439467207879859400\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit3007039541909212790\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit3007039541909212790\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 1 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 2 expenses to: C:\Users\jairu\AppData\Local\Temp\junit3007039541909212790\monthly_archives\Month2
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 2 archived successfully with 1 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit11376872139827098573\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit4760093380455289183\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit4309310645447576186\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit8446731679078106419\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit11690748420633569042\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit11690748420633569042\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 1 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit11816300641542376354\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit11816300641542376354\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 0 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit3796678889823739265\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit11991933138855977612\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit17002538752716988307\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit17002538752716988307\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 1 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit4366920899875720769\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit18418473626103894635\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit12304632189312025303\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit8201165605519460934\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit8201165605519460934\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 0 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit1285970589770094972\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archiving Month 1 expenses to: C:\Users\jairu\AppData\Local\Temp\junit1285970589770094972\monthly_archives\Month1
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Month 1 archived successfully with 2 expenses
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit12532078006155058568\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit1898791171631117705\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit15119316010557624459\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit7295758998758658505\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit14874572900059297680\monthly_archives
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.MonthlyArchive - Archive directory created at: C:\Users\jairu\AppData\Local\Temp\junit1730764367649890028\monthly_archives
+[2026-03-26 14:09:17] [WARNING] seedu.duke.data.MonthlyArchive - Skipping malformed archived expense line: this line is malformed
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.Storage - Saving financial data to C:\Users\jairu\AppData\Local\Temp\junit2097624243418951936\test_data.txt
+[2026-03-26 14:09:17] [INFO] seedu.duke.data.Storage - Save successful.
+[2026-03-26 14:09:18] [WARNING] seedu.duke.data.Storage - No save file found. Starting fresh.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:18] [WARNING] seedu.duke.data.SummaryReport - Monthly surplus is non-positive; cannot estimate completion.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:18] [WARNING] seedu.duke.data.SummaryReport - Monthly surplus is non-positive; cannot estimate completion.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:18] [WARNING] seedu.duke.data.SummaryReport - BTO goal is zero; percentage set to 0.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Distance is zero or negative. Goal marked as reached.
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
+[2026-03-26 14:09:18] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
