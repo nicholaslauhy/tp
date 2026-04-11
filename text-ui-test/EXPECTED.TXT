@@ -31,7 +31,7 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 5 months and 22 days remaining.
+You have 1 years and 5 months and 12 days remaining.
 Nice! Based on your current savings, you have already met your goal.
 
 Type 'help' to view my currently supported commands!
@@ -70,8 +70,8 @@ Readiness Level: Ready - Time to sign that BTO!
 BTO Goal: $913.50 (your share + fees)
 Deadline: 2027-09-24 (18 months)
 
-Current Savings: $1,000.00 (109% reached)
-Distance to Goal: -$86.50
+Current Savings: $1,000.00 (100% reached)
+Distance to Goal: $0.00
 Adjusted Minimum Savings: $0.00 / month
 
 Monthly Allowance: $4,000.00
