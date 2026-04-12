@@ -456,17 +456,26 @@ public class CommandHandler {
 
     //@@ jairusljr
     /**
-     * Completely resets the user profile and expense list after confirmation.
+     * Completely resets the user profile and all expense lists after confirmation,
+     * then signals to the caller whether a re-setup sequence should be triggered.
+     *
+     * <p>If the user confirms with {@code "y"}, all in-memory data (profile, one-off expenses,
+     * and recurring expenses) is wiped and the save file is overwritten with the empty state.
+     * Returns {@code true} to indicate that {@link FinTrackPro} should immediately run
+     * {@code performInitialSetup()} without requiring the user to restart.</p>
+     *
+     * <p>If the user does not confirm, no data is modified and {@code false} is returned.</p>
+     *
      * @param in Scanner used for user confirmation.
+     * @return {@code true} if the reset was confirmed and completed; {@code false} if cancelled.
      */
-    public void handleReset(Scanner in) {
+    public boolean handleReset(Scanner in) {
         assert in != null : "Scanner should not be null";
 
         ui.printLine("WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: ");
         String response = ui.readLine(in, "").trim().toLowerCase();
 
         if (response.equals("y")) {
-            // Reset in-memory objects
             profile.reset();
             expenseList.clear();
             recurringExpenseList.clear();
@@ -474,20 +483,22 @@ public class CommandHandler {
             assert expenseList.getTotal().compareTo(BigDecimal.ZERO) == 0
                     : "Expense total should be zero after reset";
 
-            // Overwrite the save file with the empty data
             try {
                 storage.save(profile, expenseList, recurringExpenseList);
                 logger.info("handleReset executed | All data cleared and save file overwritten");
-                ui.printLine("System reset successful. Please restart or type 'bye' to exit.");
+                ui.printLine("System reset successful. Starting fresh setup...");
                 ui.printLine("");
             } catch (IOException e) {
                 logger.warning("handleReset | Disk write failed: " + e.getMessage());
                 ui.printLine("Error: Could not reset the save file on disk.");
             }
+            return true; // signals that re-setup is needed
+
         } else {
             logger.info("handleReset cancelled | user did not confirm");
             ui.printLine("Reset aborted. Your data is safe!");
             ui.printLine("");
+            return false;
         }
     }
 

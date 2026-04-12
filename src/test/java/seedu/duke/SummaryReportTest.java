@@ -51,7 +51,7 @@ public class SummaryReportTest {
 
         SummaryReport report = new SummaryReport(profile, expenses, recurringExpenses);
 
-        assertEquals(new BigDecimal("-2000"), report.distance);
+        assertEquals(new BigDecimal("0"), report.distance);;
         assertEquals("Reached! Go get that BTO!", report.estimate);
     }
 
@@ -111,7 +111,7 @@ public class SummaryReportTest {
 
         SummaryReport report = new SummaryReport(profile, expenses, recurringExpenses);
 
-        assertEquals(0, report.percentage);
+        assertEquals(100, report.percentage);
     }
 
     @Test

@@ -52,7 +52,8 @@ public class SummaryReport {
         assert monthlyAllowance.compareTo(BigDecimal.ZERO) >= 0 : "Allowance should not be negative";
 
         this.totalExpenditure = expenseList.getTotal().add(recurringExpenseList.getTotal());
-        this.distance = btoGoal.subtract(currentSavings);
+        BigDecimal rawDistance = btoGoal.subtract(currentSavings);
+        this.distance = rawDistance.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : rawDistance;
         this.monthlySurplus = monthlyAllowance.subtract(totalExpenditure);
 
         this.percentage = computePercentage();
@@ -109,22 +110,23 @@ public class SummaryReport {
     }
 
     /**
-     * Computes the percentage of the BTO goal reached.
-     * Returns {@code 0} if the BTO goal is zero or negative.
+     * Computes the percentage of the BTO goal reached, capped at 100%.
+     * Returns {@code 100} if the BTO goal is zero or negative, since the
+     * goal is considered already met.
      *
-     * @return percentage of goal reached, rounded to the nearest whole number.
+     * @return percentage of goal reached, capped at 100 and rounded to the nearest whole number.
      */
     private int computePercentage() {
-        if (btoGoal.compareTo(BigDecimal.ZERO) > 0) {
-            int calcPercentage = currentSavings.multiply(BigDecimal.valueOf(100))
-                    .divide(btoGoal, 0, RoundingMode.HALF_UP)
-                    .intValue();
-
-            assert calcPercentage >= 0 : "Percentage calculation resulted in negative value";
-            return calcPercentage;
+        if (btoGoal.compareTo(BigDecimal.ZERO) <= 0) {
+            logger.warning("BTO goal is zero; percentage set to 100 as goal is already met.");
+            return 100;
         }
-        logger.warning("BTO goal is zero; percentage set to 0.");
-        return 0;
+        int calcPercentage = currentSavings.multiply(BigDecimal.valueOf(100))
+                .divide(btoGoal, 0, RoundingMode.HALF_UP)
+                .intValue();
+
+        assert calcPercentage >= 0 : "Percentage calculation resulted in negative value";
+        return Math.min(calcPercentage, 100);
     }
 
     /**

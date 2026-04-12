@@ -18,6 +18,11 @@ Let's get started!
 6. Type the command in the command line and press Enter to execute it.
 7. You can refer to the [Features](#features) page for details of each command. Have fun!!
 
+## Notes about the command format
+- Words in `UPPER_CASE` are parameters to be supplied by the user. e.g. in `add <NAME> <AMOUNT> <CATEGORY>`, `NAME`, `AMOUNT` and `CATEGORY` are parameters.
+- Items in angle brackets `< >` are compulsory. e.g. `<NAME>` must be provided.
+- Items in square brackets `[ ]` are optional. e.g. `[RECURRING]` can be omitted.
+- 
 ## Features
 
 * <b>View all commands:</b> [help](#viewing-help-help)

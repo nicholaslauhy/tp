@@ -580,6 +580,22 @@ The following sequence of actions occurs during the save process:
 6. The `FileWriter` is closed automatically via try-with-resources, guaranteeing the file is flushed
    even if an exception occurs mid-write.
 
+The two `ref` frames in the diagram above are expanded below.
+
+**Writing each Expense** (`ref`: write each Expense):
+
+![Storage Save Expense Sub-diagram](diagram/StorageSave-sd1.png)
+
+For each expense in **ExpenseList**, `Storage` retrieves its fields and writes a single
+`E | name | amount | category | order` line to the `FileWriter`.
+
+**Writing each RecurringExpense** (`ref`: write each RecurringExpense):
+
+![Storage Save RecurringExpense Sub-diagram](diagram/StorageSave-sd2.png)
+
+For each entry in **RecurringExpenseList**, `Storage` retrieves its fields and writes a single
+`R | name | amount | category` line to the `FileWriter`.
+
 #### Sequence Diagram: Loading Data
 
 The load process occurs **once** during application startup, before the command loop begins. `Storage`

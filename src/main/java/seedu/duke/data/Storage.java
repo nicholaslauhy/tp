@@ -185,8 +185,16 @@ public class Storage {
         if (len == 2) { // Old format
             expenseList.add("Unnamed Expense", new BigDecimal(parts[1]), Category.fromString("OTHER"));
         } else if (len == 4) { // New format
+            if (!Category.isValid(parts[3])) {
+                logger.log(Level.WARNING, "Skipping expense with invalid category: " + parts[3]);
+                return;
+            }
             expenseList.add(parts[1], new BigDecimal(parts[2]), Category.fromString(parts[3]));
         } else if (len == 5) { // Format with insertion order
+            if (!Category.isValid(parts[3])) {
+                logger.log(Level.WARNING, "Skipping expense with invalid category: " + parts[3]);
+                return;
+            }
             expenseList.add(parts[1], new BigDecimal(parts[2]), Category.fromString(parts[3]),
                     Integer.parseInt(parts[4]));
         }

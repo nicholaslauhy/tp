@@ -108,6 +108,15 @@ public class FinTrackPro {
                     "btoGoal=" + profile.getBtoGoal());
             name = performInitialSetup(in);
             profile.setName(name);
+
+            try {
+                storage.save(profile, expenseList, recurringExpenseList);
+                logger.info("Initial profile saved to disk after setup.");
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "Failed to save after initial setup: " + e.getMessage(), e);
+                ui.printLine("Warning: Could not save your profile to disk.");
+            }
+
             logState("run.profile.initialized", "enter command loop",
                     "profileName=" + name
                             + ", btoGoal=" + profile.getBtoGoal()
@@ -396,7 +405,22 @@ public class FinTrackPro {
             logger.warning(
                     "state=command.dispatch.destructive | expected="
                             + "handler.handleReset with confirmation | command=reset");
-            handler.handleReset(in);
+            boolean wasReset = handler.handleReset(in);
+            if (wasReset) {
+                String newName = performInitialSetup(in);
+                profile.setName(newName);
+                try {
+                    storage.save(profile, expenseList, recurringExpenseList);
+                    logger.info("Post-reset setup saved to disk.");
+                } catch (IOException e) {
+                    logger.log(Level.WARNING, "Failed to save after post-reset setup: " + e.getMessage(), e);
+                    ui.printLine("Warning: Could not save your new profile to disk.");
+                }
+                ui.printLine("");
+                ui.printLine("Type 'help' to view my currently supported commands!");
+                ui.printLine("Type 'bye' to exit!");
+                ui.printLine("");
+            }
             break;
         case "sort":
             logState("command.dispatch", "handler.handleSort", "command=sort, rawInput='" + userInput + "'");
