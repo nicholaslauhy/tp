@@ -205,6 +205,7 @@ Month 1 Total: $88.30
 Total Expenditure (All Months + Recurring): $118.30
 ```
 <b>NOTE:</b> Sorting reorders the in-memory list immediately. Run `list` to see the updated order.
+<b>NOTE:</b> Sort only reorders the current month expenses.
 
 ### Deleting an entry: ```delete```
 Deletes the specified entry from the tracker.<br>
