@@ -64,6 +64,8 @@ individual needs to save and whether additional financing is required.
 - Wrote the following sections: `summary`, `storage`, `clear`, `reset`
 - Reviewed the entire UG to ensure consistent flow and tone, correcting formatting and
   wording issues across all sections
+- Fixed all inconsistencies flagged during PE dry run, including parameter format in
+  the `help` command output and ensuring consistency across all command sections
 
 ---
 
@@ -85,11 +87,17 @@ Wrote the following sections:
 UML diagrams created:
 - Storage Class Diagram
 - Storage Load Sequence Diagram
-- Storage Save Sequence Diagram
-- Storage Object Diagram 
+- Storage Save Sequence Diagram (with two `sd` sub-diagrams for `ref` frames)
+- Storage Object Diagram (in-memory state snapshot after `Storage#load()`)
 
 Updated the Table of Contents to reflect all teammates' sections, and resolved formatting
 inconsistencies across the DG (heading levels, anchor links, placeholder text removal).
+
+Added test cases for:
+- Storage and Data Integrity (Section 7.1.8) including auto-save verification,
+  corrupted data handling, backward compatibility, final save on clean exit, and
+  graceful stream closure
+- System reset flow reflecting immediate re-setup without requiring restart
 
 ---
 
@@ -105,11 +113,20 @@ inconsistencies across the DG (heading levels, anchor links, placeholder text re
   everyone aligned on deadlines throughout the project lifecycle
 - Wrote JUnit tests for `CommandHandler`, `ExpenseList`, `Storage`, and `SummaryReport`,
   and enabled assertions in `build.gradle` for runtime invariant checking
+- Fixed bugs raised during PE dry run including invalid category crash on load,
+  percentage cap exceeding 100% in `SummaryReport`, negative distance to goal display,
+  and inconsistent readiness level when BTO goal is zero
+- Implemented post-reset immediate re-setup flow so users no longer need to restart
+  the application after a reset
+- Ensured `fintrack.txt` is created immediately after initial setup completes, preventing
+  data loss if the app is closed before the first command is entered
 ---
 
 ### Review/Mentoring Contributions
 
 PRs reviewed (from most recent to least recent):
+- [PR #244](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/244)
+- [PR #173](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/173)
 - [PR #167](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/167)
 - [PR #147](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/147)
 - [PR #126](https://github.com/AY2526S2-CS2113-T14-2/tp/pull/126)
