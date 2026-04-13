@@ -307,7 +307,7 @@ public class SummaryReportTest {
         profile.setCurrentSavings(new BigDecimal("4000"));
         profile.setMonthlyAllowance(new BigDecimal("4000"));
 
-        // Set deadline to exactly 10 months from now 
+        // Set deadline to exactly 10 months from now
         profile.setDeadline(LocalDate.now().plusMonths(10));
 
         ExpenseList expenses = new ExpenseList();

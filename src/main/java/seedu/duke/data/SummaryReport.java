@@ -10,8 +10,9 @@ import seedu.duke.util.LoggerUtil;
 /**
  * Represents a snapshot of the user's BTO savings readiness.
  *
- * <p>Computed from a {@link Profile} and {@link ExpenseList} at the time of construction.
- * All fields are immutable after instantiation.</p>
+ * <p>Computed from a {@link Profile}, {@link ExpenseList}, and {@link RecurringExpenseList}.
+ * This report is simulation-aware; it adjusts the remaining timeline and required
+ * savings based on the simulated months advanced in the profile.</p>
  */
 public class SummaryReport {
     private static final Logger logger = LoggerUtil.getLogger(SummaryReport.class);
@@ -31,10 +32,14 @@ public class SummaryReport {
     public final int adjustedMonthsLeft;
 
     /**
-     * Constructs a {@code SummaryReport} from the user's current profile and expense list.
+     * Constructs a {@code SummaryReport} from the user's current profile and expense lists.
      *
-     * @param profile     the user's financial profile.
-     * @param expenseList the user's current list of expenses.
+     * <p>Calculates financial metrics including the "Adjusted Minimum Savings," which
+     * factors in simulated time elapsed via {@code profile.getCurrentMonth()}.</p>
+     *
+     * @param profile              the user's financial profile.
+     * @param expenseList          the user's current list of one-off expenses.
+     * @param recurringExpenseList the user's current list of recurring expenses.
      */
     public SummaryReport(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList) {
         assert profile != null : "Profile cannot be null for report generation";
@@ -133,10 +138,12 @@ public class SummaryReport {
 
     /**
      * Computes a human-readable estimate of when the BTO goal will be reached.
+     * * <p>Logs a warning if the estimated completion time exceeds the simulation-adjusted
+     * months remaining until the deadline.</p>
      *
      * @return {@code "Reached! Go get that BTO!"} if the goal is met,
-     *         {@code "Infinite (Surplus is $0 or negative!)"} if no progress can be made,
-     *         or the estimated number of months as a {@code String} otherwise.
+     * {@code "Infinite (Surplus is $0 or negative!)"} if no progress can be made,
+     * or the estimated number of months as a {@code String} otherwise.
      */
     private String computeEstimate() {
         if (distance.compareTo(BigDecimal.ZERO) <= 0) {
