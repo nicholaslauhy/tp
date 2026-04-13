@@ -443,14 +443,16 @@ transforms raw financial figures into actionable insights.
 The `SummaryReport` constructor performs all necessary financial computations at the moment of instantiation.
 This ensures that the `Ui` component remains clean, while the logic is encapsulated within the report object.
 
-| Metric                   | Logic / Formula                                                             |
-|--------------------------|-----------------------------------------------------------------------------|
-| Distance to goal         | `btoGoal − currentSavings`                                                  |
-| Monthly surplus          | `monthlyAllowance − (totalOneOffExpenses + recurringExpenses)`              |
-| Percentage progress      | `(currentSavings / btoGoal) × 100` (capped at 100%)                         |
-| Estimated months         | `distanceToGoal ÷ monthlySurplus` rounded up (ceiling), only if surplus > 0 |
-| Monthly required savings | `distanceToGoal ÷ monthsUntilDeadline`                                      |
-| Readiness level          | A qualitative status mapped from the progress percentage.                   |
+| Metric                   | Logic / Formula                                                                               |
+|--------------------------|-----------------------------------------------------------------------------------------------|
+| Distance to goal         | `btoGoal − currentSavings`                                                                    |
+| Monthly surplus          | `monthlyAllowance − (totalOneOffExpenses + recurringExpenses)`                                |
+| Percentage progress      | `(currentSavings / btoGoal) × 100` (capped at 100%)                                           |
+| Estimated months         | `distanceToGoal ÷ monthlySurplus` rounded up (ceiling), only if surplus > 0                   |
+| Months remaining (real)  | `Period.between(today, profile.deadline)` rounded up to the next month                        |
+| Adjusted months left     | `realMonthsRemaining − (profile.currentMonth − 1)`, with a floor of 1 to prevent division errors. |
+| Monthly required savings | `distanceToGoal ÷ adjustedMonthsLeft`                                                         |
+| Readiness level          | A qualitative status mapped from the progress percentage.                                     |
 
 The computed report is passed to `Ui.showSummaryReport()` for display.
 
@@ -977,3 +979,11 @@ a valid profile before testing profile-dependent commands.
     2. Expected: Readiness Level shows `ON TRACK`.
     3. Test case: Adjust savings to meet or exceed the BTO goal. Run `summary`.
     4. Expected: Readiness Level shows `READY`.
+
+3. **Simulation-Aware Timeline Accuracy**
+    1. Prerequisites: Profile initialized with a deadline 10 months away and a $5000 distance to goal.
+    2. Test case: Run `summary`. Expected: Months remaining shows 10, Monthly Required shows $500.00.
+    3. Test case: Run `save`, then run `summary`. Expected: Months remaining shows 9, 
+       Monthly Required shows approximately $555.56.
+    4. Test case: Run `save` 10 more times (past the deadline), then run `summary`. Expected: Months remaining shows 1, 
+       preventing application crash and showing the final catch-up amount.

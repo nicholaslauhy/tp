@@ -24,13 +24,13 @@ individual needs to save and whether additional financing is required.
 - **Highlights:** Required defensive per-line `try-catch` for corrupted data, and a
   backward-compatibility check for older save files missing the `currentMonth` field.
 
-**2. BTO Summary Report (`summary` command)**
-- **What it does:** Generates a real-time BTO readiness report showing surplus, distance
-  to goal, estimated months, and a readiness level (`BARELY STARTED` → `READY`).
-- **Justification:** Without a summary, users have no way to gauge whether their spending
-  habits allow them to meet their BTO deadline.
-- **Highlights:** All metrics are computed at instantiation inside `SummaryReport`,
-  keeping `Ui` entirely free of business logic.
+**1. Simulation-Aware BTO Summary Report (`summary` command)**
+- **What it does:** Generates a real-time BTO readiness report. It was upgraded to be **simulation-aware**, 
+  calculating metrics based on simulated months advanced via the `save` command.
+- **Justification:** Allows users to model long-term savings. Without an adjusted timeline, "Monthly Required Savings" 
+  would remain static and fail to reflect the increasing urgency as the BTO deadline approaches in the simulation.
+- **Highlights:** Implemented `adjustedMonthsLeft` with a defensive "floor" of 1 month to prevent division-by-zero 
+  errors. All metrics are computed at instantiation inside `SummaryReport`, keeping `Ui` logic-free.
 
 **3. `clear` and `reset` Commands**
 - **What it does:** `clear` wipes the current month's one-off expenses with confirmation,
@@ -66,6 +66,9 @@ individual needs to save and whether additional financing is required.
   wording issues across all sections
 - Fixed all inconsistencies flagged during PE dry run, including parameter format in
   the `help` command output and ensuring consistency across all command sections
+- Updated the `summary` and `save` sections to explain the interaction between month advancement and financial readiness.
+- Added clear explanations for "Adjusted Minimum Savings" and "Estimated Goal Achievement" to help users understand 
+  simulation-adjusted results.
 
 ---
 
@@ -120,6 +123,8 @@ Added test cases for:
   the application after a reset
 - Ensured `fintrack.txt` is created immediately after initial setup completes, preventing
   data loss if the app is closed before the first command is entered
+- Expanded the test suite for `SummaryReportTest` to include simulation advancement, boundary checks for 
+  readiness levels, and rounding-up logic for fractional months.
 ---
 
 ### Review/Mentoring Contributions

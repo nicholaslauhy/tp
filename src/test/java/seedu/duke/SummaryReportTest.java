@@ -299,4 +299,47 @@ public class SummaryReportTest {
         assertEquals(new BigDecimal("2500"), report.monthlySurplus);
         assertEquals(new BigDecimal("0"), report.totalExpenditure);
     }
+
+    @Test
+    void summaryReport_simulatedMonthAdvancement_recalculatesRequiredSavings() {
+        Profile profile = new Profile();
+        profile.setBtoGoal(new BigDecimal("10000"));
+        profile.setCurrentSavings(new BigDecimal("4000"));
+        profile.setMonthlyAllowance(new BigDecimal("4000"));
+
+        // Set deadline to exactly 10 months from now
+        profile.setDeadline(LocalDate.now().plusMonths(10));
+
+        ExpenseList expenses = new ExpenseList();
+        RecurringExpenseList recurring = new RecurringExpenseList();
+
+        // 1. Test Initial Month (currentMonth = 1)
+        // realMonthsRemaining = 10, simulatedElapsedMonths = 0
+        // adjustedMonthsLeft = 10
+        // monthlyRequired = 6000 / 10 = 600.00
+        SummaryReport reportMonth1 = new SummaryReport(profile, expenses, recurring);
+        assertEquals(10, reportMonth1.adjustedMonthsLeft);
+        assertEquals(new BigDecimal("600.00"), reportMonth1.monthlyRequired);
+
+        // 2. Simulate month advancement (simulate calling 'save' command)
+        profile.setCurrentMonth(3);
+
+        // 3. Test Advanced Month (currentMonth = 3)
+        // realMonthsRemaining = 10, simulatedElapsedMonths = 2
+        // adjustedMonthsLeft = 10 - 2 = 8
+        // monthlyRequired = 6000 / 8 = 750.00
+        SummaryReport reportMonth3 = new SummaryReport(profile, expenses, recurring);
+        assertEquals(8, reportMonth3.adjustedMonthsLeft);
+        assertEquals(new BigDecimal("750.00"), reportMonth3.monthlyRequired);
+
+        // 4. Test Simulation Floor (simulate advancing past the deadline)
+        profile.setCurrentMonth(15);
+
+        // realMonthsRemaining = 10, simulatedElapsedMonths = 14
+        // adjustedMonthsLeft = Max(1, 10 - 14) = 1
+        // monthlyRequired = 6000 / 1 = 6000.00
+        SummaryReport reportPastDeadline = new SummaryReport(profile, expenses, recurring);
+        assertEquals(1, reportPastDeadline.adjustedMonthsLeft);
+        assertEquals(new BigDecimal("6000.00"), reportPastDeadline.monthlyRequired);
+    }
 }

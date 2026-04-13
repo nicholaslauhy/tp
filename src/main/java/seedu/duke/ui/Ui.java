@@ -181,7 +181,7 @@ public class Ui {
 
         assert monthsLeft >= 0 : "Months left should not be negative";
 
-        printLine("Deadline: " + report.deadline + " (" + monthsLeft + " months)");
+        System.out.println("Deadline: " + report.deadline + " (" + report.adjustedMonthsLeft + " months)");
         printLine("");
         String savingsLine = InputUtil.formatMoney(report.currentSavings) + " (" + report.percentage + "% reached)";
         printLine("Current Savings: " + savingsLine);

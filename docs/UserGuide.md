@@ -241,7 +241,8 @@ Recurring Total: $0
 
 ### View financial summary: ```summary```
 Generates a comprehensive financial report based on your profile and current spending habits. Calculates your monthly
-surplus, distance to your goal, and provides an estimate of how many months it will take to secure your downpayment.
+surplus, distance to your goal, and provides an estimate of how many months it will take to secure your downpayment 
+based on your current month's spending, adjusted for any months already advanced via the `save` command.
 <br>The Readiness Level reflects your percentage progress toward your BTO goal, ranging from `Barely Started - Do start saving soon` to 
 `Ready - Time to sign that BTO!`.<br>
 <b>Format:</b> ```summary``` <br>
@@ -311,6 +312,7 @@ Monthly Allowance: $4,000.00
 - Any unspent allowance (monthly allowance minus total expenses) is automatically transferred to your savings balance.
 - Typically a BTO downpayment is due within 9 months of securing the flat. Hence, it should not be used beyond Month 9, though it can be used for as many months as the user wants to simulate.
 - If your total expenses exceed your monthly allowance, no transfer occurs and an overspend message is shown.
+- Advancing the month with save will reduce the number of months remaining in your summary report. This may increase your Adjusted Minimum Savings if you have not yet reached your goal, reflecting the shortened timeline.
 
 ### Data Storage
 FinTrackPro data is saved in the hard disk automatically after any command that changes your data (e.g., add, delete, allowance, ratio). There is no need to save manually.<br>

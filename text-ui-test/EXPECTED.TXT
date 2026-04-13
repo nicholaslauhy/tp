@@ -31,7 +31,7 @@ Your personal contribution needed: $913.50
 
 When do you need to save this money by? (e.g., 2028-10-24)
 
-You have 1 years and 5 months and 11 days remaining.
+You have 1 years and 5 months and 10 days remaining.
 Nice! Based on your current savings, you have already met your goal.
 
 Type 'help' to view my currently supported commands!
@@ -136,7 +136,7 @@ Clear cancelled. Your data is still there, bro.
 
 Did you mean "reset"? Try again!
 
-WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: 
+WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue:
 Reset aborted. Your data is safe!
 
 Did you mean "bye"? Try again!
@@ -167,11 +167,11 @@ Profile & Goal Management
 User: James Gosling
 Readiness Level: Secure - Keep it up, you're almost there!
 BTO Goal: $1,309.35 (your share + fees)
-Deadline: 2027-09-24 (18 months)
+Deadline: 2027-09-24 (17 months)
 
 Current Savings: $1,200.00 (92% reached)
 Distance to Goal: $109.35
-Adjusted Minimum Savings: $6.08 / month
+Adjusted Minimum Savings: $6.43 / month
 
 Monthly Allowance: $100.00
 Total Expenditure: $0.00
@@ -212,7 +212,7 @@ Save cancelled. Your current month's data is still editable.
 WARNING: This will permanently delete ALL one-off expenses. Are you sure? (Input Y to clear)
 Clear cancelled. Your data is still there, bro.
 
-WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: 
+WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue:
 Reset aborted. Your data is safe!
 
 Goodbye James Gosling. Stay disciplined and get that house that you always wanted!

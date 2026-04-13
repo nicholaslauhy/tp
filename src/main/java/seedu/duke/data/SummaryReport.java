@@ -10,8 +10,9 @@ import seedu.duke.util.LoggerUtil;
 /**
  * Represents a snapshot of the user's BTO savings readiness.
  *
- * <p>Computed from a {@link Profile} and {@link ExpenseList} at the time of construction.
- * All fields are immutable after instantiation.</p>
+ * <p>Computed from a {@link Profile}, {@link ExpenseList}, and {@link RecurringExpenseList}.
+ * This report is simulation-aware; it adjusts the remaining timeline and required
+ * savings based on the simulated months advanced in the profile.</p>
  */
 public class SummaryReport {
     private static final Logger logger = LoggerUtil.getLogger(SummaryReport.class);
@@ -28,12 +29,17 @@ public class SummaryReport {
     public final BigDecimal totalExpenditure;
     public final BigDecimal monthlyRequired;
     public final String readinessLevel;
+    public final int adjustedMonthsLeft;
 
     /**
-     * Constructs a {@code SummaryReport} from the user's current profile and expense list.
+     * Constructs a {@code SummaryReport} from the user's current profile and expense lists.
      *
-     * @param profile     the user's financial profile.
-     * @param expenseList the user's current list of expenses.
+     * <p>Calculates financial metrics including the "Adjusted Minimum Savings," which
+     * factors in simulated time elapsed via {@code profile.getCurrentMonth()}.</p>
+     *
+     * @param profile              the user's financial profile.
+     * @param expenseList          the user's current list of one-off expenses.
+     * @param recurringExpenseList the user's current list of recurring expenses.
      */
     public SummaryReport(Profile profile, ExpenseList expenseList, RecurringExpenseList recurringExpenseList) {
         assert profile != null : "Profile cannot be null for report generation";
@@ -63,22 +69,23 @@ public class SummaryReport {
         // Calculate months remaining
         LocalDate today = LocalDate.now();
         Period period = Period.between(today, profile.getDeadline());
-        int monthsLeft = period.getYears() * 12 + period.getMonths();
+        int realMonthsRemaining = period.getYears() * 12 + period.getMonths();
         if (period.getDays() > 0) {
-            monthsLeft++; // Round up for partial months
+            realMonthsRemaining++; // Round up for partial months [cite: 193]
         }
-        if (monthsLeft <= 0) {
-            monthsLeft = 1;
-        }
+
+        // Subtract months already elapsed based on app month counter
+        int simulatedElapsedMonths = Math.max(0, profile.getCurrentMonth() - 1);
+        this.adjustedMonthsLeft = Math.max(1, realMonthsRemaining - simulatedElapsedMonths);
 
         // Calculate Distance to Goal / Months Remaining
         BigDecimal distanceToGoal = profile.getBtoGoal().subtract(profile.getCurrentSavings());
 
-        if (distanceToGoal.compareTo(BigDecimal.ZERO) <= 0) {
+        if (this.distance.compareTo(BigDecimal.ZERO) <= 0) {
             this.monthlyRequired = BigDecimal.ZERO;
         } else {
-            this.monthlyRequired = distanceToGoal.divide(
-                    BigDecimal.valueOf(monthsLeft), 2, java.math.RoundingMode.HALF_UP);
+            this.monthlyRequired = this.distance.divide(
+                    BigDecimal.valueOf(this.adjustedMonthsLeft), 2, RoundingMode.HALF_UP);
         }
 
         logger.fine("Report values - Distance: " + distance + ", Surplus: " + monthlySurplus);
@@ -131,10 +138,12 @@ public class SummaryReport {
 
     /**
      * Computes a human-readable estimate of when the BTO goal will be reached.
+     * * <p>Logs a warning if the estimated completion time exceeds the simulation-adjusted
+     * months remaining until the deadline.</p>
      *
      * @return {@code "Reached! Go get that BTO!"} if the goal is met,
-     *         {@code "Infinite (Surplus is $0 or negative!)"} if no progress can be made,
-     *         or the estimated number of months as a {@code String} otherwise.
+     *     {@code "Infinite (Surplus is $0 or negative!)"} if no progress can be made,
+     *     or the estimated number of months as a {@code String} otherwise.
      */
     private String computeEstimate() {
         if (distance.compareTo(BigDecimal.ZERO) <= 0) {
@@ -154,6 +163,12 @@ public class SummaryReport {
         int months = monthsBig.intValue();
 
         assert months >= 0 : "Estimated months should be a positive value";
+
+        int estimatedMonths = monthsBig.intValue();
+        if (estimatedMonths > adjustedMonthsLeft) {
+            logger.warning("User rate of saving is insufficient for the deadline.");
+        }
+
         return months + " months";
     }
 }
