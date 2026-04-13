@@ -424,7 +424,7 @@ public class FinTrackPro {
             break;
         case "sort":
             logState("command.dispatch", "handler.handleSort", "command=sort, rawInput='" + userInput + "'");
-            handler.handleSort(userInput);
+            handler.handleSort(userInput.trim());
             break;
         case "save":
             logger.info("state=command.dispatch | expected=handler.handleSaveMonth | command=save");

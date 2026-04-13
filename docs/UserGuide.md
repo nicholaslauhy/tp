@@ -167,7 +167,7 @@ Total Expenditure (All Months + Recurring): $118.30
 ```
 
 ### Sorting the expenditure list: ```sort <keyword>```
-Sorts the expenditure list by category or by recency. Valid keywords are `name`, `category` and `recent`.<br>
+Sorts the expenditure list by category, by recency or by alphabetical order. Valid keywords are `name`, `category` and `recent`.<br>
 <b>Format:</b> ```sort category``` or ``` sort name ``` or ```sort recent```<br>
 <b>Example of Usage:</b> ``` sort name ``` or ```sort category```<br>
 <b>Expected Output:</b>
@@ -205,6 +205,7 @@ Month 1 Total: $88.30
 Total Expenditure (All Months + Recurring): $118.30
 ```
 <b>NOTE:</b> Sorting reorders the in-memory list immediately. Run `list` to see the updated order.
+<b>NOTE:</b> Sort only reorders the current month expenses.
 
 ### Deleting an entry: ```delete```
 Deletes the specified entry from the tracker.<br>
