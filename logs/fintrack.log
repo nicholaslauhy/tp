@@ -744,3 +744,17 @@
 [2026-04-13 12:44:19] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
 [2026-04-13 12:44:19] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: friend
 [2026-04-13 12:44:19] [INFO] seedu.duke.data.SummaryReport - Generating SummaryReport for user: Nick
+[2026-04-13 18:30:25] [INFO] seedu.duke.FinTrackPro - state=startup | expected=run() entry | storagePath=fintrack.txt
+[2026-04-13 18:30:25] [INFO] seedu.duke.FinTrackPro - state=run.start | expected=show welcome and load persisted data | profileName=friend
+[2026-04-13 18:30:25] [INFO] seedu.duke.ui.Ui - Displaying welcome message and ASCII logo.
+[2026-04-13 18:30:25] [INFO] seedu.duke.FinTrackPro - state=run.load.success | expected=check if initial setup is required | profileName=jairus, btoGoal=15750.00, oneOffCount=14, recurringCount=0
+[2026-04-13 18:30:25] [INFO] seedu.duke.FinTrackPro - state=run.profile.existing | expected=enter command loop | profileName=jairus, btoGoal=15750.00
+[2026-04-13 18:30:25] [INFO] seedu.duke.FinTrackPro - state=run.command-loop | expected=read command until bye | profileName=jairus, oneOffCount=14, recurringCount=0
+[2026-04-13 18:30:59] [INFO] seedu.duke.FinTrackPro - state=command.received | expected=parse command token | rawInput='reset'
+[2026-04-13 18:30:59] [INFO] seedu.duke.FinTrackPro - state=command.parsed | expected=dispatch to command handler | command=reset, rawInput='reset'
+[2026-04-13 18:30:59] [WARNING] seedu.duke.FinTrackPro - state=command.dispatch.destructive | expected=handler.handleReset with confirmation | command=reset
+[2026-04-13 18:31:01] [INFO] seedu.duke.data.Storage - Saving financial data to fintrack.txt
+[2026-04-13 18:31:01] [INFO] seedu.duke.data.Storage - Save successful.
+[2026-04-13 18:31:01] [INFO] seedu.duke.CommandHandler - handleReset executed | All data cleared and save file overwritten
+[2026-04-13 18:31:01] [INFO] seedu.duke.FinTrackPro - state=setup.start | expected=collect name, finances and deadline | scannerReady=true
+[2026-04-13 18:31:01] [INFO] seedu.duke.ui.Ui - Displaying prompt to user: What is your name?
