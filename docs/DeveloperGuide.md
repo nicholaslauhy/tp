@@ -533,10 +533,12 @@ R | Netflix | 10.90 | ENTERTAINMENT
 
 This snapshot illustrates three key design points:
 
-1. **All Profile fields are restored** — all eight fields (name, allowance, savings, BTO goal, ratio,
-   deadline, `currentMonth`, `housePrice`) are written by the current save format and fully restored
-   on load. The checks for missing 8th and 9th segments exist only for backward compatibility with
-   save files produced by older versions of the application.
+1. **All Profile fields are restored** — all eight data fields (name, allowance, savings,
+    BTO goal, ratio, deadline, `currentMonth`, and `housePrice`) are written by the current
+    save format and fully restored on load. The `loadProfile` method checks for the presence
+    of the 8th token (`currentMonth`, at index 7) and 9th token (`housePrice`, at index 8)
+    to maintain backward compatibility with save files from older versions of the application
+    that did not yet include these fields.
 2. **Insertion order is preserved** — `e1` has `insertionOrder = 0` and `e2` has
    `insertionOrder = 1`, meaning a subsequent `sort recent` command will restore this exact sequence.
 3. **Recurring and one-off expenses are held separately** — `expenseList` and `recurringList` are
@@ -868,9 +870,12 @@ a valid profile before testing profile-dependent commands.
 2. **System reset**
     1. Prerequisites: Application is running with an existing profile and expenses.
     2. Test case: `reset`, then enter `y` when prompted. Expected: Success message shown. All profile data and all
-       expense lists (one-off and recurring) are wiped.
-    3. Test case: Restarting the app after a successful `reset`. Expected: App triggers the "Initial Setup" sequence (
-       asking for name, etc.) as the save file is now empty.
+       expense lists (one-off and recurring) are wiped. Initial Setup sequence begins immediately in the same
+       session without requiring a restart.
+    3. Test case: `reset`, then enter `n` when prompted. Expected: Reset aborted message shown. All data remains
+       unchanged.
+    4. Test case: Complete the Initial Setup sequence after a successful reset. Expected: New profile is saved to
+       disk immediately. Running `list` shows an empty expense list reflecting the fresh state.
 
 ---
 
@@ -933,7 +938,8 @@ a valid profile before testing profile-dependent commands.
 2. **Handling corrupted data in fintrack.txt**
     1. Prerequisites: Application is closed.
     2. Test case: Manually edit `fintrack.txt` and change an expense amount to `abc`. Start the application.
-    3. Expected: Application starts normally. Other valid data is loaded successfully.
+    3. Expected: Application starts normally. The corrupted line is skipped and other valid data is loaded successfully.
+       A warning entry is written to the log file.
 
 3. **Backward compatibility (Missing Month Data)**
     1. Prerequisites: Application is closed.
