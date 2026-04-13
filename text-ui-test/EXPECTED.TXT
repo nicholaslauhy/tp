@@ -167,7 +167,7 @@ Profile & Goal Management
 User: James Gosling
 Readiness Level: Secure - Keep it up, you're almost there!
 BTO Goal: $1,309.35 (your share + fees)
-Deadline: 2027-09-24 (18 months)
+Deadline: 2027-09-24 (17 months)
 
 Current Savings: $1,200.00 (92% reached)
 Distance to Goal: $109.35
@@ -212,7 +212,7 @@ Save cancelled. Your current month's data is still editable.
 WARNING: This will permanently delete ALL one-off expenses. Are you sure? (Input Y to clear)
 Clear cancelled. Your data is still there, bro.
 
-WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: 
+WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue:
 Reset aborted. Your data is safe!
 
 Goodbye James Gosling. Stay disciplined and get that house that you always wanted!

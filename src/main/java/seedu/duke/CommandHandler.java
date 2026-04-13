@@ -536,7 +536,7 @@ public class CommandHandler {
     public boolean handleReset(Scanner in) {
         assert in != null : "Scanner should not be null";
 
-        ui.printLine("WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue: ");
+        ui.printLine("WARNING: This will wipe your profile and ALL expenses. Type 'Y' to continue:");
         String response = ui.readLine(in, "").trim().toLowerCase();
 
         if (response.equals("y")) {
