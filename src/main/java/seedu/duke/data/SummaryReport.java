@@ -142,8 +142,8 @@ public class SummaryReport {
      * months remaining until the deadline.</p>
      *
      * @return {@code "Reached! Go get that BTO!"} if the goal is met,
-     * {@code "Infinite (Surplus is $0 or negative!)"} if no progress can be made,
-     * or the estimated number of months as a {@code String} otherwise.
+     *     {@code "Infinite (Surplus is $0 or negative!)"} if no progress can be made,
+     *     or the estimated number of months as a {@code String} otherwise.
      */
     private String computeEstimate() {
         if (distance.compareTo(BigDecimal.ZERO) <= 0) {
