@@ -19,8 +19,7 @@ Let's get started!
 7. You can refer to the [Features](#features) page for details of each command. Have fun!!
 
 ## Notes about the command format
-- Words in `UPPER_CASE` are parameters to be supplied by the user. e.g. in `add <NAME> <AMOUNT> <CATEGORY>`, `NAME`, `AMOUNT` and `CATEGORY` are parameters.
-- Items within angle brackets `< >` are compulsory. e.g. `<NAME>` means `NAME` must be provided.
+- Words in `UPPER_CASE` are parameters to be supplied by the user. e.g. in `add NAME AMOUNT CATEGORY`, `NAME`, `AMOUNT` and `CATEGORY` are parameters.
 - Items in square brackets `[ ]` are optional. e.g. `[RECURRING]` can be omitted.
 - 
 ## Features
@@ -123,7 +122,7 @@ Success! Your contribution ratio is now 0.5
 
 ### Adding an expense: ```add```
 Adds a regular expense to your monthly tracker, with optional field recurring.<br>
-<b>Format:</b> ```add <NAME> <AMOUNT> <CATEGORY> [RECURRING]``` <br>
+<b>Format:</b> ```add NAME AMOUNT CATEGORY [RECURRING]``` <br>
 <b>Example of Usage:</b> <br>
 ```add netflix 30 entertainment recurring ```<br>
 ```add breakfast 25 food``` <br>
@@ -138,7 +137,7 @@ Month 1 Total: $25
 <b>NOTE:</b>
 - The keyword `recurring` is optional.
 - If omitted, the expense will be treated as a one-off expense.
-- The command format is: `add <NAME> <AMOUNT> <CATEGORY> [RECURRING]` The system interprets the last numeric token before 
+- The command format is: `add NAME AMOUNT CATEGORY [RECURRING]` The system interprets the last numeric token before 
   the category as the amount. Any earlier tokens, including numbers, are treated as part of the expense name. To avoid ambiguity, 
   users should enter exactly one amount value.
 - Expense name cannot contain the `|` character, as it is reserved as the file delimiter.
@@ -167,8 +166,8 @@ Month 1 Total: $88.30
 Total Expenditure (All Months + Recurring): $118.30
 ```
 
-### Sorting the expenditure list: ```sort <keyword>```
-Sorts the expenditure list by category, by recency or by alphabetical order. Valid keywords are `name`, `category` and `recent`.<br>
+### Sorting the expenditure list: ```sort KEYWORD```
+Sorts the expenditure list by different methods - by category, by recency or by alphabetical order. Valid methods/keywords are `name`, `category` and `recent`.<br>
 <b>Format:</b> ```sort category``` or ``` sort name ``` or ```sort recent```<br>
 <b>Example of Usage:</b> ``` sort name ``` or ```sort category```<br>
 <b>Expected Output:</b>
@@ -210,7 +209,7 @@ Total Expenditure (All Months + Recurring): $118.30
 
 ### Deleting an entry: ```delete```
 Deletes the specified entry from the tracker.<br>
-<b>Format:</b> ```delete <INDEX>``` <br>
+<b>Format:</b> ```delete INDEX``` <br>
 <b>Example of Usage:</b> ```delete 1```<br>
 <b>Expected Output:</b>
 ```
@@ -223,7 +222,7 @@ Current Total: $0
 
 ### Deleting a recurring entry: ```deleterecurring```
 Deletes a recurring expense from the tracker.<br>
-<b>Format:</b> ```deleterecurring <INDEX>```  
+<b>Format:</b> ```deleterecurring INDEX```  
 <b>Example of Usage:</b> ```deleterecurring 1```  
 <b>Expected Output:</b>
 ```
@@ -357,7 +356,7 @@ R | Netflix | 30 | ENTERTAINMENT
 | `ENTERTAINMENT`| category           | category assigned to the expense                              |
 
 ## FAQ
-<b>Updated as of 1st April 2026</b>
+<b>Updated as of 13th April 2026</b>
 
 **Q**: How do I transfer my data to another computer? 
 
@@ -380,24 +379,24 @@ Watch this space for more updates!!
 
 ### Daily Transaction Commands
 
-| Action                    | Format, Examples                                 |
-|---------------------------|--------------------------------------------------|
-| Add Expense               | `add <NAME> <AMOUNT> <CATEGORY> [RECURRING]`     |
-| List Entries              | `list`                                           |
-| Delete Entry              | `delete <INDEX>` e.g. `delete 2`                 |
-| Delete Recurring          | `deleterecurring <INDEX>` eg `deleterecurring 1` |
+| Action                    | Format, Examples                         |
+|---------------------------|------------------------------------------|
+| Add Expense               | `add NAME AMOUNT CATEGORY [RECURRING]`   |
+| List Entries              | `list`                                   |
+| Delete Entry              | `delete INDEX` e.g. `delete 2`           |
+| Delete Recurring          | `deleterecurring INDEX` eg `deleterecurring 1` |
 
 ### Other Commands
 
-| Action                    | Format, Examples                                                |
-|---------------------------|-----------------------------------------------------------------|
-| Sort Entries              | `sort <keyword>` e.g. `sort category` `sort recent` `sort name` |
-| Add more savings          | `savings`                                                       |
-| Update monthly allowance  | `allowance`                                                     |
-| Update contribution ratio | `ratio`                                                         |
-| Archive Month             | `save`                                                          |
-| Clear Current Month       | `clear`                                                         |
-| Factory Reset             | `reset`                                                         |
+| Action                    | Format, Examples                                              |
+|---------------------------|---------------------------------------------------------------|
+| Sort Entries              | `sort KEYWORD` e.g. `sort category` `sort recent` `sort name` |
+| Add more savings          | `savings`                                                     |
+| Update monthly allowance  | `allowance`                                                   |
+| Update contribution ratio | `ratio`                                                       |
+| Archive Month             | `save`                                                        |
+| Clear Current Month       | `clear`                                                       |
+| Factory Reset             | `reset`                                                       |
 
 
 ### Enquiry
