@@ -57,7 +57,7 @@ Profile & Goal Management
 'sort'   <keyword> - sort the expenditure list by category, alphabetical order or recency (e.g sort name, sort recent, sort category)
 'savings'   - add a surplus amount to your existing savings
 'allowance' - update your monthly allowance
-'ratio'     - update your BTO contribution ratio (0.0 to 1.0, max 2 dp)
+'ratio'     - update your BTO contribution ratio (0.01 to 1.0, max 2 dp)
 'save'      - archive current month's expenses and advance to next month
 'clear'   - wipe all current expenses from the list
 'reset'   - wipes all profile data and expenses to start fresh.
@@ -106,9 +106,9 @@ Success! Your monthly allowance is now $100.00
 Did you mean "ratio"? Try again!
 
 Current Contribution Ratio: 60.0% (0.6)
-Enter new ratio (0.0 to 1.0):
+Enter new ratio (0.01 to 1.0):
 Ratio can have at most 2 decimal places (e.g., 0.86). Try again.
-Enter new ratio (0.0 to 1.0):
+Enter new ratio (0.01 to 1.0):
 
 Success! Your contribution ratio is now 0.86
 

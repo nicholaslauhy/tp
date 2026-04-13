@@ -152,14 +152,15 @@ public class Profile {
     /**
      * Sets the share of the BTO cost relative to a partner.
      * @param contributionRatio A decimal representing the share (e.g., 0.5 for 50%).
+     *                          Must be between 0.01 and 1.0 (minimum 1%).
      */
     public void setContributionRatio(BigDecimal contributionRatio) {
         assert contributionRatio != null : "Contribution ratio cannot be null";
 
-        // Ensure the ratio is between 0% and 100%
-        assert contributionRatio.compareTo(BigDecimal.ZERO) >= 0 &&
+        // Ensure the ratio is between 1% and 100% (0 is not allowed)
+        assert contributionRatio.compareTo(new BigDecimal("0.01")) >= 0 &&
                 contributionRatio.compareTo(BigDecimal.ONE) <= 0
-                : "Contribution ratio must be between 0.0 and 1.0";
+                : "Contribution ratio must be between 0.01 and 1.0";
         this.contributionRatio = contributionRatio;
 
         // Set new btoGoal if ratio changed

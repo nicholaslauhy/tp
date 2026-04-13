@@ -158,14 +158,14 @@ public class InputUtil {
      *
      * <p>Accepted formats:
      * <ul>
-     * <li>Decimals between 0.0 and 1.0 inclusive (e.g., 0, 1, 0.5, 0.75)</li>
+     * <li>Decimals between 0.01 and 1.0 inclusive (e.g., 0.01, 1, 0.5, 0.75)</li>
      * <li>Max 2 decimal places</li>
      * </ul>
      * </p>
      *
      * <p>Rejected inputs include:
      * <ul>
-     * <li>Negative numbers (e.g., -0.6)</li>
+     * <li>Values below 0.01 (e.g., 0, -0.1)</li>
      * <li>Values greater than 1 (e.g., 1.1)</li>
      * <li>More than 2 decimal places (e.g., 0.555)</li>
      * <li>Non-numeric strings</li>
@@ -177,7 +177,7 @@ public class InputUtil {
      * @param ui UI component used for displaying prompts and messages.
      * @param in Scanner used to read user input.
      * @param prompt Prompt message shown to the user.
-     * @return A validated {@link BigDecimal} between 0 and 1.
+     * @return A validated {@link BigDecimal} between 0.01 and 1.0.
      */
     public static BigDecimal readRatio(Ui ui, Scanner in, String prompt) {
         assert ui != null : "readRatio: ui must not be null";
@@ -191,17 +191,17 @@ public class InputUtil {
             if (!input.matches("-?\\d+(\\.\\d+)?")) {
                 // Log at WARNING: user provided invalid formatted string which is rejected
                 logger.warning("readRatio unsuccessful | reason: invalid formatting");
-                ui.printLine("EH WRONG FORMAT! Enter a decimal between 0 and 1 (e.g., 0.5).");
+                ui.printLine("EH WRONG FORMAT! Enter a decimal between 0.01 and 1 (e.g., 0.5).");
                 continue;
             }
             try {
                 BigDecimal ratio = new BigDecimal(input);
 
-                // Check if between 0.0 & 1.0
-                if (ratio.compareTo(BigDecimal.ZERO) < 0 || ratio.compareTo(BigDecimal.ONE) > 0) {
+                // Check if between 0.01 & 1.0 (0 is not a valid ratio)
+                if (ratio.compareTo(new BigDecimal("0.01")) < 0 || ratio.compareTo(BigDecimal.ONE) > 0) {
                     // Log at WARNING: user provided out of bounds input which is rejected
-                    logger.warning("readRatio unsuccessful | reason: out of specified bounds");
-                    ui.printLine("Brother...Ratio must be between 0 and 1. Try again!");
+                    logger.warning("readRatio unsuccessful | reason: out of specified bounds (must be 0.01–1.0)");
+                    ui.printLine("Brother...Ratio must be between 0.01 and 1. Try again!");
                     continue;
                 }
 
@@ -211,8 +211,8 @@ public class InputUtil {
                     continue;
                 }
 
-                assert ratio.compareTo(BigDecimal.ZERO) >= 0 && ratio.compareTo(BigDecimal.ONE) <= 0
-                        : "readRatio: returned ratio must be between 0.0 and 1.0 inclusive";
+                assert ratio.compareTo(new BigDecimal("0.01")) >= 0 && ratio.compareTo(BigDecimal.ONE) <= 0
+                        : "readRatio: returned ratio must be between 0.01 and 1.0 inclusive";
                 // Log at FINE: readRatio is a low-level detail, not a key app event
                 logger.fine("readRatio successful | ratio: " + ratio);
                 return ratio;

@@ -399,7 +399,7 @@ runs `performInitialSetup()` before entering the command loop. The steps are:
 
 1. The user is prompted for their **name**.
 2. The user provides their **current savings** and **monthly allowance** (validated by `InputUtil.readMoney()`).
-3. The user provides the **total house price** and their **contribution ratio** (0.0–1.0, validated by
+3. The user provides the **total house price** and their **contribution ratio** (0.01–1.0, validated by
    `InputUtil.readRatio()`).
 4. `BtoCalculator` computes the **total downpayment** (base of 2.5% of house price, plus legal fees
    equal to 110% of that base, totalling 5.25% of house price) and the user's **personal share**
@@ -423,6 +423,9 @@ Three commands allow the user to update their profile after initial setup:
 
 All three handlers use `InputUtil.readMoney()` or `InputUtil.readRatio()` to enforce valid input,
 re-prompting the user on invalid entries rather than throwing an exception to the caller.
+
+> **Design note — `savings` is deposit-only, with no undo.**
+> `handleSavings()` always adds to `currentSavings`; there is no subtract or undo operation. This is intentional: the command models a real-world cash deposit, where a user records money they have set aside. Allowing negative adjustments was considered but excluded from scope to keep the command surface minimal and to avoid introducing a separate correction workflow. Users who enter an incorrect amount must perform a `reset` (losing all data) or edit `fintrack.txt` directly — both of which are intentionally high-friction to discourage casual misuse.
 
 ![Sequence Diagram](diagram/ProfileRatio-SequenceDiagram.png)
 
@@ -744,7 +747,7 @@ clear downpayment plan - showing how much the individual needs to save and wheth
 
 * *BTO (Build-To-Order)* - a subsidized public housing option scheme in Singapore where new flats are constructed only
   after a sufficient number of units (typically 65-70%) have been pre-booked by applicants
-* *Contribution ratio* - the user's fractional share of the downpayment (0.0 to 1.0)
+* *Contribution ratio* - the user's fractional share of the downpayment (0.01 to 1.0)
 * *Recurring expenses* - expenses that occur every month at a fixed rate (e.g. a Netflix subscription of $5.98/month)
 * *Adjusted Minimum Savings* - minimum amount you need to save per month given your distance to goal and number of
   months remaining till the deadline
@@ -831,9 +834,9 @@ a valid profile before testing profile-dependent commands.
 3. **Updating contribution ratio**
     1. Prerequisites: Application started and house price set during initial setup.
     2. Test case: Enter `ratio`, then enter `0.5`. Expected: Ratio set to 0.5; BTO goal recalculated and confirmed.
-    3. Test case: Enter `ratio`, then enter `0.0` or `1.0`. Expected: Boundary values accepted; BTO goal recalculated.
+    3. Test case: Enter `ratio`, then enter `0.01` or `1.0`. Expected: Boundary values accepted; BTO goal recalculated.
     4. Test case: Enter `ratio`, then enter `1.5`. Expected: Error shown for value above 1.0, user re-prompted.
-    5. Test case: Enter `ratio`, then enter `-0.1`. Expected: Error shown for negative value, user re-prompted.
+    5. Test case: Enter `ratio`, then enter `0` or `-0.1`. Expected: Error shown for value below minimum, user re-prompted.
     6. Test case: Enter `ratio`, then enter `abc`. Expected: Error shown for non-numeric input, user re-prompted.
     7. Test case: Enter `ratio`, then enter `0.123`. Expected: Error shown for more than 2 decimal places, user
        re-prompted.
