@@ -331,11 +331,26 @@ class CommandHandlerTest {
         // Spend $600 (Overspent by $100)
         expenseList.add("Shopping", new BigDecimal("600"), Category.fromString("OTHER"));
 
-        ch.handleSaveMonth();
+        Scanner in = new Scanner(new ByteArrayInputStream("y\n".getBytes()));
+        ch.handleSaveMonth(in);
 
         // Savings should stay at 1000, not 900
         assertEquals(new BigDecimal("1000"), profile.getCurrentSavings());
         assertEquals(2, profile.getCurrentMonth());
+    }
+
+    @Test
+    void handleSaveMonth_cancelled_saveDoesNotAdvanceMonth() {
+        profile.setMonthlyAllowance(new BigDecimal("500"));
+        profile.setCurrentSavings(new BigDecimal("1000"));
+        expenseList.add("Shopping", new BigDecimal("100"), Category.fromString("OTHER"));
+
+        Scanner in = new Scanner(new ByteArrayInputStream("n\n".getBytes()));
+        ch.handleSaveMonth(in);
+
+        assertEquals(new BigDecimal("1000"), profile.getCurrentSavings());
+        assertEquals(1, profile.getCurrentMonth());
+        assertEquals(1, expenseList.size());
     }
 
     @Test

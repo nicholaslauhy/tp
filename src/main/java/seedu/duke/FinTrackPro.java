@@ -430,7 +430,7 @@ public class FinTrackPro {
             break;
         case "save":
             logger.info("state=command.dispatch | expected=handler.handleSaveMonth | command=save");
-            handler.handleSaveMonth();
+            handler.handleSaveMonth(in);
             break;
         default:
             logger.warning("state=command.unknown | expected=show help hint to user | rawInput='" + userInput + "'");
