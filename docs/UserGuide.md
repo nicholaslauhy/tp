@@ -72,6 +72,7 @@ Add more savings from the initial saving count
 
 <b>Format:</b> ```savings``` <br>
 <b>NOTE:</b> When entering `amount`, it represents the additional amount of cash you want to add towards the goal.<br>
+<b>WARNING:</b> Savings can only be increased. There is no command to reduce or undo a savings entry. Double-check your amount before confirming.<br>
 <b>Example of Usage:</b> ```savings```<br>
 <b>Expected Output:</b>
 ```
@@ -116,7 +117,7 @@ Enter new ratio (0.0 to 1.0):
 Success! Your contribution ratio is now 0.5
 ```
 <b>NOTE:</b>
-- Value must be between `0.0` (0%) and `1.0` (100%), with at most 2 decimal places.
+- Value must be between `0.01` (1%) and `1.0` (100%), with at most 2 decimal places.
 - Inputs like `0.8666666` are rejected; use `0.86` instead.
 - Updating the ratio automatically recalculates your BTO goal. Run `summary` to see the updated goal.
 

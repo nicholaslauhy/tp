@@ -335,15 +335,22 @@ class CommandHandlerTest {
 
     @Test
     void handleRatio_boundaryValues_updatesProfile() {
-        // Test 0% share
-        Scanner inZero = new Scanner(new java.io.ByteArrayInputStream("0.0\n".getBytes()));
-        ch.handleRatio(inZero);
-        assertEquals(new BigDecimal("0.0"), profile.getContributionRatio());
+        // Test minimum 1% share
+        Scanner inMin = new Scanner(new java.io.ByteArrayInputStream("0.01\n".getBytes()));
+        ch.handleRatio(inMin);
+        assertEquals(0, new BigDecimal("0.01").compareTo(profile.getContributionRatio()));
 
         // Test 100% share
         Scanner inFull = new Scanner(new java.io.ByteArrayInputStream("1.0\n".getBytes()));
         ch.handleRatio(inFull);
         assertEquals(new BigDecimal("1.0"), profile.getContributionRatio());
+    }
+
+    @Test
+    void handleRatio_zeroRejectedThenMinAccepted() {
+        Scanner in = new Scanner(new java.io.ByteArrayInputStream("0\n0.01\n".getBytes()));
+        ch.handleRatio(in);
+        assertEquals(0, new BigDecimal("0.01").compareTo(profile.getContributionRatio()));
     }
 
     void handleSavings_zeroDeposit_savingsUnchanged() {

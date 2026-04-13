@@ -119,13 +119,24 @@ public class InputUtilTest {
     }
 
     @Test
-    public void readRatio_zero_returnsZero() {
+    public void readRatio_minimumBoundary_returnsPointZeroOne() {
         Ui ui = new Ui();
-        Scanner in = new Scanner("0\n");
+        Scanner in = new Scanner("0.01\n");
 
         BigDecimal result = InputUtil.readRatio(ui, in, "Enter ratio:");
 
-        assertEquals(0, BigDecimal.ZERO.compareTo(result));
+        assertEquals(0, new BigDecimal("0.01").compareTo(result));
+    }
+
+    @Test
+    public void readRatio_zeroRejected_thenMinAccepted() {
+        CapturingUi ui = new CapturingUi();
+        Scanner in = new Scanner("0\n0.01\n");
+
+        BigDecimal result = InputUtil.readRatio(ui, in, "Enter ratio:");
+
+        assertEquals(0, new BigDecimal("0.01").compareTo(result));
+        assertTrue(ui.getLines().contains("Brother...Ratio must be between 0.01 and 1. Try again!"));
     }
 
     @Test

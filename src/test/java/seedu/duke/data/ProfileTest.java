@@ -107,9 +107,14 @@ public class ProfileTest {
     }
 
     @Test
-    public void setContributionRatio_zero_isAccepted() {
-        profile.setContributionRatio(BigDecimal.ZERO);
-        assertEquals(BigDecimal.ZERO, profile.getContributionRatio());
+    public void setContributionRatio_zero_throwsAssertionError() {
+        assertThrows(AssertionError.class, () -> profile.setContributionRatio(BigDecimal.ZERO));
+    }
+
+    @Test
+    public void setContributionRatio_minimumRatio_isAccepted() {
+        profile.setContributionRatio(new BigDecimal("0.01"));
+        assertEquals(0, new BigDecimal("0.01").compareTo(profile.getContributionRatio()));
     }
 
     @Test

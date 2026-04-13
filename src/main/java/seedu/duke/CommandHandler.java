@@ -465,6 +465,7 @@ public class CommandHandler {
 
     /**
      * Displays the current contribution ratio and prompts the user to update it.
+     * The ratio must be between 0.01 (1%) and 1.0 (100%).
      *
      * @param in Scanner used to read the user's input.
      */
@@ -476,7 +477,7 @@ public class CommandHandler {
 
         // Show current state
         ui.promptForRatio(current);
-        BigDecimal newRatio = InputUtil.readRatio(ui, in, "Enter new ratio (0.0 to 1.0):");
+        BigDecimal newRatio = InputUtil.readRatio(ui, in, "Enter new ratio (0.01 to 1.0):");
         ui.printLine("");
 
         profile.setContributionRatio(newRatio);
