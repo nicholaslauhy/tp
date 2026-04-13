@@ -206,12 +206,14 @@ class CommandHandlerTest {
         ExpenseList testExpenseList = new ExpenseList();
         CommandHandler testHandler = new CommandHandler(testUi, new Profile(),
                 testExpenseList, new RecurringExpenseList(), new Storage("fintrack.txt"));
+        String expectedMessage = "Invalid add format. Use: add NAME AMOUNT CATEGORY "
+                + "[RECURRING]. Try again!";
 
         testHandler.handleAdd("add 5 lunch food");
 
         assertEquals(0, testExpenseList.size());
         assertTrue(testUi.getLines().stream()
-                .anyMatch(line -> line.contains("Invalid add format. Use: add NAME AMOUNT CATEGORY [RECURRING]. Try again!")));
+                .anyMatch(line -> line.contains(expectedMessage)));
     }
 
     @Test
